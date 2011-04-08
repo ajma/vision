@@ -1,0 +1,192 @@
+﻿<!DOCTYPE html>
+
+<html lang="en">
+    <head>
+        <meta charset="utf-8" />
+        <meta name="apple-mobile-web-app-capable" content="yes">
+        <title>Optometry</title>
+        <link rel="stylesheet" href="/css/blueprint/screen.css" type="text/css" media="screen, projection">
+        <link rel="stylesheet" href="/css/blueprint/print.css" type="text/css" media="print">
+        <!--[if lt IE 8]><link rel="stylesheet" href="/css/blueprint/ie.css" type="text/css" media="screen, projection"><![endif]-->
+        <link rel="stylesheet" href="/css/site.css" type="text/css">
+        <script src="/js/jquery-1.4.4.min.js" type="text/javascript"></script>
+        <script src="/js/json2.js" type="text/javascript"></script>
+        <script src="/js/jquery.tools.min.js" type="text/javascript"></script>
+        <script src="/js/site.js" type="text/javascript"></script>
+    </head>
+    <body>
+        <div id="header">
+            <ul> 
+	            <li><a id="addTab" href="#Add">ADD</a></li> 
+	            <li><a id="searchTab" href="#Search">SEARCH</a></li> 
+	            <li><a id="historyTab" href="#History">HISTORY</a></li> 
+            </ul> 
+        </div>
+        <div id="body" class="container">
+            <!-- ADD -->
+		    <div class="pane span-24 last" id="addPane">
+                <div class="column span-15 colborder">
+                    <div class="circle"><div>1</div></div>
+                    <div class="column span-13 last">
+                        <h1 class="circle_label">Optometrist</h1>
+                        Take a pair of glasses that has not been processed. Optometrist uses lensometer to get readings and reads them out loud.
+                    </div>
+                    <hr />
+                    <div class="circle"><div>2</div></div>
+                    <div class="column span-13 last">
+                        <h1 class="circle_label">Data Entry</h1>
+                        While optometrist reads, data entry person types in the values on the right side of this page. Clicks &quot;Add&quot; when done.
+                    </div>
+                    <hr />
+                    <div class="circle"><div>3</div></div>
+                    <div class="column span-13 last">
+                        <h1 class="circle_label">Bag &amp; Tag</h1>
+                        When step 1 and 2 is finished, this person takes the glasses, places them in a bag and places the sticker (which should come out of the label printer) on to the bag.
+                        When this is done, bring the bag to the centralized collector.
+                    </div>
+                </div>
+                <div id="addForm" class="column span-8 last">
+                    <div class="column span-8">
+                        <div class="rx_label rx_col">&nbsp;</div>
+                        <div class="rx_label rx_col">Sph</div>
+                        <div class="rx_label rx_col">Cyl</div>
+                        <div class="rx_label rx_col">Axis</div>
+                        <div class="rx_label rx_col">Add</div>
+                    </div>
+                    <div class="column span-8">
+                        <div class="rx_col"><div class="rx_label">OD:</div><div style="font-size:10px;">(Right)</div></div>
+                        <div class="rx_col"><input name="OD_Spherical" type="number" class="rx_box" min="-20" max="20" step="0.25" /></div>
+                        <div class="rx_col"><input name="OD_Cylindrical" type="number" class="rx_box" min="-20" max="0" step="0.25" /></div>
+                        <div class="rx_col"><input name="OD_Axis" type="number" class="rx_box" min="0" max="180" /></div>
+                        <div class="rx_col"><input name="OD_Add" type="number" class="rx_box" min="0" max="20" step="0.25" /></div>
+                    </div>
+                    <div class="column span-8">
+                        <div class="rx_col"><div class="rx_label">OS:</div><div style="font-size:10px;">(Left)</div></div>
+                        <div class="rx_col"><input name="OS_Spherical" type="number" class="rx_box" min="-20" max="20" step="0.25" /></div>
+                        <div class="rx_col"><input name="OS_Cylindrical" type="number" class="rx_box" min="-20" max="0" step="0.25" /></div>
+                        <div class="rx_col"><input name="OS_Axis" type="number" class="rx_box" min="0" max="180" /></div>
+                        <div class="rx_col"><input name="OS_Add" type="number" class="rx_box" min="0" max="20" step="0.25" /></div>
+                    </div>
+                    <div class="column span-8">
+                        <div class="column span-3 rx_label">Sunglasses:</div>
+                        <div class="column span-3"><input name="Sunglasses" type="checkbox" class="rx" /></div>
+                    </div>
+                    <div class="column span-8">
+                        <div class="column span-3 rx_label">Gender:</div>
+                        <div class="column span-4"><select name="Gender" class="rx_select"><option value="U">Unspecified</option><option value="M">Male</option><option value="F">Female</option><option value="N">Neutral</option></select></div>
+                    </div>
+                    <div class="column span-8">
+                        <div class="column span-3 rx_label">Size:</div>
+                        <div class="column span-4"><select name="Size" class="rx_select"><option value="U">Unspecified</option><option value="S">Small</option><option value="M">Medium</option><option value="L">Large</option></select></div>
+                    </div>
+                    <div class="column span-8">
+                        <input id="add" type="button" value="Add" />
+                        <input id="addClear" type="button" value="Clear" />
+                    </div>
+                </div>
+                <hr />
+                <div id="addMsg"></div>
+		    </div>
+
+            <!-- SEARCH -->
+		    <div class="pane span-24 last" id="searchPane">               
+                <div id="searchForm" class="column span-24 last">
+                    <div class="column prepend-2 span-8 colborder">
+                        <div class="column span-8">
+                            <div class="rx_label rx_col">&nbsp;</div>
+                            <div class="rx_label rx_col">Sph</div>
+                            <div class="rx_label rx_col">Cyl</div>
+                            <div class="rx_label rx_col">Axis</div>
+                            <div class="rx_label rx_col">Add</div>
+                        </div>
+                        <div class="column span-8">
+                            <div class="rx_col"><div class="rx_label">OD:</div><div style="font-size:10px;">(Right)</div></div>
+                            <div class="rx_col"><input name="OD_Spherical" type="number" class="rx_box" min="-20" max="20" step="0.25" /></div>
+                            <div class="rx_col"><input name="OD_Cylindrical" type="number" class="rx_box" min="-20" max="0" step="0.25" /></div>
+                            <div class="rx_col"><input name="OD_Axis" type="number" class="rx_box" min="0" max="180" /></div>
+                            <div class="rx_col"><input name="OD_Add" type="number" class="rx_box" min="0" max="20" step="0.25" /></div>
+                        </div>
+                        <div class="column span-8">
+                            <div class="rx_col"><div class="rx_label">OS:</div><div style="font-size:10px;">(Left)</div></div>
+                            <div class="rx_col"><input name="OS_Spherical" type="number" class="rx_box" min="-20" max="20" step="0.25" /></div>
+                            <div class="rx_col"><input name="OS_Cylindrical" type="number" class="rx_box" min="-20" max="0" step="0.25" /></div>
+                            <div class="rx_col"><input name="OS_Axis" type="number" class="rx_box" min="0" max="180" /></div>
+                            <div class="rx_col"><input name="OS_Add" type="number" class="rx_box" min="0" max="20" step="0.25" /></div>
+                        </div>
+                        <div class="column span-8">
+                            <div class="column span-3 rx_label">Sunglasses:</div>
+                            <div class="column span-3"><input name="Sunglasses" type="checkbox" class="rx" /></div>
+                        </div>
+                        <div class="column span-8">
+                            <div class="column span-3 rx_label">Gender:</div>
+                            <div class="column span-4"><select name="Gender" class="rx_select"><option value="U">Unspecified</option><option value="M">Male</option><option value="F">Female</option><option value="N">Neutral</option></select></div>
+                        </div>
+                        <div class="column span-8">
+                            <div class="column span-3 rx_label">Size:</div>
+                            <div class="column span-4"><select name="Size" class="rx_select"><option value="U">Unspecified</option><option value="S">Small</option><option value="M">Medium</option><option value="L">Large</option></select></div>
+                        </div>
+                    </div>
+                    <div class="column span-2 colborder" style="text-align:center;padding-top:70px;">
+                        <h1>OR</h1>
+                    </div>
+                    <div class="column span-8 append-2 last">
+                        <div class="rx_label span-3">Group:</div>
+                        <div class="span-5 last"><input name="Group" type="number" class="rx_box" /></div>
+                        <div class="rx_label span-3">Number:</div>
+                        <div class="span-5 last"><input name="Number" type="number" class="rx_box" /></div>
+                    </div>
+                    <div class="column span-24 last" style="text-align:center">
+                        <input id="search" type="button" value="Search" />
+                        <input id="searchClear" type="button" value="Clear" />
+                    </div>
+                </div>
+
+                <div id="rx_result_header" class="column span-24 last">
+                    <div class="rx_result_col">&nbsp;</div>
+                    <div class="rx_result_col_header">&nbsp;</div>
+                    <div class="rx_result_col_header_top">OD (Right)</div>
+                    <div class="rx_result_col_header_top">OS (Left)</div>
+                    <div class="rx_result_col">&nbsp;</div>
+                    <div class="rx_result_col">&nbsp;</div>
+                    <div class="rx_result_col">&nbsp;</div>
+                    <div class="rx_result_col_header">Score</div>
+                    <div class="rx_result_col_header">Call #</div>
+                    <div class="rx_result_col_header">Sph</div>
+                    <div class="rx_result_col_header">Cyl</div>
+                    <div class="rx_result_col_header">Axis</div>
+                    <div class="rx_result_col_header">Add</div>
+                    <div class="rx_result_col_header">Sph</div>
+                    <div class="rx_result_col_header">Cyl</div>
+                    <div class="rx_result_col_header">Axis</div>
+                    <div class="rx_result_col_header">Add</div>
+                    <div class="rx_result_col_header">Sungl.</div>
+                    <div class="rx_result_col_header">Gender</div>
+                    <div class="rx_result_col_header_last">Size</div>
+                </div>
+                <div id="searchResults" class="column span-24 last">
+                    No Results
+                </div>
+		    </div>
+
+		    <!-- HISTORY -->
+		    <div class="pane span-24 last" id="historyPane">
+		    c
+		    </div>
+        </div>
+
+        <div id="removeDialog" class="modal">
+	        <h2>Remove this pair of glasses from the inventory?</h2>
+
+            <div class="column box">
+                <div class="column span-4 huge">Group: <span class="group"></span></div>
+                <div class="column span-4 huge last">Number: <span class="number"></span></div>
+            </div>
+            <div class="rx"></div>
+	        
+            <p class="centered">
+		        <button>Remove</button>
+		        <button>Keep</button>
+	        </p>
+        </div>
+    </body>
+</html>

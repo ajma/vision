@@ -1,0 +1,225 @@
+﻿html 
+{
+    overflow-y: scroll;
+}
+body {
+	font-family: Tahoma, Helvetica, Arial, Sans-Serif;
+	background-color: #ddd;
+	color: #444;
+}
+h1 { font-weight: bold; text-shadow: 2px 2px 2px #aaa; color:#333; }
+.centered { text-align: center; }
+.huge { font-size:2em; }
+.bold { font-weight: bold; }
+#header 
+{
+	height:45px;
+	background:#ddd;
+	background: -moz-linear-gradient(100% 100% 90deg, #ccc, #eee);
+	background: -webkit-gradient(linear, 0% 0%, 0% 100%, from(#eee), to(#ccc));
+	text-align:center;
+}
+#header ul {	
+	width:531px;
+	margin:0 auto;	
+}
+	
+#header li {	
+	border-right:1px solid #bbb;
+	float:left;
+	padding-left:1px;
+	width:175px;
+	list-style-type:none;
+	margin-top:0px;
+}
+	
+#header a {
+	color:#444;
+	display:block;
+	padding: 10px;
+	position:relative;
+	word-spacing:-2px;
+	font-size:20px;
+	font-weight:bold;
+	height:26px;
+	text-decoration:none;
+	text-shadow: 0px 1px 0px #e5e5ee;
+}	
+	
+#header a.current {
+	background: #fff;
+	background: -moz-linear-gradient(100% 100% 90deg, #fff, #bbb);
+	background: -webkit-gradient(linear, 0% 0%, 0% 100%, from(#bbb), to(#fff));
+	-moz-box-shadow: inset 4px 4px 4px #aaa;
+	-webkit-box-shadow: inset 4px 4px 4px #aaa;
+	box-shadow: inset 4px 4px 4px #aaa;
+}
+
+/********************** Body ***********************/
+#body 
+{
+	background:#fff;
+	background: -moz-linear-gradient(100% 100% 90deg, #ddd, #fff);
+	background: -webkit-gradient(linear, 0% 0%, 0% 100%, from(#fff), to(#ddd));
+	min-height:400px;
+		
+	/* must be relative so the individual panes can be absolutely positioned */
+	position:relative;
+	box-shadow: inset 0 3px 3px #ddd;
+}
+	
+/* crossfading effect needs absolute positioning from the elements */
+#body div.pane {
+	display:none;		
+	position:absolute;
+	top:10px;
+	left:10px;
+	color:#444;	
+}
+
+.circle 
+{
+    margin: 5px 9px 5px 5px;
+    float: left;
+    width: 66px;
+    height: 66px;
+    background: #444;
+    -moz-border-radius: 33px;
+    -webkit-border-radius: 33px;
+    -moz-box-shadow: 4px 4px 4px #aaa;
+	-webkit-box-shadow: 4px 4px 4px #aaa;
+	box-shadow: 4px 4px 4px #aaa;
+}
+
+.circle > div 
+{
+    color: #eee;
+    padding: 1px 0 0 0;
+    margin: 0;
+    width:66px;
+    font-size: 3.45em;
+    text-align:center;
+    font-weight:bold;
+    text-shadow: 0px 1px 1px #aaa;
+}
+
+.circle_label 
+{
+    color: #333;
+}
+
+/*********************** RX ***********************/
+
+#searchForm 
+{
+    margin-bottom: 20px;
+}
+
+#addMsg 
+{
+    display:none;
+}
+
+.rx_col
+{
+    float:left;
+    width:66px;
+}
+.rx_col:first-child
+{
+    width:45px;
+}
+.rx_box, .rx_select {
+    width:50px;
+    font-size: 1.5em;
+    padding: 5px;
+}
+.rx_select
+{
+	width:160px;
+	text-align: left;
+	padding: 2px;
+}
+.rx_label {
+    font-weight: bold;
+    font-size: 1.5em;
+}
+input[type=button], button
+{
+    margin-top: 10px;
+    font-size: 1.5em;
+    height: 2em;
+    width: 150px;
+}
+
+#rx_result_header 
+{
+    font-weight:bold;
+    background: -moz-linear-gradient(100% 100% 90deg, #ccc, #eee);
+	background: -webkit-gradient(linear, 0% 0%, 0% 100%, from(#eee), to(#ccc));
+	border: 1px solid #aaa;
+}
+
+.rx_result_col_header, .rx_result_col_header_last 
+{
+    float:left;
+    width: 68px;
+    border-right:1px solid #aaa;
+    margin: 0 2px;
+    text-align: center;
+    font-size: 1.2em;
+}
+.rx_result_col_header_last {
+    border: 0;
+}
+.rx_result_col_header_top 
+{
+    float:left;
+    width: 287px;
+    margin: 0 2px;
+    border-right:1px solid #aaa;
+    text-align:center;
+    font-size: 1.2em;
+}
+.rx_result_col
+{
+    float:left;
+    width: 69px;
+    margin: 0 2px;
+    text-align: center;
+    font-size: 1.2em;
+}
+.rx_result_row, .rx_result_row_alt
+{
+    cursor: pointer;
+    background-color:#fff;
+}
+.rx_result_row_alt {
+    background-color:#eee;    
+}
+
+.rx_result_row_hilite {
+    background: #e6efc2;
+}
+
+input[type=number]::-webkit-inner-spin-button,
+input[type=number]::-webkit-outer-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}
+
+/******************* Modal *****************/
+.modal {
+	background-color:#fff;
+	display:none;
+	width:360px;
+	padding:15px;
+	text-align:left;
+	border:2px solid #333;
+	
+	opacity:0.8;
+	-moz-border-radius:6px;
+	-webkit-border-radius:6px;
+	-moz-box-shadow: 0 0 50px #ccc;
+	-webkit-box-shadow: 0 0 50px #ccc;
+}
