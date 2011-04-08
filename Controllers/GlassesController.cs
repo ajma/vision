@@ -11,16 +11,6 @@ namespace Vision.Controllers
 	{
 		VisionContext context = new VisionContext();
 
-		public ActionResult Index()
-		{
-			return View();
-		}
-
-		public ActionResult Add()
-		{
-			return View();
-		}
-
 		[HttpPost]
 		public ActionResult Add(Glasses glasses)
 		{
@@ -81,10 +71,5 @@ namespace Vision.Controllers
 
             return Json(true);
         }
-
-		public ActionResult List()
-		{
-			return View();
-		}
 	}
 }
