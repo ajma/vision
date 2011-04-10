@@ -30,20 +30,4 @@ namespace Vision.Models
 
         public DateTime InsertDate { get; set; }
 	}
-
-	public enum Gender
-	{
-		Unspecified = 'U',
-		Male = 'M',
-		Female = 'F',
-		Neutral = 'N'
-	}
-
-	public enum GlassesSize
-	{
-		Unspecified = 'U',
-		Small = 'S',
-		Medium = 'M',
-		Large = 'L'
-	}
 }

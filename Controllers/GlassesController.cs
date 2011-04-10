@@ -67,6 +67,9 @@ namespace Vision.Controllers
         {
             var glasses = context.Glasses.Single(g => g.Group == group && g.Number == number);
             context.Glasses.Remove(glasses);
+            var history = new GlassesHistory(glasses);
+            history.RemovalDate = DateTime.UtcNow;
+            context.GlassesHistory.Add(history);
             context.SaveChanges();
 
             return Json(true);

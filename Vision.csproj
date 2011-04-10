@@ -80,7 +80,9 @@
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
+    <Compile Include="Models\enums.cs" />
     <Compile Include="Models\Glasses.cs" />
+    <Compile Include="Models\GlassesHistory.cs" />
     <Compile Include="Models\GlassesSearchResult.cs" />
     <Compile Include="VisionContext.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -91,6 +93,7 @@
     <Content Include="css\blueprint\screen.css" />
     <Content Include="css\Site.css" />
     <Content Include="Global.asax" />
+    <Content Include="img\spinner.gif" />
     <Content Include="js\jquery-1.4.4-vsdoc.js" />
     <Content Include="js\jquery-1.4.4.js" />
     <Content Include="js\jquery-1.4.4.min.js" />

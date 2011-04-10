@@ -73,6 +73,8 @@
 
     // add button click
     $('#add').click(function () {
+        $('#add').attr('disabled', 'disabled');
+        $('#addWaiting').show();
         var glasses = formToJson($('#addForm').find('input,select'));
         var errMsg = '';
         var rxVal = function (property, min, max) {
@@ -98,9 +100,12 @@
         rxVal('OS_Add', 0, 10);
 
         if (errMsg != '') {
-            $('#addMsg').removeClass('success').addClass('error').html(errMsg).fadeIn(200);
+            $('#addErr').html(errMsg).fadeIn(200);
+            $('#add').removeAttr('disabled');
+            $('#addWaiting').hide();
         }
         else {
+            $('#addErr').fadeOut(200);
             $.ajax({
                 url: '/Glasses/Add',
                 type: 'POST',
@@ -108,7 +113,16 @@
                 data: JSON.stringify(glasses),
                 contentType: 'application/json; charset=utf-8',
                 success: function (msg) {
-                    $('#addMsg').removeClass('error').addClass('success').html('Added Number ' + msg.Number + ' for OD Spherical ' + sphCylFormat(msg.OD_Spherical) + ' group.').fadeIn(200);
+                    var newmsg = $(div('Added with call number ' + msg.Group + ' / ' + msg.Number + '.', 'success hidden'));
+                    $('#addMsg').prepend(newmsg);
+                    newmsg.slideDown();
+                    $('#add').removeAttr('disabled');
+                    $('#addWaiting').slideUp();
+                },
+                error: function (msg) {
+                    $('#addErr').html('Error Adding').fadeIn(200);
+                    $('#add').removeAttr('disabled');
+                    $('#addWaiting').hide();
                 }
             });
         }
