@@ -6,4 +6,5 @@ App_Data
 *.user
 *.patch
 *.cache
+*.Publish.xml
 desktop.ini
