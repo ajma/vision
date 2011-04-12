@@ -93,7 +93,9 @@
     <Content Include="css\blueprint\screen.css" />
     <Content Include="css\Site.css" />
     <Content Include="Global.asax" />
+    <Content Include="img\ios-icon.png" />
     <Content Include="img\spinner.gif" />
+    <Content Include="js\date.f-0.5.0-min.js" />
     <Content Include="js\jquery-1.4.4-vsdoc.js" />
     <Content Include="js\jquery-1.4.4.js" />
     <Content Include="js\jquery-1.4.4.min.js" />

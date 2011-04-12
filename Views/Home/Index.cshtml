@@ -3,7 +3,9 @@
 <html lang="en">
     <head>
         <meta charset="utf-8" />
-        <meta name="apple-mobile-web-app-capable" content="yes">
+        <meta name="apple-mobile-web-app-capable" content="yes" />
+        <meta name="viewport" content="width=980px" />
+        <link rel="apple-touch-icon" href="/img/ios-icon.png" />
         <title>Optometry</title>
         <link rel="stylesheet" href="/css/blueprint/screen.css" type="text/css" media="screen, projection">
         <link rel="stylesheet" href="/css/blueprint/print.css" type="text/css" media="print">
@@ -21,7 +23,7 @@
 	            <li><a id="addTab" href="#Add">ADD</a></li> 
 	            <li><a id="searchTab" href="#Search">SEARCH</a></li> 
 	            <li><a id="historyTab" href="#History">HISTORY</a></li>
-                <li><a id="optionsTab" href="#Options">OPTIONS</a></li>
+                <li><a id="otherTab" href="#Other">OTHER</a></li>
             </ul> 
         </div>
         <div id="body" class="container">
@@ -179,8 +181,8 @@
                 <div id="historyResults"></div>
 		    </div>
 
-            <!-- OPTIONS -->
-		    <div class="pane span-24 last" id="optionsPane">
+            <!-- OTHER -->
+		    <div class="pane span-24 last" id="otherPane">
 		        <h2>Export Inventory to <a href="http://kendall-optometry-ministry.com/kendall-optometry/" target="_blank">Kendall Optometry Software</a> Format</h2>
                 @Html.ActionLink("Export", "ExportToKendallFormat", "Glasses")
 		    </div>
