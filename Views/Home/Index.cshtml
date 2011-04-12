@@ -19,7 +19,8 @@
             <ul> 
 	            <li><a id="addTab" href="#Add">ADD</a></li> 
 	            <li><a id="searchTab" href="#Search">SEARCH</a></li> 
-	            <li><a id="historyTab" href="#History">HISTORY</a></li> 
+	            <li><a id="historyTab" href="#History">HISTORY</a></li>
+                <li><a id="optionsTab" href="#Options">OPTIONS</a></li>
             </ul> 
         </div>
         <div id="body" class="container">
@@ -165,6 +166,7 @@
                     <div class="rx_result_col_header">Gender</div>
                     <div class="rx_result_col_header_last">Size</div>
                 </div>
+                <div id="searchWaiting" class="huge centered hidden"><img src="/img/spinner.gif" /> Searching...</div>
                 <div id="searchResults" class="column span-24 last">
                     No Results
                 </div>
@@ -173,6 +175,11 @@
 		    <!-- HISTORY -->
 		    <div class="pane span-24 last" id="historyPane">
 		    c
+		    </div>
+
+            <!-- OPTIONS -->
+		    <div class="pane span-24 last" id="optionsPane">
+		        
 		    </div>
         </div>
 

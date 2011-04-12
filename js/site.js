@@ -157,6 +157,7 @@
                 return num;
         };
         $('#searchResults').html('');
+        $('#searchWaiting').show();
         $.ajax({
             url: '/Glasses/Search',
             type: 'POST',
@@ -175,6 +176,7 @@
                                 '</div>';
                 });
                 $('#searchResults').html(results).scrollTo();
+                $('#searchWaiting').hide();
             }
         });
     });
