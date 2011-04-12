@@ -5,6 +5,10 @@ namespace Vision.Models
 {
     public class GlassesHistory
     {
+        public GlassesHistory()
+        {
+        }
+
         public GlassesHistory(Glasses g)
         {
             Group = g.Group;

@@ -12,6 +12,7 @@
         <script src="/js/jquery-1.4.4.min.js" type="text/javascript"></script>
         <script src="/js/json2.js" type="text/javascript"></script>
         <script src="/js/jquery.tools.min.js" type="text/javascript"></script>
+        <script src="/js/date.f-0.5.0-min.js" type="text/javascript"></script>
         <script src="/js/site.js" type="text/javascript"></script>
     </head>
     <body>
@@ -174,12 +175,14 @@
 
 		    <!-- HISTORY -->
 		    <div class="pane span-24 last" id="historyPane">
-		    c
+		        <button id="getHistory">Get History</button>
+                <div id="historyResults"></div>
 		    </div>
 
             <!-- OPTIONS -->
 		    <div class="pane span-24 last" id="optionsPane">
-		        
+		        <h2>Export Inventory to <a href="http://kendall-optometry-ministry.com/kendall-optometry/" target="_blank">Kendall Optometry Software</a> Format</h2>
+                @Html.ActionLink("Export", "ExportToKendallFormat", "Glasses")
 		    </div>
         </div>
 

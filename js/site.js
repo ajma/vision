@@ -187,6 +187,7 @@
         $('#searchResults').html('');
     });
 
+    var clickedResultRow = null;
     $('.rx_result_row, .rx_result_row_alt').live('click', function () {
         var callnum = $(this).find('.callnum').html().split('/');
         $('#removeDialog').find('.group').text(callnum[0]);
@@ -200,6 +201,7 @@
         }
         $('#removeDialog').find('.rx').html(rx);
         $('#removeDialog').overlay().load();
+        clickedResultRow = this;
     });
 
     $('.rx_result_row, .rx_result_row_alt').live('mouseover', function () {
@@ -210,6 +212,7 @@
         $(this).removeClass('rx_result_row_hilite');
     });
 
+    // need to call this to intialize. might be a jquery tools bug
     $('#removeDialog').overlay({
         top: '20%',
         fixed: false,
@@ -229,11 +232,35 @@
                 dataType: 'json',
                 data: '{ group:' + $('#removeDialog').find('.group').text() + ', number:' + $('#removeDialog').find('.number').text() + ' }',
                 contentType: 'application/json; charset=utf-8',
+                success: function (msg) {
+                    alert(clickedResultRow);
+                    $(clickedResultRow).slideUp(200);
+                    clickedResultRow = null;
+                },
                 error: function (msg) {
                     alert('Could not remove');
                 }
             });
         }
         $('#removeDialog').overlay().close();
+    });
+
+    $('#getHistory').click(function () {
+        $('#historyResults').html('');
+        $.ajax({
+            url: '/Glasses/History',
+            type: 'POST',
+            dataType: 'json',
+            contentType: 'application/json; charset=utf-8',
+            success: function (msg) {
+                var result = '';
+                $.each(msg, function (index, value) {
+                    var removalDate = new Date(parseInt(value.RemovalDate.substr(6)));
+                    result += div(div('Entry ID: ' + value.GlassesHistoryID, 'span-2') + div(value.Group + '/' + value.Number, 'span-2') + div(removalDate.f('yyyy-NNN-dd hh:mm a'))
+                     , 'span-24 last');
+                });
+                $('#historyResults').html(result);
+            }
+        });
     });
 });
