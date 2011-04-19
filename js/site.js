@@ -29,7 +29,7 @@
                 $(this).val(-Math.abs(Math.round($(this).val() * 4) / 4));
                 break;
             case 'Axis':
-                $(this).val(Math.round($(this).val() / 10) * 10);
+                $(this).val(Math.round($(this).val() / 1) * 1);
                 break;
             case 'Add':
                 $(this).val(Math.abs(Math.round($(this).val() * 4) / 4));
@@ -169,13 +169,14 @@
                 var counter = 0;
                 $.each(msg, function (index, value) {
                     results += '<div class="span-24 last rx_result_row' + (counter++ % 2 == 1 ? '_alt' : '') + '">' +
-								'<div class="rx_result_col">' + Math.round(value.MatchScore) + '</div><div class="rx_result_col callnum">' + sphCylFormat(value.Glasses.Group).split('.')[0] + '/' + value.Glasses.Number + '</div>' +
-								'<div class="rx_result_col">' + sphCylFormat(value.Glasses.OD_Spherical) + '</div><div class="rx_result_col">' + sphCylFormat(value.Glasses.OD_Cylindrical) + '</div><div class="rx_result_col">' + axisFormat(value.Glasses.OD_Axis) + '</div><div class="rx_result_col">' + sphCylFormat(value.Glasses.OD_Add) + '</div>' +
-								'<div class="rx_result_col">' + sphCylFormat(value.Glasses.OS_Spherical) + '</div><div class="rx_result_col">' + sphCylFormat(value.Glasses.OS_Cylindrical) + '</div><div class="rx_result_col">' + axisFormat(value.Glasses.OS_Axis) + '</div><div class="rx_result_col">' + sphCylFormat(value.Glasses.OS_Add) + '</div>' +
+								'<div class="rx_result_col">' + Math.round(value.MatchScore) + '</div><div class="rx_result_col_border callnum">' + sphCylFormat(value.Glasses.Group).split('.')[0] + '/' + value.Glasses.Number + '</div>' +
+								'<div class="rx_result_col">' + sphCylFormat(value.Glasses.OD_Spherical) + '</div><div class="rx_result_col">' + sphCylFormat(value.Glasses.OD_Cylindrical) + '</div><div class="rx_result_col">' + axisFormat(value.Glasses.OD_Axis) + '</div><div class="rx_result_col_border">' + sphCylFormat(value.Glasses.OD_Add) + '</div>' +
+								'<div class="rx_result_col">' + sphCylFormat(value.Glasses.OS_Spherical) + '</div><div class="rx_result_col">' + sphCylFormat(value.Glasses.OS_Cylindrical) + '</div><div class="rx_result_col">' + axisFormat(value.Glasses.OS_Axis) + '</div><div class="rx_result_col_border">' + sphCylFormat(value.Glasses.OS_Add) + '</div>' +
                                 '<div class="rx_result_col">' + (value.Glasses.Sunglasses ? 'Y' : 'N') + '</div><div class="rx_result_col">' + value.Glasses.Gender + '</div><div class="rx_result_col">' + value.Glasses.Size + '</div>' +
                                 '</div>';
                 });
-                $('#searchResults').html(results).scrollTo();
+                $('#searchResults').html(results);
+                $('#rx_result_header').scrollTo();
                 $('#searchWaiting').hide();
             }
         });
