@@ -23,9 +23,11 @@
     var focusoutRxCleaup = function () {
         switch (this.name.substr(3)) {
             case 'Spherical':
+                if ($(this).val() >= 25 || $(this).val() <= -25) $(this).val($(this).val() / 100);
                 $(this).val(Math.round($(this).val() * 4) / 4);
                 break;
             case 'Cylindrical':
+                if ($(this).val() >= 25 || $(this).val() <= -25) $(this).val(-Math.abs($(this).val()) / 100);
                 $(this).val(-Math.abs(Math.round($(this).val() * 4) / 4));
                 break;
             case 'Axis':
