@@ -41,64 +41,48 @@ namespace Vision.Controllers
         [HttpPost]
         public ActionResult Search(Glasses search, int maxResults = 100)
         {
-            var results = scoringB(search);
+            var results = scoring(search);
 
             return Json(results.OrderByDescending(g => g.MatchScore).Take(maxResults));
         }
 
-        // this is my first attempt at scoring. Pretty raw type of scoring
-        private List<GlassesSearchResult> scoringA(Glasses search)
+        private float scoreSpherical(float search, float glasses)
         {
-            var results = new List<GlassesSearchResult>();
-            foreach (var glasses in context.Glasses)
+            if (search >= 0 && search >= glasses && glasses >= 0)
             {
-                GlassesSearchResult result = new GlassesSearchResult { Glasses = glasses };
-
-                float od_sph_match = 1.0f - (Math.Abs(glasses.OD_Spherical - search.OD_Spherical) / 20.0f);
-                float od_cyl_match = 1.0f - (Math.Abs(glasses.OD_Cylindrical - search.OD_Cylindrical) / 20.0f);
-                float od_axis_match = 1.0f - (Math.Abs(glasses.OD_Axis - search.OD_Axis) / 180.0f);
-                float od_add_match = 1.0f - (Math.Abs(glasses.OD_Add - search.OD_Add) / 10.0f);
-
-                float os_sph_match = 1.0f - (Math.Abs(glasses.OS_Spherical - search.OS_Spherical) / 20.0f);
-                float os_cyl_match = 1.0f - (Math.Abs(glasses.OS_Cylindrical - search.OS_Cylindrical) / 20.0f);
-                float os_axis_match = 1.0f - (Math.Abs(glasses.OS_Axis - search.OS_Axis) / 180.0f);
-                float os_add_match = 1.0f - (Math.Abs(glasses.OS_Add - search.OS_Add) / 10.0f);
-
-                result.MatchScore = (float)Math.Round((od_sph_match * od_cyl_match * od_axis_match * od_add_match * os_sph_match * os_cyl_match * os_axis_match * os_add_match) * 100.0f, 2);
-
-                results.Add(result);
+                return (search - glasses) / 0.25f;
             }
-            return results;
-        }
-
-        private float stepDifference(float search, float original)
-        {
-            if (search > 0 && search >= original)
+            else if (search < 0 && search <= glasses && glasses <= 0)
             {
-                return (search - original) / 0.25f;
-            }
-            else if (search <= 0 && search <= original)
-            {
-                return (search - original) / -0.25f;
+                return (search - glasses) / -0.25f;
             }
             return 100f;
         }
 
-        private float axisSearch(float search_cyl, int search_axis, int glasses_axis)
+        private float scoreCylindrical(float search, float glasses)
+        {
+            if (search - 0.25f <= glasses)
+            {
+                return Math.Abs(search - glasses) / 0.25f;
+            }
+            return 100f;
+        }
+
+        private float scoreAxis(float search_cyl, int search_axis, int glasses_axis)
         {
             int reasonableRange = 5;
-            if (search_cyl <= -1.0f)
+            if (search_cyl >= -1.0f)
                 reasonableRange = 20;
-            else if (search_cyl <= -2.0f)
+            else if (search_cyl >= -2.0f)
                 reasonableRange = 15;
-            else if (search_cyl <= -3.0f)
+            else if (search_cyl >= -3.0f)
                 reasonableRange = 10;
 
             int distance = Math.Abs(search_axis - glasses_axis);
             distance = Math.Min(distance, 180 - distance);
 
             if (distance < reasonableRange)
-                return (10 * distance) / reasonableRange;
+                return (8 * distance) / reasonableRange;
             else if (distance < reasonableRange * 2)
                 return 15;
             else if (distance < reasonableRange * 3)
@@ -108,41 +92,84 @@ namespace Vision.Controllers
         }
 
         // this is my second attempt at scoring after some consultation from Mike Tam.
-        private List<GlassesSearchResult> scoringB(Glasses search)
+        private List<GlassesSearchResult> scoring(Glasses search)
         {
             var results = new List<GlassesSearchResult>();
             foreach (var glasses in context.Glasses)
             {
                 GlassesSearchResult result = new GlassesSearchResult { Glasses = glasses };
                 result.MatchScore = 100f;
-                result.MatchScore -= 2 * stepDifference(search.OD_Cylindrical, glasses.OD_Cylindrical);
-                result.MatchScore -= 2 * stepDifference(search.OS_Cylindrical, glasses.OS_Cylindrical);
-                result.MatchScore -= stepDifference(search.OD_Spherical, glasses.OD_Spherical);
-                result.MatchScore -= stepDifference(search.OS_Spherical, glasses.OS_Spherical);
+                StringBuilder details = new StringBuilder();
 
-                result.MatchScore -= axisSearch(search.OS_Cylindrical, search.OS_Axis, glasses.OS_Axis);
-                result.MatchScore -= axisSearch(search.OD_Cylindrical, search.OD_Axis, glasses.OD_Axis);
-                //float os_axis_diff = (search.OS_Axis - glasses.OS_Axis) % 180;
-                //if (os_axis_diff < reasonableRange(search.OS_Cylindrical))
-                //    result.MatchScore -= (10f * Math.Abs(search.OS_Axis - glasses.OS_Axis)) / reasonableRange(search.OS_Cylindrical);
-                //else if (os_axis_diff < reasonableRange(search.OS_Cylindrical) * 2)
-                //    result.MatchScore -= 15f;
-                //else if (os_axis_diff < reasonableRange(search.OS_Cylindrical) * 2)
-                //    result.MatchScore -= 25f;
-                //else
-                //    result.MatchScore -= 35f;
+                /*** Calculate Cyl ***/
+                float od_cyl_score = 2 * scoreCylindrical(search.OD_Cylindrical, glasses.OD_Cylindrical);
+                result.MatchScore -= od_cyl_score;
+                details.AppendFormat("OD Cyl: -{0}\n", od_cyl_score);
 
-                //float od_axis_diff = (search.OD_Axis - glasses.OD_Axis) % 180;
-                //if (od_axis_diff < reasonableRange(search.OD_Cylindrical))
-                //    result.MatchScore -= (10f * Math.Abs(search.OD_Axis - glasses.OD_Axis)) / reasonableRange(search.OD_Cylindrical);
-                //else if (od_axis_diff < reasonableRange(search.OD_Cylindrical) * 2)
-                //    result.MatchScore -= 15f;
-                //else if (od_axis_diff < reasonableRange(search.OD_Cylindrical) * 2)
-                //    result.MatchScore -= 25f;
-                //else
-                //    result.MatchScore -= 35f;
+                float os_cyl_score = 2 * scoreCylindrical(search.OS_Cylindrical, glasses.OS_Cylindrical);
+                result.MatchScore -= os_cyl_score;
+                details.AppendFormat("OS Cyl: -{0}\n", os_cyl_score);
 
-                results.Add(result);
+                // if the two eyes have an adjustment difference of more than 1 step, then penalize
+                if (Math.Abs(od_cyl_score - os_cyl_score) > 2)
+                {
+                    result.MatchScore -= 5;
+                    details.Append("OS OD cyl diff > 1 step: -5\n");
+                }
+
+                /*** Calculate Sph ***/
+                float od_sph_score = 2 * scoreSpherical(search.OD_Spherical, glasses.OD_Spherical);
+                result.MatchScore -= od_sph_score;
+                details.AppendFormat("OD Sph: -{0}\n", od_sph_score);
+
+                float os_sph_score = 2 * scoreSpherical(search.OS_Spherical, glasses.OS_Spherical);
+                result.MatchScore -= os_sph_score;
+                details.AppendFormat("OS Sph: -{0}\n", os_sph_score);
+
+                // if the two eyes have an adjustment difference of more than 1 step, then penalize
+                if (Math.Abs(od_sph_score - os_sph_score) > 2)
+                {
+                    result.MatchScore -= 5;
+                    details.Append("OS OD sph diff > 1 step: -5\n");
+                }
+
+                // check if any of the properties are different more than one step
+                float minStep = Math.Min(od_cyl_score, Math.Min(os_cyl_score, Math.Min(od_sph_score, os_sph_score)));
+                if (od_cyl_score - minStep > 2
+                    || os_cyl_score - minStep > 2
+                    || od_sph_score - minStep > 2
+                    || os_sph_score - minStep > 2)
+                {
+                    result.MatchScore -= 5;
+                    details.Append("Cyl and/or sph diff > 1 step: -5\n");
+                }
+
+                // spherical equivalant (sph + cyl/2)
+                if (od_sph_score > 0 && od_sph_score == od_cyl_score / 2)
+                {
+                    result.MatchScore += 7;
+                    details.Append("OD Spherical equiv: +7\n");
+                }
+                if (os_sph_score > 0 && os_sph_score == os_cyl_score / 2)
+                {
+                    result.MatchScore += 7;
+                    details.Append("OS Spherical equiv: +7\n");
+                }
+
+                /*** Calculate Axis ***/
+                float od_axis_score = scoreAxis(search.OD_Cylindrical, search.OD_Axis, glasses.OD_Axis);
+                result.MatchScore -= od_axis_score;
+                details.AppendFormat("OD Axis: -{0}\n", od_axis_score);
+
+                float os_axis_score = scoreAxis(search.OS_Cylindrical, search.OS_Axis, glasses.OS_Axis);
+                result.MatchScore -= os_axis_score;
+                details.AppendFormat("OS Axis: -{0}\n", os_axis_score);
+
+                if (result.MatchScore >= 0)
+                {
+                    result.MatchScoreDetails = details.ToString();
+                    results.Add(result);
+                }
             }
             return results;
         }

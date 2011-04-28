@@ -138,6 +138,18 @@
         $('#addMsg').hide().html('');
     });
 
+    // search type choosing
+    $('input[name=searchType]').click(function () {
+        if ($(this).val() === 'rx' && !$('#rxsearchform').is(':visible')) {
+            $('#callnumsearchform').slideUp();
+            $('#rxsearchform').slideDown();
+        }
+        if ($(this).val() === 'callnum' && !$('#callnumsearchform').is(':visible')) {
+            $('#callnumsearchform').slideDown();
+            $('#rxsearchform').slideUp();
+        }
+    });
+
     // search form input box data cleanup
     $('#searchForm').find('input,').focusout(focusoutRxCleaup);
 
@@ -171,7 +183,8 @@
                 var counter = 0;
                 $.each(msg, function (index, value) {
                     results += '<div class="span-24 last rx_result_row' + (counter++ % 2 == 1 ? '_alt' : '') + '">' +
-								'<div class="rx_result_col">' + Math.round(value.MatchScore) + '</div><div class="rx_result_col_border callnum">' + sphCylFormat(value.Glasses.Group).split('.')[0] + '/' + value.Glasses.Number + '</div>' +
+								'<div class="rx_result_col matchscore">' + Math.round(value.MatchScore) + '</div><div class="rx_result_col_border callnum">' + sphCylFormat(value.Glasses.Group).split('.')[0] + '/' + value.Glasses.Number + '</div>' +
+                                '<span class="hidden">' + value.MatchScoreDetails + '</span>' +
 								'<div class="rx_result_col">' + sphCylFormat(value.Glasses.OD_Spherical) + '</div><div class="rx_result_col">' + sphCylFormat(value.Glasses.OD_Cylindrical) + '</div><div class="rx_result_col">' + axisFormat(value.Glasses.OD_Axis) + '</div><div class="rx_result_col_border">' + sphCylFormat(value.Glasses.OD_Add) + '</div>' +
 								'<div class="rx_result_col">' + sphCylFormat(value.Glasses.OS_Spherical) + '</div><div class="rx_result_col">' + sphCylFormat(value.Glasses.OS_Cylindrical) + '</div><div class="rx_result_col">' + axisFormat(value.Glasses.OS_Axis) + '</div><div class="rx_result_col_border">' + sphCylFormat(value.Glasses.OS_Add) + '</div>' +
                                 '<div class="rx_result_col">' + (value.Glasses.Sunglasses ? 'Y' : 'N') + '</div><div class="rx_result_col">' + value.Glasses.Gender + '</div><div class="rx_result_col">' + value.Glasses.Size + '</div>' +
@@ -180,6 +193,15 @@
                 $('#searchResults').html(results);
                 $('#rx_result_header').scrollTo();
                 $('#searchWaiting').hide();
+                $('.matchscore').tooltip({
+                    tip: '#tooltip',
+                    effect: 'slide',
+                    position: 'bottom right',
+                    predelay: 500,
+                    onShow: function () {
+                        $('#tooltip').find('pre').text(this.getTrigger().parent().find('.hidden').text());
+                    }
+                });
             }
         });
     });

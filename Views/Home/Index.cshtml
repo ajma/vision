@@ -96,8 +96,13 @@
 
             <!-- SEARCH -->
 		    <div class="pane span-24 last" id="searchPane">               
-                <div id="searchForm" class="column span-24 last">
-                    <div class="column prepend-2 span-8 colborder">
+                <div id="searchForm" class="column span-24">
+                    <div class="column span-6 colborder">
+                        <h1>Search by:</h1>
+                        <div class="huge"><input type="radio" name="searchType" value="rx" checked> RX</div>
+                        <div class="huge"><input type="radio" name="searchType" value="callnum" /> Call #</div>
+                    </div>
+                    <div id="rxsearchform" class="column span-8 append-9 last">
                         <div class="column span-8">
                             <div class="rx_label rx_col">&nbsp;</div>
                             <div class="rx_label rx_col">Sph</div>
@@ -132,10 +137,7 @@
                             <div class="column span-4"><select name="Size" class="rx_select"><option value="U">Unspecified</option><option value="S">Small</option><option value="M">Medium</option><option value="L">Large</option></select></div>
                         </div>
                     </div>
-                    <div class="column span-2 colborder" style="text-align:center;padding-top:70px;">
-                        <h1>OR</h1>
-                    </div>
-                    <div class="column span-8 append-2 last">
+                    <div id="callnumsearchform" class="column span-8 append-9 last hidden">
                         <div class="rx_label span-3">Group:</div>
                         <div class="span-5 last"><input name="Group" type="number" class="rx_box" /></div>
                         <div class="rx_label span-3">Number:</div>
@@ -202,5 +204,8 @@
 		        <button>Keep</button>
 	        </p>
         </div>
+
+        <!-- tooltip element -->
+        <div id="tooltip"><div class="bold">Score Details</div><pre></pre></div>
     </body>
 </html>

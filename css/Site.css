@@ -229,3 +229,14 @@ input[type=number]::-webkit-outer-spin-button {
 	-moz-box-shadow: 0 0 50px #ccc;
 	-webkit-box-shadow: 0 0 50px #ccc;
 }
+
+#tooltip {
+	display: none;
+	padding: 20px;
+	color:#000;
+	background: #fff;
+}
+#tooltip pre 
+{
+    margin: 0;
+}
