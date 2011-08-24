@@ -9,53 +9,54 @@
 @Html.Partial("RxForm")
 <div id="callnumsearchform" class="clearfix hidden">
 	<div class="rx_label span-3">Group:</div>
-	<div class="span-5 last"><input name="Group" type="number" class="rx_box" /></div>
+	<div class="span-5 last"><input id="group" name="Group" type="number" class="rx_box" /></div>
 	<div class="rx_label span-3">Number:</div>
-	<div class="span-5 last"><input name="Number" type="number" class="rx_box" /></div>
+	<div class="span-5 last"><input id="number" name="Number" type="number" class="rx_box" /></div>
 </div>
 <div class="column span-24 last" style="text-align:center">
 	<a href="#" id="submit" class="button big">Search</a>
 	<a href="#" id="clear" class="button big">Clear</a>
 </div>
-<script src="/js/search.js" type="text/javascript"></script>
+<div>&nbsp;</div>
+
+<h3 id="searchWaiting" class="hidden centered"><img src="/img/spinner.gif" alt="waiting..." /> Searching....</h3>
 
 <table>
-    <thead>
-        <tr>
-            <th>Score</th>
-            <th>Call #</th>
-            <th>OD Sph</th>
-            <th>OD Cyl</th>
-            <th>OD Axis</th>
-            <th>OD Add</th>
-            <th>OS Sph</th>
-            <th>OS Cyl</th>
-            <th>OS Axis</th>
-            <th>OS Add</th>
-            <th>Sungl.</th>
-            <th>Gender</th>
-            <th>Size</th>
-        </tr>
-    </thead> 
+	<thead>
+		<tr>
+			<th>Score</th>
+			<th>Call #</th>
+			<th>OD Sph</th>
+			<th>OD Cyl</th>
+			<th>OD Axis</th>
+			<th>OD Add</th>
+			<th>OS Sph</th>
+			<th>OS Cyl</th>
+			<th>OS Axis</th>
+			<th>OS Add</th>
+			<th>Sungl.</th>
+			<th>Gender</th>
+			<th>Size</th>
+		</tr>
+	</thead> 
 	<tbody id="rxList"></tbody> 
 </table> 
 
-
+<script src="/js/search.js" type="text/javascript"></script>
 <script id="rxTemplate" type="text/x-jquery-tmpl">
 <tr>
 <td>${MatchScore}</td>
 <td>${Glasses.Group}/${Glasses.Number}</td>
-<td>${Glasses.OD_Spherical}</td>
-<td>${Glasses.OD_Cylindrical}</td>
-<td>${Glasses.OD_Axis}</td>
-<td>${Glasses.OD_Add}</td>
-<td>${Glasses.OS_Spherical}</td>
-<td>${Glasses.OS_Cylindrical}</td>
-<td>${Glasses.OS_Axis}</td>
-<td>${Glasses.OS_Add}</td>
-<td>${Glasses.Sunglasses}</td>
+<td>${sphCylFormat(Glasses.OD_Spherical)}</td>
+<td>${sphCylFormat(Glasses.OD_Cylindrical)}</td>
+<td>${axisFormat(Glasses.OD_Axis)}</td>
+<td>${sphCylFormat(Glasses.OD_Add)}</td>
+<td>${sphCylFormat(Glasses.OS_Spherical)}</td>
+<td>${sphCylFormat(Glasses.OS_Cylindrical)}</td>
+<td>${axisFormat(Glasses.OS_Axis)}</td>
+<td>${sphCylFormat(Glasses.OS_Add)}</td>
+<td>${Glasses.Sunglasses?'Y':'N'}</td>
 <td>${Glasses.Gender}</td>
 <td>${Glasses.Size}</td>
-
 </tr>
 </script>

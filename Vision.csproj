@@ -91,7 +91,6 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="css\googlebuttons.css" />
     <Content Include="css\style.css" />
     <Content Include="Global.asax" />
     <Content Include="img\ios-icon.png" />

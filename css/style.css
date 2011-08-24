@@ -396,7 +396,8 @@ article header{
 
 /* Hide for both screenreaders and browsers:
    css-discuss.incutio.com/wiki/Screenreader_Visibility */
-.hidden { display: none; visibility: hidden; }
+   /* ajma: taking out visibility:hidden so jquery.show can work properly */
+.hidden { display: none; }
 
 /* Hide only visually, but have it available for screenreaders: by Jon Neal.
   www.webaim.org/techniques/css/invisiblecontent/  &  j.mp/visuallyhidden */
@@ -413,7 +414,7 @@ article header{
 .clearfix:after { clear: both; }
 .clearfix { zoom: 1; }
 
-
+.centered { text-align: center; }
 
 /* =============================================================================
    PLACEHOLDER Media Queries for Responsive Design.

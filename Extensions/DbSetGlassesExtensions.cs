@@ -10,6 +10,14 @@ namespace Vision
 {
     public static class DbSetGlassesExtensions
     {
+        public static List<GlassesSearchResult> CallNumberSearch(this DbSet<Glasses> glassesDbSet, int group, int number)
+        {
+            return glassesDbSet.Where(g => g.Group == group && g.Number == number).Select(g => new GlassesSearchResult {
+                MatchScore = 100,
+                Glasses = g
+            }).ToList();
+        }
+
         public static List<GlassesSearchResult> FuzzySearch(this DbSet<Glasses> glassesDbSet, Glasses searchParameters)
         {
             var results = new List<GlassesSearchResult>();
