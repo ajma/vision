@@ -10,7 +10,7 @@ namespace Vision
 {
     public static class DbSetGlassesExtensions
     {
-        public static List<GlassesSearchResult> Scoring(this DbSet<Glasses> glassesDbSet, Glasses searchParameters)
+        public static List<GlassesSearchResult> FuzzySearch(this DbSet<Glasses> glassesDbSet, Glasses searchParameters)
         {
             var results = new List<GlassesSearchResult>();
             foreach (var glasses in glassesDbSet)

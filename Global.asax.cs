@@ -21,12 +21,20 @@ namespace Vision
         {
             routes.IgnoreRoute("{resource}.axd/{*pathInfo}");
 
+            mapBasicRoute(routes, "search", "search");
+            mapBasicRoute(routes, "history", "history");
+            mapBasicRoute(routes, "manage", "manage");
+            mapBasicRoute(routes, "options", "options");
+
             routes.MapRoute(
-                "Default", // Route name
+                "Home",
                 "{controller}/{action}/{id}", // URL with parameters
                 new { controller = "Home", action = "Index", id = UrlParameter.Optional } // Parameter defaults
             );
+        }
 
+        private static void mapBasicRoute(RouteCollection routes, string name, string url) {
+            routes.MapRoute( name, url, new { controller = name, action = name } );
         }
 
         protected void Application_Start()
