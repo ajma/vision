@@ -84,6 +84,7 @@
     <Compile Include="Models\Glasses.cs" />
     <Compile Include="Models\GlassesHistory.cs" />
     <Compile Include="Models\GlassesSearchResult.cs" />
+    <Compile Include="Extensions\SearchService.cs" />
     <Compile Include="VisionContext.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
