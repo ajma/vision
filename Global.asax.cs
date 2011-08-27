@@ -23,7 +23,7 @@ namespace Vision
 
             mapBasicRoute(routes, "search", "search");
             mapBasicRoute(routes, "history", "history");
-            mapBasicRoute(routes, "manage", "manage");
+            mapBasicRoute(routes, "add", "add");
             mapBasicRoute(routes, "options", "options");
 
             routes.MapRoute(
