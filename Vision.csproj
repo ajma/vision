@@ -95,6 +95,7 @@
     <Content Include="Global.asax" />
     <Content Include="img\ios-icon.png" />
     <Content Include="img\spinner.gif" />
+    <Content Include="js\add.js" />
     <Content Include="js\jquery-1.6.2.min.js" />
     <Content Include="js\jquery.tmpl.min.js" />
     <Content Include="js\search.js" />

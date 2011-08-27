@@ -19,10 +19,12 @@ namespace Vision.Controllers
         [HttpPost]
         public ActionResult Add(Glasses glasses)
         {
-            // assign number
+            // figure out which group this pair goes to
             glasses.Group = (int)Math.Floor(glasses.OD_Spherical);
+            // grab all glasses in this group so that I can look for the next pair of glasses
             var numbers = context.Glasses.Where(g => g.Group == glasses.Group).Select(g => g.Number).OrderBy(g => g).ToArray();
             glasses.Number = numbers.Length > 0 ? numbers.Max() + 1 : 1;
+            // try to look for a gap. If there is a gap in the number, fill it in.
             for (int i = 0; i < numbers.Length; i++)
             {
                 if (numbers[i] != i + 1)

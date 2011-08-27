@@ -12,24 +12,24 @@ var axisFormat = function (num) {
     else
         return num;
 };
+var formToJson = function (form) {
+    var glasses = {};
+    form.each(function (index) {
+        switch ($(this).attr('type')) {
+            case 'button':
+                break;
+            case 'checkbox':
+                glasses[$(this).attr('name')] = $(this).is(':checked');
+                break;
+            default:
+                glasses[$(this).attr('name')] = $(this).val();
+        }
+    });
+    return glasses;
+};
 
 $(document).ready(function () {
     var currentSearchType = 'rx';
-    var formToJson = function (form) {
-        var glasses = {};
-        form.each(function (index) {
-            switch ($(this).attr('type')) {
-                case 'button':
-                    break;
-                case 'checkbox':
-                    glasses[$(this).attr('name')] = $(this).is(':checked');
-                    break;
-                default:
-                    glasses[$(this).attr('name')] = $(this).val();
-            }
-        });
-        return glasses;
-    };
 
     // search type choosing
     $('input[name=searchType]').click(function () {

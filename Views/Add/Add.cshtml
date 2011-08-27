@@ -1,5 +1,16 @@
 ﻿@{
-    ViewBag.Title = "Add";
+	ViewBag.Title = "Add";
 }
 
 <h2>Add</h2>
+@Html.Partial("RxForm")
+<div id="addErr" class="hidden"></div>
+
+<div class="centered">
+	<a href="#" id="add" class="button big">Add</a>
+	<a href="#" id="clear" class="button big">Clear</a>
+</div>
+
+<div id="addMsg"></div>
+
+<script src="/js/add.js" type="text/javascript"></script>
