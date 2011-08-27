@@ -2,22 +2,30 @@
 	ViewBag.Title = "Search";
 }
 
-<h3>Search by:</h3>
-<div><input type="radio" name="searchType" value="rx" checked> RX</div>
-<div><input type="radio" name="searchType" value="callnum" /> Call #</div>
-
-@Html.Partial("RxForm")
-<div id="callnumsearchform" class="clearfix hidden">
-	<div class="rx_label span-3">Group:</div>
-	<div class="span-5 last"><input id="group" name="Group" type="number" class="rx_box" /></div>
-	<div class="rx_label span-3">Number:</div>
-	<div class="span-5 last"><input id="number" name="Number" type="number" class="rx_box" /></div>
+<div style="float:left;width:300px;">
+    <h2>Search by:</h2>
+    <h3>
+    <div><input type="radio" name="searchType" value="rx" checked> RX</div>
+    <div><input type="radio" name="searchType" value="callnum" /> Call #</div>
+    </h3>
 </div>
-<div class="column span-24 last" style="text-align:center">
+
+<div style="float:left;">
+    @Html.Partial("RxForm")
+    <div id="callnumsearchform" class="clearfix hidden">
+	    <div class="rx_label">Group:</div>
+	    <div><input id="group" name="Group" type="number" class="rx_box" /></div>
+	    <div class="rx_label">Number:</div>
+	    <div><input id="number" name="Number" type="number" class="rx_box" /></div>
+    </div>
+</div>
+<div class="clearfix">&nbsp;</div>
+<div class="clearfix">&nbsp;</div>
+<div class="centered">
 	<a href="#" id="submit" class="button big">Search</a>
 	<a href="#" id="clear" class="button big">Clear</a>
 </div>
-<div>&nbsp;</div>
+<div class="clearfix">&nbsp;</div>
 
 <h3 id="searchWaiting" class="hidden centered"><img src="/img/spinner.gif" alt="waiting..." /> Searching....</h3>
 
