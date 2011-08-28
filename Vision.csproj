@@ -76,6 +76,7 @@
   <ItemGroup>
     <Compile Include="App_Start\EntityFramework.SqlServerCompact.cs" />
     <Compile Include="Controllers\GlassesController.cs" />
+    <Compile Include="Controllers\HistoryController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\AddController.cs" />
     <Compile Include="Controllers\SearchController.cs" />
@@ -135,6 +136,9 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Views\Add\Add.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Views\History\History.cshtml" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v10.0\WebApplications\Microsoft.WebApplication.targets" />
