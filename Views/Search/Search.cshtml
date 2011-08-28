@@ -52,9 +52,9 @@
 
 <script src="/js/search.js" type="text/javascript"></script>
 <script id="rxTemplate" type="text/x-jquery-tmpl">
-<tr>
+<tr class="resultRow">
 <td>${MatchScore}</td>
-<td>${Glasses.Group}/${Glasses.Number}</td>
+<td class="group">${Glasses.Group}/${Glasses.Number}</td>
 <td>${sphCylFormat(Glasses.OD_Spherical)}</td>
 <td>${sphCylFormat(Glasses.OD_Cylindrical)}</td>
 <td>${axisFormat(Glasses.OD_Axis)}</td>
@@ -68,3 +68,14 @@
 <td>${Glasses.Size}</td>
 </tr>
 </script>
+<div id="action" style="display:none; cursor: default"> 
+    <h1>What would you like to do with these glasses?</h1>
+    <p>
+    <b>Remove</b> will remove these from the inventory (and log in the history). This is for a pair of glasses that has been distributed (or thrown away).<br />
+    <b>Edit</b> will give you the option to edit any the glasses if something was entered incorrectly.<br />
+    <b>Do Nothing</b> is the option to close this if you clicked it by accident or would just like to go back.
+    </p>
+    <a href="#" id="remove" class="button big">Remove</a>
+	<a href="#" id="edit" class="button big">Edit</a>
+    <a href="#" id="doNothing" class="button big">Do Nothing</a>
+</div> 

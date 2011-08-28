@@ -30,6 +30,7 @@ var formToJson = function (form) {
 
 $(document).ready(function () {
     var currentSearchType = 'rx';
+    var clickedGlassesCallNumber = { group: 0, number: 0 };
 
     // search type choosing
     $('input[name=searchType]').click(function () {
@@ -45,7 +46,7 @@ $(document).ready(function () {
         }
     });
 
-    // submit search query
+    // binding submit search query button
     $('#submit').click(function (e) {
         e.preventDefault();
         var glasses, url;
@@ -73,10 +74,46 @@ $(document).ready(function () {
         });
     });
 
+    // bind clear button
     $('#clear').click(function (e) {
         e.preventDefault();
         $('#rxform').find('.rx_box').each(function () { $(this).val(''); });
         $('#rxform').find('select').each(function () { $(this).val('U'); });
         $('#rxList').html('');
+    });
+
+    // bind for clicking on a row
+    $('.resultRow').live('click', function (event) {
+        var callNumber = $(this).find('.group').text().split('/');
+        clickedGlassesCallNumber.group = callNumber[0];
+        clickedGlassesCallNumber.number = callNumber[1];
+        $.blockUI({ message: $('#action'), css: { width: '500px'} });
+    });
+
+    // bind for hovering over rows and highlighting properly
+    $('.resultRow').live('mouseover mouseout', function (event) {
+        // user "event.type == 'mouseover'" if you want to have diff behaviour
+        $(this).find('td').toggleClass('rowHover');
+    });
+
+    // bind edit button (in modal)
+    $('#edit').click(function (e) {
+        e.preventDefault();
+        $.unblockUI();
+    });
+
+    // bind remove button (in modal)
+    $('#remove').click(function (e) {
+        e.preventDefault();
+        $.post('add/remove', clickedGlassesCallNumber, function (msg) {
+            $.unblockUI();
+            $('#submit').click();
+        });
+    });
+
+    // bind do nothing button (in modal)
+    $('#doNothing').click(function (e) {
+        e.preventDefault();
+        $.unblockUI();
     });
 });
