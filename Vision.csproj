@@ -96,6 +96,7 @@
     <Content Include="img\ios-icon.png" />
     <Content Include="img\spinner.gif" />
     <Content Include="js\add.js" />
+    <Content Include="js\history.js" />
     <Content Include="js\jquery-1.6.2.min.js" />
     <Content Include="js\jquery.blockUI.js" />
     <Content Include="js\jquery.tmpl.min.js" />
@@ -136,6 +137,12 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Views\Add\Add.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Views\History\RemovalHistory.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Views\History\InsertionHistory.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Views\History\History.cshtml" />

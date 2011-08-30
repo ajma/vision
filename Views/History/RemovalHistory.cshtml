@@ -1,0 +1,103 @@
+﻿@model IEnumerable<Vision.Models.GlassesHistory>
+
+@{
+    ViewBag.Title = "History";
+}
+
+<h2>Removal History</h2>
+<p>These are the glasses that have been removed from the inventory.</p>
+
+<table>
+    <tr>
+        <th>
+            Call Number
+        </th>
+        <th>
+            OD Sph
+        </th>
+        <th>
+            OD Cyl
+        </th>
+        <th>
+            OD Axis
+        </th>
+        <th>
+            OD Add
+        </th>
+        <th>
+            OS Sph
+        </th>
+        <th>
+            OS Cyl
+        </th>
+        <th>
+            OS Axis
+        </th>
+        <th>
+            OS Add
+        </th>
+        <th>
+            Sunglasses
+        </th>
+        <th>
+            Size
+        </th>
+        <th>
+            Gender
+        </th>
+        <th>
+            Inserted on
+        </th>
+        <th>
+            Removed on
+        </th>
+    </tr>
+
+@foreach (var item in Model) {
+    <tr>
+        <td>
+            @Html.DisplayFor(modelItem => item.Group)/@Html.DisplayFor(modelItem => item.Number)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.OD_Spherical)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.OD_Cylindrical)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.OD_Axis)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.OD_Add)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.OS_Spherical)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.OS_Cylindrical)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.OS_Axis)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.OS_Add)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Sunglasses)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Size)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Gender)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.InsertDate)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.RemovalDate)
+        </td>
+    </tr>
+}
+
+</table>
