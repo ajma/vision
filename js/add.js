@@ -39,7 +39,7 @@ $(document).ready(function () {
         rxValRangeCheck('OS_Add', 0, 10);
 
         if (errMsg != '') {
-            if(console) console.log(errMsg);
+            if (console) console.log(errMsg);
             $('#addErr').html(errMsg).fadeIn(200);
             $('#add').removeAttr('disabled');
             $('#addWaiting').hide();
@@ -56,6 +56,10 @@ $(document).ready(function () {
                     $('#addMsg').prepend($('<div>Added with call number ' + msg.Group + ' / ' + msg.Number + '.</div>'));
                     $('#add').removeAttr('disabled');
                     $('#addWaiting').slideUp();
+
+                    // clear form so user can add next pair of glasses
+                    $('#rxform').find('.rx_box').each(function () { $(this).val(''); });
+                    $('#rxform').find('select').each(function () { $(this).val('U'); });
                 },
                 error: function (msg) {
                     $('#addErr').html('Error Adding').fadeIn(200);
@@ -70,7 +74,6 @@ $(document).ready(function () {
         e.preventDefault();
         $('#rxform').find('.rx_box').each(function () { $(this).val(''); });
         $('#rxform').find('select').each(function () { $(this).val('U'); });
-        $('#rxList').html('');
         $('#addErr').fadeOut(200);
     });
 });
