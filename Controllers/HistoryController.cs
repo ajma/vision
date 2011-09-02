@@ -23,9 +23,10 @@ namespace Vision.Controllers
             return View(history);
         }
 
-        public ActionResult InsertionHistory()
+        public ActionResult InsertionHistory(int page = 0)
         {
-            var history = context.Glasses.OrderByDescending(h => h.InsertDate).ToArray();
+            int pageSize = 200;
+            var history = context.Glasses.OrderByDescending(h => h.InsertDate).Skip(page * pageSize).Take(pageSize).ToArray();
             return View(history);
         }
 

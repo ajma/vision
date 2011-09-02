@@ -14,3 +14,12 @@
 <div id="addMsg"></div>
 
 <script src="/js/add.js" type="text/javascript"></script>
+<script id="addMsgTmpl" type="text/x-jquery-tmpl">
+<p>Added with call number ${Group} / ${Number}<br />
+	<table style="width:200px">
+        <tr><td></td><td>Sph</td><td>Cyl</td><td>Axis</td><td>Add</td></tr>
+		<tr><td><b>OD</b></td><td>${Glasses.OD_Spherical}</td><td>${Glasses.OD_Cylindrical}</td><td>${Glasses.OD_Axis}</td><td>${Glasses.OD_Add}</td></tr>
+        <tr><td><b>OS</b></td><td>${Glasses.OS_Spherical}</td><td>${Glasses.OS_Cylindrical}</td><td>${Glasses.OS_Axis}</td><td>${Glasses.OS_Add}</td></tr>
+	</table>
+</p>
+</script>

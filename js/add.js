@@ -53,7 +53,9 @@ $(document).ready(function () {
                 data: JSON.stringify(glasses),
                 contentType: 'application/json; charset=utf-8',
                 success: function (msg) {
-                    $('#addMsg').prepend($('<div>Added with call number ' + msg.Group + ' / ' + msg.Number + '.</div>'));
+                    msg.Glasses = glasses;
+                    $('#addMsgTmpl').tmpl(msg).prependTo('#addMsg');
+
                     $('#add').removeAttr('disabled');
                     $('#addWaiting').slideUp();
 
