@@ -61,6 +61,7 @@ $(document).ready(function () {
 
                     // clear form so user can add next pair of glasses
                     $('#rxform').find('.rx_box').each(function () { $(this).val(''); });
+                    $('#rxform').find('.rx_checkbox').each(function () { $(this).prop('checked', false); });
                     $('#rxform').find('select').each(function () { $(this).val('U'); });
                 },
                 error: function (msg) {
