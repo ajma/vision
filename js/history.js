@@ -25,6 +25,24 @@ $(document).ready(function () {
         });
     });
 
+    // bind to check 40 above button
+    $('#check40above').click(function (e) {
+        e.preventDefault();
+        var lastIndex = -1;
+
+        // find the last checked item
+        $('td input[type=checkbox]').each(function (index) {
+            if ($(this).is(':checked'))
+                lastIndex = index;
+        });
+
+        // check
+        $('td input[type=checkbox]').each(function (index) {
+            if (index > lastIndex - 40 && index < lastIndex)
+                $(this).prop("checked", true);
+        });
+    });
+
     // bind to checkbox click event so that I can select multiple checkboxes easier
     $('td input[type=checkbox]').click(function () {
         var lastIndex = -1;
