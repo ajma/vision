@@ -2,6 +2,7 @@
 
 @{
     ViewBag.Title = "History";
+    var counter = 1;
 }
 
 <h2>Insertion History</h2>
@@ -11,6 +12,7 @@
 
 <table>
     <tr>
+        <th></th>
         <th></th>
         <th>
             Call Number
@@ -55,6 +57,7 @@
 
 @foreach (var item in Model) {
     <tr>
+        <td>@(counter++)</td>
         <td><input type="checkbox" name="@item.Group/@item.Number" /></td>
         <td>
             @Html.DisplayFor(modelItem => item.Group)/@Html.DisplayFor(modelItem => item.Number)
