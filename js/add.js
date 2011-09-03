@@ -22,21 +22,21 @@ $(document).ready(function () {
         $('#addWaiting').show();
         var glasses = formToJson($('#rxform').find('input,select'));
         var errMsg = '';
-        var rxValRangeCheck = function (property, min, max) {
-            if (glasses[property] == '')
+        var rxValRangeCheck = function (property, min, max, optional) {
+            if (glasses[property] === '' && !optional)
                 errMsg += property + ' missing<br />';
             if (glasses[property] < min || glasses[property] > max)
                 errMsg += property + ' must be between ' + min + ' and ' + max + '<br />';
         };
 
         rxValRangeCheck('OD_Spherical', -20, 20);
-        rxValRangeCheck('OD_Cylindrical', -20, 0);
-        rxValRangeCheck('OD_Axis', 0, 180);
-        rxValRangeCheck('OD_Add', 0, 10);
+        rxValRangeCheck('OD_Cylindrical', -20, 0, true);
+        rxValRangeCheck('OD_Axis', 0, 180, true);
+        rxValRangeCheck('OD_Add', 0, 10, true);
         rxValRangeCheck('OS_Spherical', -20, 20);
-        rxValRangeCheck('OS_Cylindrical', -20, 20);
-        rxValRangeCheck('OS_Axis', 0, 180);
-        rxValRangeCheck('OS_Add', 0, 10);
+        rxValRangeCheck('OS_Cylindrical', -20, 20, true);
+        rxValRangeCheck('OS_Axis', 0, 180, true);
+        rxValRangeCheck('OS_Add', 0, 10, true);
 
         if (errMsg != '') {
             if (console) console.log(errMsg);
