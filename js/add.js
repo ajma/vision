@@ -34,7 +34,7 @@ $(document).ready(function () {
                 $('#add').toggleClass('big button hidden');
 
             // tell what the batch number is
-            $('#addMsg').prepend('<h3>'+msg+'</h3><p>Please handoff box of glasses with the batch #.</p>');
+            $('#addMsg').prepend('<h3>' + msg + '</h3><p>Please handoff box of glasses with the batch #.</p>');
         });
     });
 
@@ -93,6 +93,9 @@ $(document).ready(function () {
                         $('#add').toggleClass('big button hidden');
                         $('#batchDoneMsg').show();
                     }
+
+                    // move focus for next entry
+                    $('input[name=OD_Spherical]').focus();
                 },
                 error: function (msg) {
                     $('#addErr').html('Error Adding').fadeIn(200);
