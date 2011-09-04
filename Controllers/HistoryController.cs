@@ -33,6 +33,24 @@ namespace Vision.Controllers
         [HttpPost]
         public ActionResult InsertionHistory(string[] callnum)
         {
+            return export(callnum);
+        }
+
+        public ActionResult Batches(int page = 0)
+        {
+            int pageSize = 200;
+            var batches = context.GlassesBatches.OrderByDescending(b => b.GlassesBatchID).Skip(page * pageSize).Take(pageSize).ToArray();
+            return View(batches);
+        }
+
+        public ActionResult ExportBatches(int id)
+        {
+            var batch = context.GlassesBatches.FirstOrDefault(b => b.GlassesBatchID == id);
+            return export(batch.CallNumbers.Split(','));
+        }
+
+        private FileContentResult export(string[] callnum)
+        {
             StringBuilder sb = new StringBuilder();
             sb.AppendLine("Group,Number,Call,L_Sp,L_Cy,L_Ax,L_Ad,R_Sp,R_Cy,R_Ax,R_Ad");
 

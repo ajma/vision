@@ -15,6 +15,29 @@
 };
 
 $(document).ready(function () {
+    var glassesBatch = new Array();
+
+    // bind to send batch button
+    $('#sendBatch').click(function (e) {
+        var glassesBatchPostData = { callnumbers: $.map(glassesBatch, function (n, i) { return n.Group + '/' + n.Number; }).join(',') };
+        $.post('/Add/AddToGlassesBatches', glassesBatchPostData, function (msg) {
+            glassesBatch = new Array();
+
+            // reset display counter to 0
+            $('#glassesBatchCount').text(glassesBatch.length);
+
+            // hide message about batch being done
+            $('#batchDoneMsg').hide();
+
+            // if hidden, show hide button again
+            if ($('#add').hasClass('hidden'))
+                $('#add').toggleClass('big button hidden');
+
+            // tell what the batch number is
+            $('#addMsg').prepend('<h3>'+msg+'</h3><p>Please handoff box of glasses with the batch #.</p>');
+        });
+    });
+
     // add button click
     $('#add').click(function (e) {
         e.preventDefault();
@@ -63,6 +86,13 @@ $(document).ready(function () {
                     $('#rxform').find('.rx_box').each(function () { $(this).val(''); });
                     $('#rxform').find('.rx_checkbox').each(function () { $(this).prop('checked', false); });
                     $('#rxform').find('select').each(function () { $(this).val('U'); });
+
+                    glassesBatch.push(msg);
+                    $('#glassesBatchCount').text(glassesBatch.length);
+                    if (glassesBatch.length === 40) {
+                        $('#add').toggleClass('big button hidden');
+                        $('#batchDoneMsg').show();
+                    }
                 },
                 error: function (msg) {
                     $('#addErr').html('Error Adding').fadeIn(200);

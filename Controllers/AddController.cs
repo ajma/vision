@@ -52,6 +52,20 @@ namespace Vision.Controllers
         }
 
         [HttpPost]
+        public ActionResult AddToGlassesBatches(string callnumbers)
+        {
+            var batch = new GlassesBatch
+            {
+                CallNumbers = callnumbers
+            };
+
+            context.GlassesBatches.Add(batch);
+            context.SaveChanges();
+
+            return Json("Batch was submitted as #" + batch.GlassesBatchID);
+        }
+
+        [HttpPost]
         public ActionResult Remove(int group, int number)
         {
             var glasses = context.Glasses.Single(g => g.Group == group && g.Number == number);

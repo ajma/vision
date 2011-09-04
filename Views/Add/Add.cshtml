@@ -3,13 +3,26 @@
 }
 
 <h2>Add</h2>
-@Html.Partial("RxForm")
-<div id="addErr" class="hidden"></div>
+<div class="clearfix">
+    <div style="float:left;width:400px;">
+        @Html.Partial("RxForm")
+        <div id="addErr" class="hidden"></div>
+    </div>
+    <div>
+        <h3>Glasses in<br />current batch: <span id="glassesBatchCount">0</span></h3>
+    </div>
+</div>
+<div id="batchDoneMsg" class="hidden" style="background-color:#eee">
+    <h3>This batch is done. Please send batch to printing.</h3>
+    <p>Hand off 40 pairs of glasses in a batch so that labels can be printed for it. Please keep these 40 together.</p>
+</div>
 
 <div class="centered">
-	<a href="#" id="add" class="button big">Add</a>
-	<a href="#" id="clear" class="button big">Clear</a>
+	<a href="#" id="add" class="button big">Add to Inventory</a>
+    <a href="#" id="sendBatch" class="button big">Send Batch for printing</a>
+	<a href="#" id="clear" class="button big">Clear Form</a>
 </div>
+
 
 <div id="addMsg"></div>
 

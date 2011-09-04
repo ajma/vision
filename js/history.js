@@ -57,6 +57,6 @@ $(document).ready(function () {
             }
         });
         console.log(data);
-        $.download('/history/InsertionHistory', data, 'post');
+        $.download('/history/export', data, 'post');
     });
 });
