@@ -17,6 +17,11 @@
 $(document).ready(function () {
     var glassesBatch = new Array();
 
+    window.onbeforeunload = function () {
+        if(glassesBatch.length > 0)
+            return 'This batch of glasses have not been submitted. Are you sure you want to leave?';
+    }
+
     // bind to send batch button
     $('#sendBatch').click(function (e) {
         e.preventDefault();
