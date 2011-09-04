@@ -61,10 +61,16 @@ namespace Vision.Controllers
                 glasses.Add(g.Group + "/" + g.Number, g);
             }
 
-            // output a line for each glasses requested
+            // create list of glasses to output
+            var outputList = new List<Glasses>(40);
             foreach (var c in callnum)
             {
-                var g = glasses[c];
+                outputList.Add(glasses[c]);
+            }
+
+            // create csv 
+            foreach(var g in outputList.OrderBy(g => g.Group).ThenBy(g => g.Number))
+            {
                 sb.Append(g.Group);
                 sb.Append(',');
                 sb.Append(g.Number);

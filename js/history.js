@@ -75,6 +75,6 @@ $(document).ready(function () {
             }
         });
         console.log(data);
-        $.download('/history/export', data, 'post');
+        $.download('/history/InsertionHistory', data, 'post');
     });
 });
