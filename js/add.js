@@ -19,23 +19,26 @@ $(document).ready(function () {
 
     // bind to send batch button
     $('#sendBatch').click(function (e) {
-        var glassesBatchPostData = { callnumbers: $.map(glassesBatch, function (n, i) { return n.Group + '/' + n.Number; }).join(',') };
-        $.post('/Add/AddToGlassesBatches', glassesBatchPostData, function (msg) {
-            glassesBatch = new Array();
+        e.preventDefault();
+        if (glassesBatch === 40 || confirm('Are you sure you want to send this batch from printing?')) {
+            var glassesBatchPostData = { callnumbers: $.map(glassesBatch, function (n, i) { return n.Group + '/' + n.Number; }).join(',') };
+            $.post('/Add/AddToGlassesBatches', glassesBatchPostData, function (msg) {
+                glassesBatch = new Array();
 
-            // reset display counter to 0
-            $('#glassesBatchCount').text(glassesBatch.length);
+                // reset display counter to 0
+                $('#glassesBatchCount').text(glassesBatch.length);
 
-            // hide message about batch being done
-            $('#batchDoneMsg').hide();
+                // hide message about batch being done
+                $('#batchDoneMsg').hide();
 
-            // if hidden, show hide button again
-            if ($('#add').hasClass('hidden'))
-                $('#add').toggleClass('big button hidden');
+                // if hidden, show hide button again
+                if ($('#add').hasClass('hidden'))
+                    $('#add').toggleClass('big button hidden');
 
-            // tell what the batch number is
-            $('#addMsg').prepend('<h3>' + msg + '</h3><p>Please handoff box of glasses with the batch #.</p>');
-        });
+                // tell what the batch number is
+                $('#addMsg').prepend('<h3>' + msg + '</h3><p>Please handoff box of glasses with the batch # written down.</p>');
+            });
+        }
     });
 
     // add button click
