@@ -79,6 +79,7 @@ $(document).ready(function () {
         e.preventDefault();
         $('#rxform').find('.rx_box').each(function () { $(this).val(''); });
         $('#rxform').find('select').each(function () { $(this).val('U'); });
+        $('#callnumsearchform').find('.rx_box').each(function () { $(this).val(''); });
         $('#rxList').html('');
     });
 
