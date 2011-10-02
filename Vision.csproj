@@ -93,6 +93,8 @@
     <Compile Include="Models\GlassesHistory.cs" />
     <Compile Include="Models\GlassesSearchResult.cs" />
     <Compile Include="Extensions\DbSetGlassesExtensions.cs" />
+    <Compile Include="Services\GlassesSearchBase.cs" />
+    <Compile Include="Services\MikeTamSearch.cs" />
     <Compile Include="VisionContext.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
