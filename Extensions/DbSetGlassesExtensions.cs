@@ -5,12 +5,13 @@ using System.Web;
 using Vision.Models;
 using System.Data.Entity;
 using System.Text;
+using System.Data.Entity.Infrastructure;
 
 namespace Vision
 {
     public static class DbSetGlassesExtensions
     {
-        public static List<GlassesSearchResult> CallNumberSearch(this DbSet<Glasses> glassesDbSet, int group, int number)
+        public static List<GlassesSearchResult> CallNumberSearch(this DbQuery<Glasses> glassesDbSet, int group, int number)
         {
             return glassesDbSet.Where(g => g.Group == group && g.Number == number).Select(g => new GlassesSearchResult {
                 MatchScore = 100,
@@ -18,7 +19,7 @@ namespace Vision
             }).ToList();
         }
 
-        public static List<GlassesSearchResult> FuzzySearch(this DbSet<Glasses> glassesDbSet, Glasses searchParameters)
+        public static List<GlassesSearchResult> FuzzySearch(this DbQuery<Glasses> glassesDbSet, Glasses searchParameters)
         {
             var searchService = new Vision.Services.MikeTamSearch();
             var results = new List<GlassesSearchResult>();

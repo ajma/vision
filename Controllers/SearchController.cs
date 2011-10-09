@@ -19,7 +19,7 @@ namespace Vision.Controllers
         [HttpPost]
         public ActionResult FuzzySearch(Glasses search, int maxResults = 100)
         {
-            var results = context.Glasses.FuzzySearch(search);
+            var results = context.Glasses.AsNoTracking().FuzzySearch(search);
 
             return Json(results.OrderByDescending(g => g.MatchScore).Take(maxResults));
         }
@@ -27,7 +27,7 @@ namespace Vision.Controllers
         [HttpPost]
         public ActionResult CallNumberSearch(int group, int number, int maxResults = 100)
         {
-            var results = context.Glasses.CallNumberSearch(group, number);
+            var results = context.Glasses.AsNoTracking().CallNumberSearch(group, number);
 
             return Json(results.Take(maxResults));
         }
