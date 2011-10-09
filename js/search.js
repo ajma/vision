@@ -47,7 +47,7 @@ $(document).ready(function () {
     });
 
     // binding submit search query button
-    $('#submit').click(function (e) {
+    var search = function (e) {
         e.preventDefault();
         var glasses, url;
         if (currentSearchType === 'rx') {
@@ -72,6 +72,13 @@ $(document).ready(function () {
                 $('#rxTemplate').tmpl(msg).appendTo('#rxList');
             }
         });
+    };
+    $('#submit').click(search);
+    $('.rx_box').keypress(function (e) {
+        if (e.which == 13) {
+            e.preventDefault();
+            search(e);
+        }
     });
 
     // bind clear button
