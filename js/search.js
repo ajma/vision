@@ -52,7 +52,7 @@ $(document).ready(function () {
         var glasses, url;
         if (currentSearchType === 'rx') {
             url = '/search/fuzzysearch';
-            glasses = { search: formToJson($('#rxform').find('input,select')) };
+            glasses = { query: formToJson($('#rxform').find('input,select')) };
         }
         else {
             url = '/search/CallNumberSearch';
@@ -85,6 +85,7 @@ $(document).ready(function () {
     $('#clear').click(function (e) {
         e.preventDefault();
         $('#rxform').find('.rx_box').each(function () { $(this).val(''); });
+        $('#rxform').find('.rx_checkbox').each(function () { $(this).prop('checked', false); });
         $('#rxform').find('select').each(function () { $(this).val('U'); });
         $('#callnumsearchform').find('.rx_box').each(function () { $(this).val(''); });
         $('#rxList').html('');

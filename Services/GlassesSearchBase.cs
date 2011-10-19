@@ -9,20 +9,20 @@ namespace Vision.Services
 {
     public abstract class GlassesSearchBase
     {
-        public GlassesSearchResult ScoreGlasses(Glasses search, Glasses glasses)
+        public GlassesSearchResult ScoreGlasses(GlassesQuery query, Glasses glasses)
         {
             GlassesSearchResult result = new GlassesSearchResult { Glasses = glasses };
             result.MatchScore = 100f;
             StringBuilder details = new StringBuilder();
 
-            result.MatchScore -= getSphericalScore(search, glasses, details);
-            result.MatchScore -= getCylinderScore(search, glasses, details);
-            result.MatchScore -= getAxisScore(search, glasses, details);
-            result.MatchScore -= getAddScore(search, glasses, details);
+            result.MatchScore -= getSphericalScore(query, glasses, details);
+            result.MatchScore -= getCylinderScore(query, glasses, details);
+            result.MatchScore -= getAxisScore(query, glasses, details);
+            result.MatchScore -= getAddScore(query, glasses, details);
 
-            result.MatchScore -= getSunglassesScore(search, glasses, details);
-            result.MatchScore -= getGenderScore(search, glasses, details);
-            result.MatchScore -= getSizeScore(search, glasses, details);
+            result.MatchScore -= getSunglassesScore(query, glasses, details);
+            result.MatchScore -= getGenderScore(query, glasses, details);
+            result.MatchScore -= getSizeScore(query, glasses, details);
 
             if (result.MatchScore < 0f)
                 result.MatchScore = 0f;
@@ -32,14 +32,14 @@ namespace Vision.Services
             return result;
         }
 
-        protected abstract float getSphericalScore(Glasses search, Glasses glasses, StringBuilder details);
-        protected abstract float getCylinderScore(Glasses search, Glasses glasses, StringBuilder details);
-        protected abstract float getAxisScore(Glasses search, Glasses glasses, StringBuilder details);
-        protected abstract float getAddScore(Glasses search, Glasses glasses, StringBuilder details);
+        protected abstract float getSphericalScore(GlassesQuery query, Glasses glasses, StringBuilder details);
+        protected abstract float getCylinderScore(GlassesQuery query, Glasses glasses, StringBuilder details);
+        protected abstract float getAxisScore(GlassesQuery query, Glasses glasses, StringBuilder details);
+        protected abstract float getAddScore(GlassesQuery query, Glasses glasses, StringBuilder details);
 
-        protected abstract float getSunglassesScore(Glasses search, Glasses glasses, StringBuilder details);
-        protected abstract float getGenderScore(Glasses search, Glasses glasses, StringBuilder details);
-        protected abstract float getSizeScore(Glasses search, Glasses glasses, StringBuilder details);
+        protected abstract float getSunglassesScore(GlassesQuery query, Glasses glasses, StringBuilder details);
+        protected abstract float getGenderScore(GlassesQuery query, Glasses glasses, StringBuilder details);
+        protected abstract float getSizeScore(GlassesQuery query, Glasses glasses, StringBuilder details);
 
         #region Helpers
         /// <summary>

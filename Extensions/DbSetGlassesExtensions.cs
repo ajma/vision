@@ -19,13 +19,13 @@ namespace Vision
             }).ToList();
         }
 
-        public static List<GlassesSearchResult> FuzzySearch(this DbQuery<Glasses> glassesDbSet, Glasses searchParameters)
+        public static List<GlassesSearchResult> FuzzySearch(this DbQuery<Glasses> glassesDbSet, GlassesQuery query)
         {
             var searchService = new Vision.Services.MikeTamSearch();
             var results = new List<GlassesSearchResult>();
             foreach (var glasses in glassesDbSet)
             {
-                var result = searchService.ScoreGlasses(searchParameters, glasses);
+                var result = searchService.ScoreGlasses(query, glasses);
 
                 if (result.MatchScore >= 0)
                 {

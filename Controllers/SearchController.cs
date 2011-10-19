@@ -17,9 +17,9 @@ namespace Vision.Controllers
         }
 
         [HttpPost]
-        public ActionResult FuzzySearch(Glasses search, int maxResults = 100)
+        public ActionResult FuzzySearch(GlassesQuery query, int maxResults = 100)
         {
-            var results = context.Glasses.AsNoTracking().FuzzySearch(search);
+            var results = context.Glasses.AsNoTracking().FuzzySearch(query);
 
             return Json(results.OrderByDescending(g => g.MatchScore).Take(maxResults));
         }

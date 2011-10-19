@@ -91,6 +91,7 @@
     <Compile Include="Models\Glasses.cs" />
     <Compile Include="Models\GlassesBatch.cs" />
     <Compile Include="Models\GlassesHistory.cs" />
+    <Compile Include="Models\GlassesQuery.cs" />
     <Compile Include="Models\GlassesSearchResult.cs" />
     <Compile Include="Extensions\DbSetGlassesExtensions.cs" />
     <Compile Include="Services\GlassesSearchBase.cs" />
