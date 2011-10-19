@@ -46,6 +46,19 @@ $(document).ready(function () {
         }
     });
 
+    $('#rxform').find('.rx_box').blur(function () {
+        if ($(this).attr('name').indexOf('Spherical') > -1) {
+            if ($(this).val() >= 25 || $(this).val() <= -25)
+                $(this).val($(this).val() / 100);
+        }
+        else if ($(this).attr('name').indexOf('Cylindrical') > -1) {
+            if ($(this).val() > 0)
+                $(this).val(-$(this).val());
+            if ($(this).val() <= -25)
+                $(this).val($(this).val() / 100);
+        }
+    });
+
     // binding submit search query button
     var search = function (e) {
         e.preventDefault();
