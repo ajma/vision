@@ -5,7 +5,7 @@
 <div style="float:left;width:300px;">
     <h2>Search by:</h2>
     <h3>
-    <label><input type="radio" name="searchType" value="rx" checked> RX</label>
+    <label><input type="radio" name="searchType" value="rx" checked="checked" /> RX</label>
     <label><input type="radio" name="searchType" value="callnum" /> Call #</label>
     </h3>
 </div>
@@ -55,15 +55,15 @@
 <tr class="resultRow">
 <td>${MatchScore}</td>
 <td class="group">${Glasses.Group}/${Glasses.Number}</td>
-<td>${sphCylFormat(Glasses.OD_Spherical)}</td>
+<td class="resultRowCol">${sphCylFormat(Glasses.OD_Spherical)}</td>
 <td>${sphCylFormat(Glasses.OD_Cylindrical)}</td>
 <td>${axisFormat(Glasses.OD_Axis)}</td>
 <td>${sphCylFormat(Glasses.OD_Add)}</td>
-<td>${sphCylFormat(Glasses.OS_Spherical)}</td>
+<td class="resultRowCol">${sphCylFormat(Glasses.OS_Spherical)}</td>
 <td>${sphCylFormat(Glasses.OS_Cylindrical)}</td>
 <td>${axisFormat(Glasses.OS_Axis)}</td>
 <td>${sphCylFormat(Glasses.OS_Add)}</td>
-<td>${Glasses.Sunglasses?'Y':'N'}</td>
+<td class="resultRowCol">${Glasses.Sunglasses?'Y':'N'}</td>
 <td>${Glasses.Gender}</td>
 <td>${Glasses.Size}</td>
 </tr>

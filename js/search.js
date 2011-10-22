@@ -83,6 +83,11 @@ $(document).ready(function () {
             success: function (msg) {
                 $('#searchWaiting').hide();
                 $('#rxTemplate').tmpl(msg).appendTo('#rxList');
+                $('.resultRow').each(function (index) {
+                    if (index % 4 < 2) {
+                        $(this).toggleClass('resultRowAlt');
+                    }
+                });
             }
         });
     };

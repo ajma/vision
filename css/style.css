@@ -299,7 +299,6 @@ a.big
 
 table { border-collapse: collapse; border-spacing: 0; width:100%; }
 th { text-align:left; }
-tbody tr:nth-child(odd) { background-color: #eee; }
 
 
 /* =============================================================================
@@ -473,7 +472,9 @@ input[type=number]::-webkit-outer-spin-button {
    Search Styles
    ========================================================================== */
 
-.resultRow { cursor: pointer; }   
+.resultRow { cursor: pointer; }
+.resultRowCol { border-left: 1px solid #000; }   
+.resultRowAlt { background-color: #ddd; }
 .rowHover { background-color:#CEECF5; }
 #action { padding: 0 10px 20px 10px; }
 #action p { text-align:left; }
