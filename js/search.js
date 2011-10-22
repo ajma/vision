@@ -88,6 +88,10 @@ $(document).ready(function () {
                         $(this).toggleClass('resultRowAlt');
                     }
                 });
+            },
+            error: function () {
+                $('#searchWaiting').hide();
+                $('#errorMsg').show();
             }
         });
     };
