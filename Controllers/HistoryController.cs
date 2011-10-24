@@ -49,6 +49,20 @@ namespace Vision.Controllers
             return export(batch.CallNumbers.Split(','));
         }
 
+        public ActionResult Return(int group, int number)
+        {
+            var history = context.GlassesHistory.SingleOrDefault(g => g.Group == group && g.Number == number);
+            if (history == null)
+                return Json(false, JsonRequestBehavior.AllowGet);
+
+            var glasses = new Glasses(history);
+            context.GlassesHistory.Remove(history);
+            context.Glasses.Add(glasses);
+            context.SaveChanges();
+
+            return Json(true, JsonRequestBehavior.AllowGet);
+        }
+
         private FileContentResult export(string[] callnum)
         {
             StringBuilder sb = new StringBuilder();

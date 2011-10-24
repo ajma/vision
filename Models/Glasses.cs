@@ -5,6 +5,32 @@ namespace Vision.Models
 {
 	public class Glasses
 	{
+        public Glasses()
+        {
+        }
+
+        public Glasses(GlassesHistory g)
+        {
+            Group = g.Group;
+            Number = g.Number;
+
+            OD_Spherical = g.OD_Spherical;
+            OD_Cylindrical = g.OD_Cylindrical;
+            OD_Axis = g.OD_Axis;
+            OD_Add = g.OD_Add;
+
+            OS_Spherical = g.OS_Spherical;
+            OS_Cylindrical = g.OS_Cylindrical;
+            OS_Axis = g.OS_Axis;
+            OS_Add = g.OS_Add;
+
+            Sunglasses = g.Sunglasses;
+            Size = g.Size;
+            Gender = g.Gender;
+
+            InsertDate = g.InsertDate;
+        }
+
 		[Key, Column(Order = 0)]
 		public int Group { get; set; }
 		[Key, Column(Order = 1)]
