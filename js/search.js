@@ -82,6 +82,7 @@ $(document).ready(function () {
             contentType: 'application/json; charset=utf-8',
             success: function (msg) {
                 $('#searchWaiting').hide();
+                $('#errorMsg').hide();
                 $('#rxTemplate').tmpl(msg).appendTo('#rxList');
                 $('.resultRow').each(function (index) {
                     if (index % 4 < 2) {
