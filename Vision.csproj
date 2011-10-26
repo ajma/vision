@@ -83,6 +83,7 @@
     <Compile Include="Controllers\HistoryController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\AddController.cs" />
+    <Compile Include="Controllers\PullRequestController.cs" />
     <Compile Include="Controllers\SearchController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
@@ -94,6 +95,7 @@
     <Compile Include="Models\GlassesQuery.cs" />
     <Compile Include="Models\GlassesSearchResult.cs" />
     <Compile Include="Extensions\DbSetGlassesExtensions.cs" />
+    <Compile Include="Models\PullRequest.cs" />
     <Compile Include="Services\GlassesSearchBase.cs" />
     <Compile Include="Services\MikeTamSearch.cs" />
     <Compile Include="VisionContext.cs" />
@@ -158,6 +160,9 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Views\History\Batches.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Views\PullRequest\Index.cshtml" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v10.0\WebApplications\Microsoft.WebApplication.targets" />

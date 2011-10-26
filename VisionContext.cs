@@ -12,6 +12,7 @@ namespace Vision
 		public DbSet<Glasses> Glasses { get; set; }
         public DbSet<GlassesHistory> GlassesHistory { get; set; }
         public DbSet<GlassesBatch> GlassesBatches { get; set; }
+        public DbSet<PullRequest> PullRequests { get; set; }
 
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
         {

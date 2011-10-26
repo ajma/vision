@@ -118,6 +118,24 @@ $(document).ready(function () {
         $('#rxList').html('');
     });
 
+    $('.request').live('click', function (e) {
+        e.preventDefault();
+        var row = $(this).parent().parent();
+        var callNumber = row.find('.group').text().split('/');
+
+        $.ajax({
+            url: '/pullrequest/pullrequest',
+            type: 'POST',
+            dataType: 'json',
+            data: JSON.stringify({ group: callNumber[0], number: callNumber[1] }),
+            contentType: 'application/json; charset=utf-8',
+            success: function (msg) {
+                row.find('.request').parent().text('Requested');
+            }
+        });
+        return false;
+    });
+
     // bind for clicking on a row
     $('.resultRow').live('click', function (event) {
         var callNumber = $(this).find('.group').text().split('/');
