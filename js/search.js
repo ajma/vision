@@ -70,6 +70,10 @@ $(document).ready(function () {
         else {
             url = '/search/CallNumberSearch';
             glasses = { group: $('#group').val(), number: $('#number').val() };
+
+            // validation
+            if (!glasses.group || !glasses.number)
+                return;
         }
 
         $('#rxList').html('');
@@ -119,7 +123,7 @@ $(document).ready(function () {
         var callNumber = $(this).find('.group').text().split('/');
         clickedGlassesCallNumber.group = callNumber[0];
         clickedGlassesCallNumber.number = callNumber[1];
-        $('#actionCallNum').text(callNumber[0]+'/'+callNumber[1]);
+        $('#actionCallNum').text(callNumber[0] + '/' + callNumber[1]);
         $.blockUI({ message: $('#action'), css: { width: '600px'} });
     });
 
