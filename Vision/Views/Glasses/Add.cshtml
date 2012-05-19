@@ -2,14 +2,18 @@
     ViewBag.Title = "Add";
 }
 
-<h2>Add</h2>
+<h1>Add</h1>
 
-@Html.Partial("_RxForm")
-<script type="text/javascript">
-$(document).ready(function() {
-    $('input.sph').rxForm();
-    $('input.cyl').rxForm({ min: -20, max: 0 });
-    $('input.axis').rxForm({ min: 0, max: 180, littleStep: 5, bigStep: 10, precision: 0, autoDecimal: 999 });
-    $('input.add').rxForm({ min: 0, max: 20 });
-});
-</script>
+<div class="row">
+    <div class="span12">
+        @Html.Partial("_RxForm")
+        <script type="text/javascript">
+            $(document).ready(function () {
+                $('input.sph').rxForm();
+                $('input.cyl').rxForm({ min: -20, max: 0 });
+                $('input.axis').rxForm({ min: 0, max: 180, littleStep: 5, bigStep: 10, precision: 0, autoDecimal: 999 });
+                $('input.add').rxForm({ min: 0, max: 20 });
+            });
+        </script>
+    </div>
+</div>

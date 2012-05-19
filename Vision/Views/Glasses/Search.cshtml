@@ -2,4 +2,87 @@
     ViewBag.Title = "Search";
 }
 
-<h2>Search</h2>
+<h1>Search</h1>
+
+<div class="row">
+    <div class="span12">
+        @Html.Partial("_RxForm")
+        <script type="text/javascript">
+            $(document).ready(function () {
+                $('input.sph').rxForm();
+                $('input.cyl').rxForm({ min: -20, max: 0 });
+                $('input.axis').rxForm({ min: 0, max: 180, littleStep: 5, bigStep: 10, precision: 0, autoDecimal: 999 });
+                $('input.add').rxForm({ min: 0, max: 20 });
+            });
+        </script>
+    </div>
+</div>
+
+<hr />
+
+<table class="table table-striped table-bordered table-condensed">
+    <thead>
+    <tr>
+        <th>Score</th>
+        <th>Call #</th>
+        <th>OD Sph</th>
+        <th>OD Cyl</th>
+        <th>OD Axis</th>
+        <th>OD Add</th>
+        <th>OS Sph</th>
+        <th>OS Cyl</th>
+        <th>OS Axis</th>
+        <th>OS Add</th>
+        <th>Sungl.</th>
+        <th>Gender</th>
+        <th>Size</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr>
+        <td>100</td>
+        <td>1/298</td>
+        <td class="table-horizontal-break">+1.00</td>
+        <td>+0.00</td>
+        <td>000</td>
+        <td>+0.00</td>
+        <td class="table-horizontal-break">+1.00</td>
+        <td>+0.00</td>
+        <td>000</td>
+        <td>+0.00</td>
+        <td class="table-horizontal-break">N</td>
+        <td>U</td>
+        <td>U</td>
+    </tr>
+    <tr>
+        <td>100</td>
+        <td>1/298</td>
+        <td class="table-horizontal-break">+1.00</td>
+        <td>+0.00</td>
+        <td>000</td>
+        <td>+0.00</td>
+        <td class="table-horizontal-break">+1.00</td>
+        <td>+0.00</td>
+        <td>000</td>
+        <td>+0.00</td>
+        <td class="table-horizontal-break">N</td>
+        <td>U</td>
+        <td>U</td>
+    </tr>
+    <tr>
+        <td>100</td>
+        <td>1/298</td>
+        <td class="table-horizontal-break">+1.00</td>
+        <td>+0.00</td>
+        <td>000</td>
+        <td>+0.00</td>
+        <td class="table-horizontal-break">+1.00</td>
+        <td>+0.00</td>
+        <td>000</td>
+        <td>+0.00</td>
+        <td class="table-horizontal-break">N</td>
+        <td>U</td>
+        <td>U</td>
+    </tr>
+    </tbody>
+</table>

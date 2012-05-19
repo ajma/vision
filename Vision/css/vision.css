@@ -11,3 +11,12 @@
     width: 60px;
     font-size: 1em;
 }
+
+.table tbody tr:hover td,
+.table tbody tr:hover th {
+  background-color: #D1F0FF;
+}
+
+td.table-horizontal-break {
+  border-left: 1px solid #222222;
+}
