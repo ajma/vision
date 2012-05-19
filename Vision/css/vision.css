@@ -1,0 +1,13 @@
+﻿.rx_form{
+    width: 480px;
+}
+.rx_form div{
+    width: 80px;
+    height:45px;
+    font-size: 1.5em;
+    float: left;
+}
+.rx_form input[type=text]{
+    width: 60px;
+    font-size: 1em;
+}
