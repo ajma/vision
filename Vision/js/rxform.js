@@ -1,5 +1,5 @@
 ﻿; (function ($, window, document, undefined) {
-    var pluginName = 'defaultPluginName',
+    var pluginName = 'rxForm',
         defaults = {
             min: -20,
             max: 20,
