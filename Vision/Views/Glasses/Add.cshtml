@@ -34,6 +34,7 @@
 
                 $('#addButton').click(function () {
                     $('#addButton').attr('disabled', 'disabled');
+                    $('#addingMessage').show();
                     autoFillEmpty();
                     $.post('/Glasses/Add', function (data) {
                         var o = {};
@@ -61,6 +62,7 @@
                             $('#rxForm').slideUp();
                         } else {
                             $('#addButton').removeAttr('disabled');
+                            $('#addingMessage').hide();
                         }
                     });
                 });
@@ -85,7 +87,7 @@
     <div class="row-fluid">
         <div class="span12">
             <button id="addButton" class="btn btn-large btn-primary">Add</button>
-            <button id="clearButton" class="btn btn-large">Clear</button>
+            <button id="clearButton" class="btn btn-large">Clear</button> <span id="addingMessage" class="hide"><img src="/img/spinner.gif" /> <strong>Adding...</strong></span>
         </div>
     </div>
 </div>

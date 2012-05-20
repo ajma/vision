@@ -82,6 +82,7 @@
     <Content Include="ico\favicon.ico" />
     <Content Include="img\glyphicons-halflings-white.png" />
     <Content Include="img\glyphicons-halflings.png" />
+    <Content Include="img\spinner.gif" />
     <Content Include="js\bootstrap-alert.js" />
     <Content Include="js\bootstrap-button.js" />
     <Content Include="js\bootstrap-carousel.js" />
@@ -99,6 +100,7 @@
     <Content Include="js\jquery.js" />
     <Content Include="js\json2.js" />
     <Content Include="js\rxform.js" />
+    <Content Include="js\spin.js" />
     <Content Include="Web.config" />
     <Content Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
