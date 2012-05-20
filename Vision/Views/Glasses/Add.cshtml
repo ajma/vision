@@ -13,8 +13,10 @@
 
             var autoFillEmpty = function () {
                 $('.rx_form input[type=text]').each(function (index) {
-                    this.value = '0';
-                    $(this).change();
+                    if (this.value === '') {
+                        this.value = '0';
+                        $(this).change();
+                    }
                 });
             };
             var clearForm = function () {
