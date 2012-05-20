@@ -5,7 +5,9 @@
             max: 20,
             littleStep: 0.25,
             bigStep: 1,
-            precision: 2,
+
+            afterDecimal: 2,
+            beforeDecimal: 1,
             // if the number is over this value, divide by 100
             autoDecimal: 25,
             autoZero: true
@@ -30,7 +32,15 @@
             if (options.min <= 0 && options.max <= 0 && updatedValue >= 0) updatedValue = -updatedValue;
             if (updatedValue > options.max) updatedValue = options.max;
             if (updatedValue < options.min) updatedValue = options.min;
-            $(box).val(updatedValue.toFixed(options.precision));
+            var padding = '';
+            console.log('----');
+            for(var i=1; i < options.beforeDecimal;i++) {
+            console.log(Math.pow(10, i) + ' > ' +updatedValue);
+                if(Math.pow(10, i) > updatedValue)
+                    padding+='0';
+            }
+            console.log('padding ' + padding);
+            $(box).val(padding + updatedValue.toFixed(options.afterDecimal));
         };
         if (options.autoZero) {
             $(this.element).focus(function () {

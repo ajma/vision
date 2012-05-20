@@ -25,7 +25,7 @@
             $(document).ready(function () {
                 $('input.sph').rxForm();
                 $('input.cyl').rxForm({ min: -20, max: 0 });
-                $('input.axis').rxForm({ min: 0, max: 180, littleStep: 5, bigStep: 10, precision: 0, autoDecimal: 999 });
+                $('input.axis').rxForm({ min: 0, max: 180, littleStep: 5, bigStep: 10, beforeDecimal: 3, afterDecimal: 0, autoDecimal: 999 });
                 $('input.add').rxForm({ min: 0, max: 20 });
 
                 $('#addButton').click(function () {
