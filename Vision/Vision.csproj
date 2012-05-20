@@ -68,6 +68,7 @@
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="Models\Glasses.cs" />
+    <Compile Include="Models\GlassesSearchResult.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -100,7 +101,7 @@
     <Content Include="js\jquery.js" />
     <Content Include="js\json2.js" />
     <Content Include="js\rxform.js" />
-    <Content Include="js\spin.js" />
+    <Content Include="js\vision.js" />
     <Content Include="Web.config" />
     <Content Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>

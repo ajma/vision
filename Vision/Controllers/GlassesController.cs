@@ -40,13 +40,16 @@ namespace Vision.Controllers
         [HttpPost]
         public JsonResult SearchByRx(Glasses glasses)
         {
-            return Json(null);
+            List<GlassesSearchResult> results = new List<GlassesSearchResult>();
+            results.Add(new GlassesSearchResult { Score=1, Group = 1, Number = 2, OD = new Glasses.Eye { Spherical = 1, Cylindrical = -1, Axis = 5 }, OS = new Glasses.Eye { Spherical = 1, Cylindrical = -1, Axis = 100 } });
+            results.Add(new GlassesSearchResult { Score = 2, Group = 1, Number = 2, OD = new Glasses.Eye { Spherical = 1, Cylindrical = -1, Axis = 11 }, OS = new Glasses.Eye { Spherical = 1, Cylindrical = -1, Axis = 10 } });
+            return Json(results);
         }
 
         [HttpPost]
         public JsonResult SearchByCallNumber(int group, int number)
         {
-            return Json(null);
+            return Json(new Glasses { Group = 1, Number = 2, OD = new Glasses.Eye { Spherical = 1, Cylindrical = -1 }, OS = new Glasses.Eye { Spherical = 1, Cylindrical = -1 } });
         }
     }
 }
