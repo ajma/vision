@@ -33,13 +33,10 @@
             if (updatedValue > options.max) updatedValue = options.max;
             if (updatedValue < options.min) updatedValue = options.min;
             var padding = '';
-            console.log('----');
             for(var i=1; i < options.beforeDecimal;i++) {
-            console.log(Math.pow(10, i) + ' > ' +updatedValue);
                 if(Math.pow(10, i) > updatedValue)
                     padding+='0';
             }
-            console.log('padding ' + padding);
             $(box).val(padding + updatedValue.toFixed(options.afterDecimal));
         };
         if (options.autoZero) {
