@@ -4,7 +4,7 @@
 
 <h1>Add</h1>
 
-<div class="row-fluid">
+<div id="rxForm" class="row-fluid">
     <div class="span12">
         @Html.Partial("_RxForm")
         <script type="text/javascript">
@@ -30,6 +30,8 @@
                 $('input.axis').rxForm({ min: 0, max: 180, littleStep: 5, bigStep: 10, beforeDecimal: 3, afterDecimal: 0, autoDecimal: 999 });
                 $('input.add').rxForm({ min: 0, max: 20 });
 
+                $('#totalText').text(totalCount);
+
                 $('#addButton').click(function () {
                     $('#addButton').attr('disabled', 'disabled');
                     autoFillEmpty();
@@ -48,30 +50,43 @@
                         });
 
                         currentProgress++;
-                        $('#batchProgress').css('width', (100 * currentProgress / 40) + '%');
+                        $('#batchProgress').css('width', (100 * currentProgress / totalCount) + '%');
                         $('#progressText').text(currentProgress);
                         var glasses = $.extend({}, data, o);
                         $("#glassesAdded").tmpl(glasses).prependTo("#log");
                         clearForm();
 
-                        if (currentProgress === totalCount)
+                        if (currentProgress === totalCount) {
                             $('#doneMessage').slideDown();
-                        else
+                            $('#rxForm').slideUp();
+                        } else {
                             $('#addButton').removeAttr('disabled');
+                        }
                     });
                 });
+
                 $('#clearButton').click(clearForm);
 
-                
+                $('#nextBatchButton').click(function () {
+                    $('#addButton').removeAttr('disabled');
+                    $('#doneMessage').slideUp();
+                    $('#rxForm').slideDown();
+                    $('#log').fadeOut(function () {
+                        $('#log').empty();
+                        $('#log').show();
+                    });
+                    $('#batchProgress').css('width', '0%');
+                    currentProgress = 0;
+                });
             });
         </script>
     </div>
-</div>
-<div class="row-fluid">
-    <div class="span12">
-        <button id="addButton" class="btn btn-large btn-primary">Add</button>
-        <button id="clearButton" class="btn btn-large">Clear</button>
-        <hr />
+
+    <div class="row-fluid">
+        <div class="span12">
+            <button id="addButton" class="btn btn-large btn-primary">Add</button>
+            <button id="clearButton" class="btn btn-large">Clear</button>
+        </div>
     </div>
 </div>
 <script id="glassesAdded" type="text/x-jquery-tmpl">
@@ -86,11 +101,13 @@
 </script>
 <div class="row-fluid">
     <div class="span12">
+        <hr />
         <div id="doneMessage" class="alert alert-success hide">
             <h3>You're done!</h3>
-            You have completed a full batch. Please pass this batch along.
+            <p>You have completed a full batch. Please pass this batch along.</p>
+            <button id="nextBatchButton" class="btn">Start Next Batch »</button>
         </div>
-        <h2>Current Progress (<span id="progressText">0</span>/40):</h2>
+        <h2>Current Progress (<span id="progressText">0</span>/<span id="totalText">40</span>):</h2>
         <div class="progress progress-striped">
             <div id="batchProgress" class="bar" style="width: 0%;">
             </div>
