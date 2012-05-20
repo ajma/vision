@@ -12,11 +12,18 @@
     font-size: 1em;
 }
 
-.table tbody tr:hover td,
-.table tbody tr:hover th {
+#searchResults.table tbody tr:hover td {
   background-color: #D1F0FF;
 }
 
 td.table-horizontal-break {
   border-left: 1px solid #222222;
+}
+
+#log.row-fluid [class*="span"]:nth-child(4n + 1) {
+    margin-left: 0;
+}
+
+.glassesAdded {
+    margin-bottom: 0px;
 }

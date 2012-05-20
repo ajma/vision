@@ -73,6 +73,7 @@
   <ItemGroup>
     <Content Include="css\bootstrap-responsive.css" />
     <Content Include="css\bootstrap.css" />
+    <Content Include="css\vision.css" />
     <Content Include="Global.asax" />
     <Content Include="ico\apple-touch-icon-114-precomposed.png" />
     <Content Include="ico\apple-touch-icon-144-precomposed.png" />
@@ -95,6 +96,8 @@
     <Content Include="js\bootstrap-typeahead.js" />
     <Content Include="js\html5.js" />
     <Content Include="js\jquery.js" />
+    <Content Include="js\json2.js" />
+    <Content Include="js\rxform.js" />
     <Content Include="Web.config" />
     <Content Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
@@ -120,6 +123,9 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Views\Glasses\Search.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Views\Shared\_RxForm.cshtml" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v10.0\WebApplications\Microsoft.WebApplication.targets" />

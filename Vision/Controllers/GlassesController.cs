@@ -17,7 +17,7 @@ namespace Vision.Controllers
         [HttpPost]
         public JsonResult Add(Glasses glasses)
         {
-            return Json(null);
+            return Json(new { Group = 2, Number = 3 });
         }
 
         [HttpPost]

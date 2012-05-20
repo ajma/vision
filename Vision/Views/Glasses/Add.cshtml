@@ -4,16 +4,110 @@
 
 <h1>Add</h1>
 
-<div class="row">
+<div class="row-fluid">
     <div class="span12">
         @Html.Partial("_RxForm")
         <script type="text/javascript">
+            var currentProgress = 0;
+            var totalCount = 40;
+
+            var autoFillEmpty = function () {
+                $('.rx_form input[type=text]').each(function (index) {
+                    this.value = '0';
+                    $(this).change();
+                });
+            };
+            var clearForm = function () {
+                $('.rx_form input[type=text]').each(function (index) { this.value = ''; });
+                $('.rx_form input[type=checkbox]').each(function (index) { this.checked = false; });
+            };
+
             $(document).ready(function () {
                 $('input.sph').rxForm();
                 $('input.cyl').rxForm({ min: -20, max: 0 });
                 $('input.axis').rxForm({ min: 0, max: 180, littleStep: 5, bigStep: 10, precision: 0, autoDecimal: 999 });
                 $('input.add').rxForm({ min: 0, max: 20 });
+
+                $('#addButton').click(function () {
+                    $('#addButton').attr('disabled', 'disabled');
+                    autoFillEmpty();
+                    $.post('/Glasses/Add', function (data) {
+                        var o = {};
+                        var a = $('.rx_form input').serializeArray()
+                        $.each(a, function () {
+                            if (o[this.name] !== undefined) {
+                                if (!o[this.name].push) {
+                                    o[this.name] = [o[this.name]];
+                                }
+                                o[this.name].push(this.value || '');
+                            } else {
+                                o[this.name] = this.value || '';
+                            }
+                        });
+
+                        currentProgress++;
+                        $('#batchProgress').css('width', (100 * currentProgress / 40) + '%');
+                        $('#progressText').text(currentProgress);
+                        var glasses = $.extend({}, data, o);
+                        $("#glassesAdded").tmpl(glasses).prependTo("#log");
+                        clearForm();
+
+                        if (currentProgress === totalCount)
+                            $('#doneMessage').slideDown();
+                        else
+                            $('#addButton').removeAttr('disabled');
+                    });
+                });
+                $('#clearButton').click(clearForm);
+
+                
             });
         </script>
+    </div>
+</div>
+<div class="row-fluid">
+    <div class="span12">
+        <button id="addButton" class="btn btn-large btn-primary">Add</button>
+        <button id="clearButton" class="btn btn-large">Clear</button>
+        <hr />
+    </div>
+</div>
+<script id="glassesAdded" type="text/x-jquery-tmpl">
+    <div class="span3 well">
+        <h3>Call Number: ${Group}/${Number}</h3>
+        <table class="table table-condensed glassesAdded">
+            <tr><th><a href="javascript:$('#editModal').modal()">[Edit]</a></td><th>Sph</td><th>Cyl</td><th>Axis</td><th>Add</td></tr>
+            <tr><td>OD</td><td>${OD_Spherical}</td><td>${OD_Cylindrical}</td><td>${OD_Axis}</td><td>${OD_Add}</td></tr>
+            <tr><td>OS</td><td>${OS_Spherical}</td><td>${OS_Cylindrical}</td><td>${OS_Axis}</td><td>${OS_Add}</td></tr>
+        </table>
+    </div>
+</script>
+<div class="row-fluid">
+    <div class="span12">
+        <div id="doneMessage" class="alert alert-success hide">
+            <h3>You're done!</h3>
+            You have completed a full batch. Please pass this batch along.
+        </div>
+        <h2>Current Progress (<span id="progressText">0</span>/40):</h2>
+        <div class="progress progress-striped">
+            <div id="batchProgress" class="bar" style="width: 0%;">
+            </div>
+        </div>
+    </div>
+</div>
+<div id="log" class="row-fluid">
+</div>
+
+<div id="editModal" class="modal hide fade in">
+
+    <div class="modal-header">
+        <h3>Edit</h3>
+    </div>
+    <div class="modal-body">
+        <p>Placeholder</p>
+    </div>
+    <div class="modal-footer">
+        <a href="#" class="btn btn-primary">Save</a>
+        <a href="#" class="btn" data-dismiss="modal">Close</a>
     </div>
 </div>

@@ -7,7 +7,7 @@
             bigStep: 1,
             precision: 2,
             // if the number is over this value, divide by 100
-            autoDecimal: 50,
+            autoDecimal: 25,
             autoZero: true
         };
 
