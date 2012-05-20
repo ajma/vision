@@ -21,6 +21,8 @@ namespace Vision
         {
             routes.IgnoreRoute("{resource}.axd/{*pathInfo}");
 
+            routes.MapRoute("About", "about", new { controller = "Pages", action = "About" });
+
             routes.MapRoute(
                 "Default", // Route name
                 "{controller}/{action}/{id}", // URL with parameters

@@ -12,5 +12,10 @@ namespace Vision.Controllers
         {
             return View();
         }
+
+        public ActionResult About()
+        {
+            return View();
+        }
     }
 }
