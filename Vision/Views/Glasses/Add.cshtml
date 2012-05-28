@@ -84,9 +84,20 @@
     <div class="span3 well">
         <h3>Call Number: ${Group}/${Number}</h3>
         <table class="table table-condensed glassesAdded">
-            <tr><th><a href="javascript:$('#editModal').modal()">[Edit]</a></td><th>Sph</td><th>Cyl</td><th>Axis</td><th>Add</td></tr>
-            <tr><td>OD</td><td>${OD_Spherical}</td><td>${OD_Cylindrical}</td><td>${OD_Axis}</td><td>${OD_Add}</td></tr>
-            <tr><td>OS</td><td>${OS_Spherical}</td><td>${OS_Cylindrical}</td><td>${OS_Axis}</td><td>${OS_Add}</td></tr>
+            <tr>
+                <th><a href="javascript:$('#editModal').modal()">[Edit]</a></th>
+                <th>Sph</th><th>Cyl</th><th>Axis</th><th>Add</th>
+            </tr>
+            <tr><td>OD</td>
+                <td>${sphcylFormat(OD_Spherical)}</td>
+                <td>${sphcylFormat(OD_Cylindrical)}</td>
+                <td>${axisFormat(OD_Axis)}</td>
+                <td>${sphcylFormat(OD_Add)}</td></tr>
+            <tr><td>OS</td>
+                <td>${sphcylFormat(OS_Spherical)}</td>
+                <td>${sphcylFormat(OS_Cylindrical)}</td>
+                <td>${axisFormat(OS_Axis)}</td>
+                <td>${sphcylFormat(OS_Add)}</td></tr>
         </table>
     </div>
 </script>
