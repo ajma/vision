@@ -37,7 +37,7 @@
                 currentProgress++;
                 $('#batchProgress').css('width', (100 * currentProgress / totalCount) + '%');
                 $('#progressText').text(currentProgress);
-                $("#glassesAdded").tmpl(data).prependTo("#log");
+                $("#glassesAdded").tmpl(data).prependTo("#log").fadeTo(0, 0).fadeTo(1000, 1.0);
                 clearForm();
 
                 if (currentProgress === totalCount) {
