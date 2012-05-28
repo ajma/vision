@@ -30,27 +30,14 @@
             $('#addButton').attr('disabled', 'disabled');
             $('#addingMessage').show();
             autoFillEmpty();
-            $.post('/Glasses/Add', function (data) {
-                $('#addingMessage').hide();
 
-                var o = {};
-                var a = $('.rx_form input').serializeArray()
-                $.each(a, function () {
-                    if (o[this.name] !== undefined) {
-                        if (!o[this.name].push) {
-                            o[this.name] = [o[this.name]];
-                        }
-                        o[this.name].push(this.value || '');
-                    } else {
-                        o[this.name] = this.value || '';
-                    }
-                });
+            $.post('/Glasses/Add', $('.rx_form input').serializeArray(), function (data) {
+                $('#addingMessage').hide();
 
                 currentProgress++;
                 $('#batchProgress').css('width', (100 * currentProgress / totalCount) + '%');
                 $('#progressText').text(currentProgress);
-                var glasses = $.extend({}, data, o);
-                $("#glassesAdded").tmpl(glasses).prependTo("#log");
+                $("#glassesAdded").tmpl(data).prependTo("#log");
                 clearForm();
 
                 if (currentProgress === totalCount) {

@@ -35,6 +35,8 @@ namespace Vision
         {
             AreaRegistration.RegisterAllAreas();
 
+            SqlHelper.EnsureDbSetup();
+
             RegisterGlobalFilters(GlobalFilters.Filters);
             RegisterRoutes(RouteTable.Routes);
         }

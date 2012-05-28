@@ -10,18 +10,26 @@ namespace Vision.Models
         public int GlassesId { get; set; }
         public int Group { get; set; }
         public int Number { get; set; }
-        public Eye OD { get; set; }
-        public Eye OS { get; set; }
-        public bool Sunglasses { get; set; }
-        public char Size { get; set; }
-        public char Gender { get; set; }
 
-        public class Eye
-        {
-            public float Spherical { get; set; }
-            public float Cylindrical { get; set; }
-            public int Axis { get; set; }
-            public float Add { get; set; }
-        }
+        public bool OD_Blind { get; set; }
+        public float OD_Spherical { get; set; }
+        public float OD_Cylindrical { get; set; }
+        public byte OD_Axis { get; set; }
+        public float OD_Add { get; set; }
+
+        public bool OS_Blind { get; set; }
+        public float OS_Spherical { get; set; }
+        public float OS_Cylindrical { get; set; }
+        public byte OS_Axis { get; set; }
+        public float OS_Add { get; set; }
+
+        public bool? Sunglasses { get; set; }
+        public char? Size { get; set; }
+        public char? Gender { get; set; }
+
+        public DateTime AddedDate { get; set; }
+        public DateTime RemovedDate { get; set; }
+        public string RemovedReason { get; set; }
+        public string RemovedBy { get; set; }
     }
 }
