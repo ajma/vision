@@ -40,7 +40,7 @@
             $(box).val(padding + updatedValue.toFixed(options.afterDecimal));
         };
         if (options.autoZero) {
-            $(this.element).focus(function () {
+            $(this.element).focusout(function () {
                 if ($(this).val() === '') {
                     $(this).val('0');
                     $(this).change();
