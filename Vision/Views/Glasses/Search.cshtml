@@ -10,7 +10,7 @@
         $('input.add').rxForm({ autoZero: false, min: 0, max: 20 });
 
         $('#searchButton').click(function () {
-            $.post('/Glasses/SearchByRx', function (data) {
+            $.post('/Glasses/SearchByRx', $('#search_by_rx input').serializeArray(), function (data) {
                 $("#searchResults tbody").empty();
                 $("#searchResultRow").tmpl(data).prependTo("#searchResults tbody");
             });
@@ -18,16 +18,42 @@
         $('#clearButton').click(function () {
             $('.rx_form input[type=text]').each(function (index) { this.value = ''; });
             $('.rx_form input[type=checkbox]').each(function (index) { this.checked = false; });
+            $("#searchResults tbody").empty();
         });
+        $('#searchby a').click(function (e) {
+            e.preventDefault();
+            $(this).tab('show');
+        })
     });
 </script>
 
 <h1>Search</h1>
 
-<div id="rxForm">
+<div id="searchForm">
     <div class="row-fluid">
         <div class="span12">
-            @Html.Partial("_RxForm")
+            <ul id="searchby" class="nav nav-tabs">
+                <li class="active"><a href="#search_by_rx" data-toggle="tab">Search By Rx</a></li>
+                <li><a href="#search_by_callnum" data-toggle="tab">Search By Call Number</a></li>
+            </ul>
+        </div>
+    </div>
+    <div class="tab-content">
+        <div id="search_by_rx" class="row-fluid tab-pane active">
+            <div class="span12">
+                @Html.Partial("_RxForm")
+            </div>
+        </div>
+        <div id="search_by_callnum" class="row-fluid tab-pane">
+            <div class="span12">
+                <div class="rx_form">
+                    <div>Group:</div>
+                    <div><input name="Group" type="text" /></div>
+                    <div>Number:</div>
+                    <div><input name="Number" type="text" /></div>
+                </div>​
+
+            </div>
         </div>
     </div>
     <div class="row-fluid">
