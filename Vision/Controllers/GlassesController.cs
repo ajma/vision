@@ -46,9 +46,9 @@ namespace Vision.Controllers
         }
 
         [HttpPost]
-        public JsonResult SearchByCallNumber(int group, int number)
+        public JsonResult SearchByCallNumber(short group, int number)
         {
-            return Json(new Glasses { Group = 1, Number = 2, OD_Spherical = 1, OD_Cylindrical = -1, OS_Spherical = 1, OS_Cylindrical = -1 });
+            return Json(SqlHelper.GetGlassesByCallNumber(group, number));
         }
     }
 }

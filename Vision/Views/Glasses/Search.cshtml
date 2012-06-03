@@ -10,11 +10,15 @@
         $('input.add').rxForm({ autoZero: false, min: 0, max: 20 });
 
         $('#searchButton').click(function () {
-            $.post('/Glasses/SearchByRx', $('#search_by_rx input').serializeArray(), function (data) {
+            var selectedTab = $('#searchby li.active a').attr('href');
+            var url = (selectedTab === '#search_by_rx') ? '/Glasses/SearchByRx' : '/Glasses/SearchByCallNumber';
+            var data = $(selectedTab + ' input').serializeArray()
+            $.post(url, data, function (data) {
                 $("#searchResults tbody").empty();
                 $("#searchResultRow").tmpl(data).prependTo("#searchResults tbody");
             });
         });
+
         $('#clearButton').click(function () {
             $('.rx_form input[type=text]').each(function (index) { this.value = ''; });
             $('.rx_form input[type=checkbox]').each(function (index) { this.checked = false; });

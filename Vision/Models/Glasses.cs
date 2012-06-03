@@ -8,7 +8,7 @@ namespace Vision.Models
     public class Glasses
     {
         public int GlassesId { get; set; }
-        public int Group { get; set; }
+        public short Group { get; set; }
         public int Number { get; set; }
 
         public bool OD_Blind { get; set; }

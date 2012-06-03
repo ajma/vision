@@ -105,7 +105,7 @@ namespace Vision
             {
                 // figure out which group this pair goes to. the algorith for this is rounding the OD (right) Sph value away from 0
                 bool positive = (glasses.OD_Spherical >= 0);
-                glasses.Group = (int)Math.Ceiling(Math.Abs(glasses.OD_Spherical));
+                glasses.Group = (short)Math.Ceiling(Math.Abs(glasses.OD_Spherical));
                 // anything over 10 gets grouped into the 20 group
                 if (glasses.Group > 10)
                     glasses.Group = 20;
@@ -125,6 +125,15 @@ namespace Vision
                 // insert inventory
                 connection.Execute("INSERT INTO Inventory ([Group], [Number], [GlassesId]) VALUES(@Group, @Number, @GlassesId)", glasses);
                 return glasses;
+            }
+        }
+
+        public static Glasses GetGlassesByCallNumber(int group, int number)
+        {
+            using (var connection = GetConnection())
+            {
+                return connection.Query<Glasses>("SELECT * FROM Inventory, Glasses WHERE Inventory.GlassesId = Glasses.GlassesId AND [Group] = @Group AND Number = @Number",
+                    new { Group = group, Number = number }).FirstOrDefault();
             }
         }
     }
