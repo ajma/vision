@@ -37,18 +37,15 @@ namespace Vision.Controllers
         }
 
         [HttpPost]
-        public JsonResult SearchByRx(Glasses glasses)
+        public JsonResult SearchByRx(Glasses rx)
         {
-            List<GlassesSearchResult> results = new List<GlassesSearchResult>();
-            results.Add(new GlassesSearchResult { Score = 1, Group = 1, Number = 2, OD_Spherical = 1, OD_Cylindrical = -1, OD_Axis = 5, OS_Spherical = 1, OS_Cylindrical = -1, OS_Axis = 100 });
-            results.Add(new GlassesSearchResult { Score = 2, Group = 1, Number = 2, OD_Spherical = 1, OD_Cylindrical = -1, OD_Axis = 11, OS_Spherical = 1, OS_Cylindrical = -1, OS_Axis = 10 });
-            return Json(results);
+            return Json(SqlHelper.Search(rx));
         }
 
         [HttpPost]
         public JsonResult SearchByCallNumber(short group, int number)
         {
-            return Json(SqlHelper.GetGlassesByCallNumber(group, number));
+            return Json(new GlassesSearchResult { Score = 100, Glasses = SqlHelper.GetGlassesByCallNumber(group, number) });
         }
     }
 }

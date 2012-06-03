@@ -5,8 +5,11 @@ using System.Data;
 using System.Data.SqlServerCe;
 using System.IO;
 using System.Linq;
+using System.Web;
+using System.Web.Caching;
 using Dapper;
 using Vision.Models;
+using Vision.Search;
 
 namespace Vision
 {
@@ -124,6 +127,10 @@ namespace Vision
                 glasses.GlassesId = (int)connection.Query<decimal>("SELECT @@IDENTITY AS LastInsertedId").Single();
                 // insert inventory
                 connection.Execute("INSERT INTO Inventory ([Group], [Number], [GlassesId]) VALUES(@Group, @Number, @GlassesId)", glasses);
+
+                // make sure cached inventory is up to date
+                addtoCachedInventory(glasses);
+
                 return glasses;
             }
         }
@@ -136,5 +143,64 @@ namespace Vision
                     new { Group = group, Number = number }).FirstOrDefault();
             }
         }
+
+        public static IEnumerable<GlassesSearchResult> Search(Glasses rx)
+        {
+            IEnumerable<Glasses> inventory = getCachedInventory();
+
+            GlassesSearchBase search = new MikeTamSearch();
+
+            return search.Search(inventory, rx).Take(50);
+        }
+
+        #region Inventory Caching
+        private static string GLASSES_INVENTORY_CACHE_KEY = "Glasses_Inventory";
+
+        private static IEnumerable<Glasses> getCachedInventory()
+        {
+            List<Glasses> inventory = (List<Glasses>)HttpContext.Current.Cache[GLASSES_INVENTORY_CACHE_KEY];
+            if (inventory == null)
+            {
+                using (var connection = GetConnection())
+                {
+                    inventory = connection.Query<Glasses>("SELECT * FROM Inventory, Glasses WHERE Inventory.GlassesId = Glasses.GlassesId").ToList();
+                    HttpContext.Current.Cache.Add(GLASSES_INVENTORY_CACHE_KEY, inventory, null, Cache.NoAbsoluteExpiration, Cache.NoSlidingExpiration, CacheItemPriority.Default, null);
+                }
+            }
+            return inventory;
+        }
+
+        private static void addtoCachedInventory(Glasses glasses)
+        {
+            List<Glasses> inventory = (List<Glasses>)HttpContext.Current.Cache[GLASSES_INVENTORY_CACHE_KEY];
+            if (inventory != null)
+            {
+                inventory.Add(glasses);
+                HttpContext.Current.Cache.Add(GLASSES_INVENTORY_CACHE_KEY, inventory, null, Cache.NoAbsoluteExpiration, Cache.NoSlidingExpiration, CacheItemPriority.Default, null);
+            }
+        }
+
+        private static void removeFromCachedInventory(int group, int number)
+        {
+            List<Glasses> inventory = (List<Glasses>)HttpContext.Current.Cache[GLASSES_INVENTORY_CACHE_KEY];
+            if (inventory != null)
+            {
+                Glasses remove = null;
+                foreach (Glasses glasses in inventory)
+                {
+                    if (glasses.Group == group && glasses.Number == number)
+                    {
+                        remove = glasses;
+                        break;
+                    }
+
+                }
+                if (remove != null)
+                    inventory.Remove(remove);
+
+                HttpContext.Current.Cache.Add(GLASSES_INVENTORY_CACHE_KEY, inventory, null, Cache.NoAbsoluteExpiration, Cache.NoSlidingExpiration, CacheItemPriority.Default, null);
+            }
+        }
+        #endregion
     }
 }

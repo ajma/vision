@@ -5,8 +5,10 @@ using System.Web;
 
 namespace Vision.Models
 {
-    public class GlassesSearchResult : Glasses
+    public class GlassesSearchResult
     {
-        public int Score { get; set; }
+        public float Score { get; set; }
+        public string ScoreDetails { get; set; }
+        public Glasses Glasses { get; set; }
     }
 }

@@ -10,11 +10,12 @@
         $('input.add').rxForm({ autoZero: false, min: 0, max: 20 });
 
         $('#searchButton').click(function () {
+            $("#searchResults tbody").empty();
+
             var selectedTab = $('#searchby li.active a').attr('href');
             var url = (selectedTab === '#search_by_rx') ? '/Glasses/SearchByRx' : '/Glasses/SearchByCallNumber';
             var data = $(selectedTab + ' input').serializeArray()
             $.post(url, data, function (data) {
-                $("#searchResults tbody").empty();
                 $("#searchResultRow").tmpl(data).prependTo("#searchResults tbody");
             });
         });
@@ -74,18 +75,18 @@
 <script id="searchResultRow" type="text/x-jquery-tmpl">
     <tr>
         <td>${Score}</td>
-        <td>${Group}/${Number}</td>
-        <td class="table-horizontal-break">${sphcylFormat(OD_Spherical)}</td>
-        <td>${sphcylFormat(OD_Cylindrical)}</td>
-        <td>${axisFormat(OD_Axis)}</td>
-        <td>${sphcylFormat(OD_Add)}</td>
-        <td class="table-horizontal-break">${sphcylFormat(OS_Spherical)}</td>
-        <td>${sphcylFormat(OS_Cylindrical)}</td>
-        <td>${axisFormat(OS_Axis)}</td>
-        <td>${sphcylFormat(OS_Add)}</td>
-        <td class="table-horizontal-break">${Sunglasses?'Yes':'No'}</td>
-        <td>${Gender}</td>
-        <td>${Size}</td>
+        <td>${Glasses.Group}/${Number}</td>
+        <td class="table-horizontal-break">${sphcylFormat(Glasses.OD_Spherical)}</td>
+        <td>${sphcylFormat(Glasses.OD_Cylindrical)}</td>
+        <td>${axisFormat(Glasses.OD_Axis)}</td>
+        <td>${sphcylFormat(Glasses.OD_Add)}</td>
+        <td class="table-horizontal-break">${sphcylFormat(Glasses.OS_Spherical)}</td>
+        <td>${sphcylFormat(Glasses.OS_Cylindrical)}</td>
+        <td>${axisFormat(Glasses.OS_Axis)}</td>
+        <td>${sphcylFormat(Glasses.OS_Add)}</td>
+        <td class="table-horizontal-break">${Glasses.Sunglasses?'Yes':'No'}</td>
+        <td>${Glasses.Gender}</td>
+        <td>${Glasses.Size}</td>
     </tr>
 </script>
 <table id="searchResults" class="table table-striped table-bordered table-condensed">
