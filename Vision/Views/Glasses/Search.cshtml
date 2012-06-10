@@ -24,7 +24,7 @@
             var data = $(selectedTab + ' input').serializeArray()
             $.post(url, data, function (data) {
                 $('#searchResultRow').tmpl(data).prependTo('#searchResults tbody');
-                searchResults = data;
+                searchResults = $.isArray(data) ? data : [ data ];
             });
         });
 
@@ -151,7 +151,7 @@
         </thead>
         <tbody>
             <tr>
-                <th>OD:</th>
+                <th>OD (right):</th>
                 <td>${sphcylFormat(OD_Spherical)}</td>
                 {{if OD_Cylindrical === 0 && OD_Axis === 0 && OD_Add === 0}}
                 <td colspan="3">DS</td>
@@ -162,7 +162,7 @@
                 {{/if}}
             </tr>
             <tr>
-                <th>OS:</th>
+                <th>OS (left):</th>
                 <td>${sphcylFormat(OS_Spherical)}</td>
                 {{if OS_Cylindrical === 0 && OS_Axis === 0 && OS_Add === 0}}
                 <td colspan="3">DS</td>
