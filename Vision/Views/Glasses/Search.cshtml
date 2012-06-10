@@ -4,10 +4,17 @@
 
 <script type="text/javascript">
     $(document).ready(function () {
+        var searchResults;
+
         $('input.sph').rxForm({ autoZero: false });
         $('input.cyl').rxForm({ autoZero: false, min: -20, max: 0 });
         $('input.axis').rxForm({ autoZero: false, min: 0, max: 180, littleStep: 5, bigStep: 10, beforeDecimal: 3, afterDecimal: 0, autoDecimal: 999 });
         $('input.add').rxForm({ autoZero: false, min: 0, max: 20 });
+
+        $('#searchby a').click(function (e) {
+            e.preventDefault();
+            $(this).tab('show');
+        });
 
         $('#searchButton').click(function () {
             $("#searchResults tbody").empty();
@@ -16,7 +23,8 @@
             var url = (selectedTab === '#search_by_rx') ? '/Glasses/SearchByRx' : '/Glasses/SearchByCallNumber';
             var data = $(selectedTab + ' input').serializeArray()
             $.post(url, data, function (data) {
-                $("#searchResultRow").tmpl(data).prependTo("#searchResults tbody");
+                $('#searchResultRow').tmpl(data).prependTo('#searchResults tbody');
+                searchResults = data;
             });
         });
 
@@ -25,10 +33,14 @@
             $('.rx_form input[type=checkbox]').each(function (index) { this.checked = false; });
             $("#searchResults tbody").empty();
         });
-        $('#searchby a').click(function (e) {
-            e.preventDefault();
-            $(this).tab('show');
-        })
+
+        $('.searchResultRow').live('click', function (event) {
+            var selectedIndex = $('#searchResults tbody tr').index(this);
+            var selectedGlasses = searchResults[selectedIndex].Glasses;
+            $('#selectedModalTitle').text('Glasses ' + selectedGlasses.Group + '/' + selectedGlasses.Number);
+            $('#selectedModal').html($('#selectedModalTemplate').tmpl(selectedGlasses));
+            $('#selectedModal').modal();
+        });
     });
 </script>
 
@@ -73,17 +85,25 @@
 </div>
 
 <script id="searchResultRow" type="text/x-jquery-tmpl">
-    <tr>
+    <tr class="searchResultRow">
         <td>${Score}</td>
-        <td>${Glasses.Group}/${Number}</td>
+        <td>${Glasses.Group}/${Glasses.Number}</td>
         <td class="table-horizontal-break">${sphcylFormat(Glasses.OD_Spherical)}</td>
+        {{if Glasses.OD_Cylindrical === 0 && Glasses.OD_Axis === 0 && Glasses.OD_Add === 0}}
+        <td colspan="3">DS</td>
+        {{else}}
         <td>${sphcylFormat(Glasses.OD_Cylindrical)}</td>
         <td>${axisFormat(Glasses.OD_Axis)}</td>
         <td>${sphcylFormat(Glasses.OD_Add)}</td>
+        {{/if}}
         <td class="table-horizontal-break">${sphcylFormat(Glasses.OS_Spherical)}</td>
+        {{if Glasses.OD_Cylindrical === 0 && Glasses.OD_Axis === 0 && Glasses.OD_Add === 0}}
+        <td colspan="3">DS</td>
+        {{else}}
         <td>${sphcylFormat(Glasses.OS_Cylindrical)}</td>
         <td>${axisFormat(Glasses.OS_Axis)}</td>
         <td>${sphcylFormat(Glasses.OS_Add)}</td>
+        {{/if}}
         <td class="table-horizontal-break">${Glasses.Sunglasses?'Yes':'No'}</td>
         <td>${Glasses.Gender}</td>
         <td>${Glasses.Size}</td>
@@ -111,3 +131,61 @@
 
     </tbody>
 </table>
+
+<div id="selectedModal" class="modal hide fade in">
+</div>
+<script id="selectedModalTemplate" type="text/x-jquery-tmpl">
+    <div class="modal-header">
+        <h3>Glasses ${Group}/${Number}</h3>
+    </div>
+    <div class="modal-body">
+        <table class="table table-bordered table-condensed">
+        <thead>
+            <tr>
+                <th></th>
+                <th>Spherical</th>
+                <th>Cylindrical</th>
+                <th>Axis</th>
+                <th>Add</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <th>OD:</th>
+                <td>${sphcylFormat(OD_Spherical)}</td>
+                {{if OD_Cylindrical === 0 && OD_Axis === 0 && OD_Add === 0}}
+                <td colspan="3">DS</td>
+                {{else}}
+                <td>${sphcylFormat(OD_Cylindrical)}</td>
+                <td>${axisFormat(OD_Axis)}</td>
+                <td>${sphcylFormat(OD_Add)}</td>
+                {{/if}}
+            </tr>
+            <tr>
+                <th>OS:</th>
+                <td>${sphcylFormat(OS_Spherical)}</td>
+                {{if OS_Cylindrical === 0 && OS_Axis === 0 && OS_Add === 0}}
+                <td colspan="3">DS</td>
+                {{else}}
+                <td>${sphcylFormat(OS_Cylindrical)}</td>
+                <td>${axisFormat(OS_Axis)}</td>
+                <td>${sphcylFormat(OS_Add)}</td>
+                {{/if}}
+            </tr>
+        </tbody>
+        </table>
+        {{if Sunglasses}}
+        <div>Sunglasses: ${Sunglasses?'Yes':'No'}</div>
+        {{/if}}
+        {{if Gender}}
+        <div>Gender: <td>${Gender}</td></div>
+        {{/if}}
+        {{if Size}}
+        <div>Size: ${Size}</div>
+        {{/if}}
+    </div>
+    <div class="modal-footer">
+        <a href="#" class="btn btn-primary">Save</a>
+        <a href="#" class="btn" data-dismiss="modal">Close</a>
+    </div>
+</script>

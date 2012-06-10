@@ -27,3 +27,11 @@ td.table-horizontal-break {
 .glassesAdded {
     margin-bottom: 0px;
 }
+
+.searchResultRow {
+    cursor:pointer;
+}
+
+#searchResults td, #searchResults th, #selectedModal td, #selectedModal th {
+    text-align:center;
+}
