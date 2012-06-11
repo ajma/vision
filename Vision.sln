@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 11.00
 # Visual Studio 2010
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Vision", "Vision.csproj", "{9D90783C-D239-48B4-97B5-9D988EB73D27}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Vision", "Vision\Vision.csproj", "{AFD02AAE-38A2-4E2E-8CCB-23B6042C8784}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -9,10 +9,10 @@ Global
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{9D90783C-D239-48B4-97B5-9D988EB73D27}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{9D90783C-D239-48B4-97B5-9D988EB73D27}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{9D90783C-D239-48B4-97B5-9D988EB73D27}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{9D90783C-D239-48B4-97B5-9D988EB73D27}.Release|Any CPU.Build.0 = Release|Any CPU
+		{AFD02AAE-38A2-4E2E-8CCB-23B6042C8784}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{AFD02AAE-38A2-4E2E-8CCB-23B6042C8784}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{AFD02AAE-38A2-4E2E-8CCB-23B6042C8784}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{AFD02AAE-38A2-4E2E-8CCB-23B6042C8784}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
