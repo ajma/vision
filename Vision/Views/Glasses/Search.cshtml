@@ -3,9 +3,11 @@
 }
 
 <script type="text/javascript">
-    $(document).ready(function () {
-        var searchResults;
+    var searchResults;
+    var selectedGlasses;
+    var selectedIndex;
 
+    $(document).ready(function () {
         $('input.sph').rxForm({ autoZero: false });
         $('input.cyl').rxForm({ autoZero: false, min: -20, max: 0 });
         $('input.axis').rxForm({ autoZero: false, min: 0, max: 180, littleStep: 5, bigStep: 10, beforeDecimal: 3, afterDecimal: 0, autoDecimal: 999 });
@@ -21,10 +23,10 @@
 
             var selectedTab = $('#searchby li.active a').attr('href');
             var url = (selectedTab === '#search_by_rx') ? '/Glasses/SearchByRx' : '/Glasses/SearchByCallNumber';
-            var data = $(selectedTab + ' input').serializeArray()
-            $.post(url, data, function (data) {
+            var query = $(selectedTab + ' input').serializeArray()
+            $.post(url, query, function (data) {
                 $('#searchResultRow').tmpl(data).prependTo('#searchResults tbody');
-                searchResults = $.isArray(data) ? data : [ data ];
+                searchResults = $.isArray(data) ? data : [data];
             });
         });
 
@@ -35,13 +37,22 @@
         });
 
         $('.searchResultRow').live('click', function (event) {
-            var selectedIndex = $('#searchResults tbody tr').index(this);
-            var selectedGlasses = searchResults[selectedIndex].Glasses;
+            selectedIndex = $('#searchResults tbody tr').index(this);
+            selectedGlasses = searchResults[selectedIndex].Glasses;
             $('#selectedModalTitle').text('Glasses ' + selectedGlasses.Group + '/' + selectedGlasses.Number);
             $('#selectedModal').html($('#selectedModalTemplate').tmpl(selectedGlasses));
-            $('#selectedModal').modal();
+            $('#selectedModal').modal().find('#removeFromInventory').click(removeSelectedGlasses);
         });
     });
+
+    var removeSelectedGlasses = function () {
+        var data = { group: selectedGlasses.Group, number: selectedGlasses.Number };
+        $.post('/Glasses/Remove', data, function () {
+            $('#searchResults tbody tr:nth-child(' + (selectedIndex + 1) + ')').remove();
+            searchResults.splice(selectedIndex, 1);
+            $('#selectedModal').modal('hide');
+        });
+    };
 </script>
 
 <h1>Search</h1>
@@ -183,9 +194,12 @@
         {{if Size}}
         <div>Size: ${Size}</div>
         {{/if}}
+        <hr />
+        <div>
+            <a href="#" id="removeFromInventory" class="btn btn-large btn-warning">Remove from inventory</a>
+        </div>
     </div>
     <div class="modal-footer">
-        <a href="#" class="btn btn-primary">Save</a>
         <a href="#" class="btn" data-dismiss="modal">Close</a>
     </div>
 </script>

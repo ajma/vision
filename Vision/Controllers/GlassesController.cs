@@ -26,8 +26,9 @@ namespace Vision.Controllers
         }
 
         [HttpPost]
-        public JsonResult Remove(int glassesId, String by, String reason)
+        public JsonResult Remove(short group, int number, String by, String reason)
         {
+            SqlHelper.RemoveGlasses(group, number);
             return Json(null);
         }
 

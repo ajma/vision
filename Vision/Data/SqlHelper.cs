@@ -135,6 +135,18 @@ namespace Vision
             }
         }
 
+        public static void RemoveGlasses(int group, int number)
+        {
+            using (var connection = GetConnection())
+            {
+                int glassesId = connection.Query<int>("SELECT GlassesId FROM Inventory WHERE [Group] = @Group AND Number = @Number", 
+                    new { Group = group, Number = number }).Single();
+
+                connection.Execute("DELETE Inventory WHERE GlassesId = @GlassesId", new { GlassesId = glassesId });
+                removeFromCachedInventory(group, number);
+            }
+        }
+
         public static Glasses GetGlassesByCallNumber(int group, int number)
         {
             using (var connection = GetConnection())
