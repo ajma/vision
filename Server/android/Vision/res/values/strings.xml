@@ -1,8 +1,8 @@
 <resources>
 
     <string name="app_name">Vision</string>
-    <string name="hello_world">Hello world!</string>
-    <string name="menu_settings">Settings</string>
-    <string name="title_activity_main">Vision</string>
 
+    <string name="startServer">Start Server</string>
+    <string name="stopServer">Stop Server</string>
+    
 </resources>
