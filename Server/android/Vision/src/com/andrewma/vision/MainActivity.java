@@ -10,8 +10,6 @@ import android.content.Intent;
 
 public class MainActivity extends Activity {
 
-	private boolean mServerStarted = false;
-	
 	private Button mStartStopServerButton;
 	private Intent mWebServerService;
 	
@@ -24,16 +22,16 @@ public class MainActivity extends Activity {
         setContentView(R.layout.activity_main);
         
         mStartStopServerButton = (Button)findViewById(R.id.startStopServerButton);
+        mStartStopServerButton.setText(WebServerService.isWebServerRunning() ? R.string.stopServer : R.string.startServer);
     }
     
     public void startStopServerButtonClick(View v) {
-    	if(!mServerStarted) {
+    	if(!WebServerService.isWebServerRunning()) {
     		startService(mWebServerService);
+    		mStartStopServerButton.setText(R.string.stopServer);
     	} else {
     		stopService(mWebServerService);
+    		mStartStopServerButton.setText(R.string.startServer);
     	}
-    	
-    	mServerStarted = !mServerStarted;
-    	mStartStopServerButton.setText(mServerStarted ? R.string.stopServer : R.string.startServer);
     }
 }
