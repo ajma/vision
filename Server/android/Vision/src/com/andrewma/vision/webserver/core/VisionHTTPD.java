@@ -7,6 +7,7 @@ import java.util.Properties;
 import android.content.Context;
 import android.content.res.AssetManager;
 import android.util.Log;
+import android.webkit.MimeTypeMap;
 
 import com.andrewma.vision.webserver.WebServerService;
 
@@ -14,10 +15,12 @@ public class VisionHTTPD extends NanoHTTPD {
 	
 	private static final String TAG = "VisionHTTPD";
 	private final AssetManager assets;
+	private final MimeTypeMap mimeTypeMap;
 	
 	public VisionHTTPD(Context c) throws IOException {
 		super(WebServerService.WEBSERVER_PORT, null);
 		assets = c.getApplicationContext().getResources().getAssets();
+		mimeTypeMap = MimeTypeMap.getSingleton();
 	}
 
 	@Override
@@ -38,8 +41,9 @@ public class VisionHTTPD extends NanoHTTPD {
 			if(truncatedUri.length() == 0) {
 				truncatedUri = "index.html";
 			}
-			final Response assetResponse = new Response(HTTP_OK, MIME_HTML, assets.open(truncatedUri)); 
-			Log.v(TAG, "Serving from assets: /" + truncatedUri);
+			final String mimeType = getMimeTypeFromUrl(truncatedUri);
+			final Response assetResponse = new Response(HTTP_OK, mimeType, assets.open(truncatedUri)); 
+			Log.v(TAG, String.format("Serving from assets (mime type: %s): /%s", mimeType, truncatedUri));
 			return assetResponse;
 		} catch (IOException e) {
 			if(uri == "" || uri.endsWith("/")) {
@@ -49,6 +53,11 @@ public class VisionHTTPD extends NanoHTTPD {
 				return new Response(HTTP_NOTFOUND, MIME_HTML, "<html><head><head><body><h1>404 Not Found</h1></body></html>");
 			}
 		}
+	}
+	
+	private String getMimeTypeFromUrl(String url) {
+		final String extension = MimeTypeMap.getFileExtensionFromUrl(url);
+		return mimeTypeMap.getMimeTypeFromExtension(extension);
 	}
 	
 	private Response serveApi(String uri) {
