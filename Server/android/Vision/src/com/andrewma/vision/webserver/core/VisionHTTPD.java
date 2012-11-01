@@ -1,6 +1,5 @@
 package com.andrewma.vision.webserver.core;
 
-import java.io.File;
 import java.io.IOException;
 import java.util.Properties;
 
@@ -26,7 +25,7 @@ public class VisionHTTPD extends NanoHTTPD {
 	@Override
 	public Response serve(String uri, String method, Properties header,
 			Properties parms, Properties files) {
-		Log.v(TAG, "Request " + uri);
+		Log.v(TAG, "Requesting " + uri);
 		
 		if(uri.toLowerCase().startsWith("/api/")) {
 			return serveApi(uri);

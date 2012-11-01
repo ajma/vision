@@ -13,8 +13,7 @@
         <TextView
             android:id="@+id/serverIpAddress"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            tools:context=".MainActivity" />
+            android:layout_height="wrap_content" />
 
         <Button
             android:id="@+id/startStopServerButton"
@@ -22,6 +21,13 @@
             android:layout_height="wrap_content"
             android:onClick="startStopServerButtonClick"
             android:text="@string/startServer" />
+        <Button
+            android:id="@+id/webviewButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:onClick="webviewButtonClick"
+            android:text="@string/webclient"
+            android:enabled="false"/>
     </LinearLayout>
 
 </RelativeLayout>

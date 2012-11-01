@@ -3,12 +3,14 @@ package com.andrewma.vision.webserver;
 import java.io.IOException;
 import java.util.concurrent.atomic.AtomicBoolean;
 
-import com.andrewma.vision.MainActivity;
+import com.andrewma.vision.activity.MainActivity;
+import com.andrewma.vision.utils.NetworkUtils;
 import com.andrewma.vision.webserver.core.VisionHTTPD;
 
 import android.app.Notification;
 import android.app.PendingIntent;
 import android.app.Service;
+import android.content.Context;
 import android.content.Intent;
 import android.os.IBinder;
 import android.util.Log;
@@ -57,7 +59,7 @@ public class WebServerService extends Service {
 		final PendingIntent pi = PendingIntent.getActivity(this, 0, i, 0);
 
 		note.setLatestEventInfo(this, NOTIFICATION_TITLE,
-				"Web Server Running...", pi);
+				WebServerService.getWebServerUrl(this), pi);
 		note.flags |= Notification.FLAG_NO_CLEAR;
 
 		startForeground(NOTIFICATION_ID, note);
@@ -76,5 +78,11 @@ public class WebServerService extends Service {
 
 	public static boolean isWebServerRunning() {
 		return mWebServerRunning.get();
+	}
+	
+	public static String getWebServerUrl(Context context) {
+		return String.format("http://%s:%d",
+				NetworkUtils.getWifiIpAddress(context),
+				WEBSERVER_PORT);
 	}
 }
