@@ -23,34 +23,36 @@ public class VisionHTTPD extends NanoHTTPD {
 	@Override
 	public Response serve(String uri, String method, Properties header,
 			Properties parms, Properties files) {
-		Log.v(TAG, "Requested " + uri);
+		Log.v(TAG, "Request " + uri);
 		
 		if(uri.toLowerCase().startsWith("/api/")) {
 			return serveApi(uri);
 		} else {
 			return serveAsset(uri);
-			// return serveFile(uri, header, new File("file:///android_asset/..."), false);
 		}
 	}
 	
 	private Response serveAsset(String uri) {
 		try {
 			String truncatedUri = uri.substring(1);
-			if(truncatedUri == "") {
+			if(truncatedUri.length() == 0) {
 				truncatedUri = "index.html";
 			}
-			return new Response(HTTP_OK, MIME_HTML, assets.open(truncatedUri));
+			final Response assetResponse = new Response(HTTP_OK, MIME_HTML, assets.open(truncatedUri)); 
+			Log.v(TAG, "Serving from assets: /" + truncatedUri);
+			return assetResponse;
 		} catch (IOException e) {
 			if(uri == "" || uri.endsWith("/")) {
 				return serveAsset(uri + "index.html");
 			} else {
-				e.printStackTrace();
+				Log.e(TAG, "File Not Found: " + uri);
 				return new Response(HTTP_NOTFOUND, MIME_HTML, "<html><head><head><body><h1>404 Not Found</h1></body></html>");
 			}
 		}
 	}
 	
 	private Response serveApi(String uri) {
+		Log.v(TAG, "Serving from API: " + uri);
 		final String html = "<html><head><head><body><h1>API request placeholder</h1></body></html>";
 		return new Response(HTTP_OK, MIME_HTML, html);
 	}
