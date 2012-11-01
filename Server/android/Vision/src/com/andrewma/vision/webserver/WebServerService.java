@@ -12,6 +12,8 @@ import android.os.IBinder;
 import android.util.Log;
 
 public class WebServerService extends Service {
+	
+	public static final int WEBSERVER_PORT = 80;
 
 	private static final String TAG = "WebServerService";
 	private static final int NOTIFICATION_ID = 1337;
