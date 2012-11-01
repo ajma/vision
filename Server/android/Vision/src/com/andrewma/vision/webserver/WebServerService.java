@@ -1,8 +1,10 @@
 package com.andrewma.vision.webserver;
 
+import java.io.IOException;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 import com.andrewma.vision.MainActivity;
+import com.andrewma.vision.webserver.core.VisionHTTPD;
 
 import android.app.Notification;
 import android.app.PendingIntent;
@@ -12,14 +14,17 @@ import android.os.IBinder;
 import android.util.Log;
 
 public class WebServerService extends Service {
-	
-	public static final int WEBSERVER_PORT = 80;
+
+	public static final int WEBSERVER_PORT = 8765;
 
 	private static final String TAG = "WebServerService";
 	private static final int NOTIFICATION_ID = 1337;
 	private static final String NOTIFICATION_TITLE = "Vision Web Server";
-	
-	private static final AtomicBoolean mWebServerRunning = new AtomicBoolean(false);
+
+	private static final AtomicBoolean mWebServerRunning = new AtomicBoolean(
+			false);
+
+	private VisionHTTPD server;
 
 	@Override
 	public IBinder onBind(Intent arg0) {
@@ -30,8 +35,21 @@ public class WebServerService extends Service {
 	public int onStartCommand(Intent intent, int flags, int startId) {
 		Log.v(TAG, "Starting Web Server Service");
 
+		try {
+			server = new VisionHTTPD();
+			mWebServerRunning.set(true);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		showNotification();
+
+		return (START_NOT_STICKY);
+	}
+
+	private void showNotification() {
 		final Notification note = new Notification(
-				android.R.drawable.ic_dialog_info, "Starting Vision Web Server Service",
+				android.R.drawable.ic_dialog_info,
+				"Starting Vision Web Server Service",
 				System.currentTimeMillis());
 		final Intent i = new Intent(this, MainActivity.class);
 		i.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP
@@ -43,19 +61,19 @@ public class WebServerService extends Service {
 		note.flags |= Notification.FLAG_NO_CLEAR;
 
 		startForeground(NOTIFICATION_ID, note);
-		
-		mWebServerRunning.set(true);
 
-		return (START_NOT_STICKY);
 	}
 
 	@Override
 	public void onDestroy() {
 		Log.v(TAG, "Stopping Web Server Service");
-		mWebServerRunning.set(false);
+		if (server != null) {
+			server.stop();
+			mWebServerRunning.set(false);
+		}
 		super.onDestroy();
 	}
-	
+
 	public static boolean isWebServerRunning() {
 		return mWebServerRunning.get();
 	}
