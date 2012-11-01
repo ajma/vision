@@ -1,4 +1,4 @@
-package com.andrewma.vision.webserver;
+package com.andrewma.vision.webserver.core;
 
 import java.io.BufferedReader;
 import java.io.ByteArrayInputStream;
