@@ -36,7 +36,7 @@ public class WebServerService extends Service {
 		Log.v(TAG, "Starting Web Server Service");
 
 		try {
-			server = new VisionHTTPD();
+			server = new VisionHTTPD(this);
 			mWebServerRunning.set(true);
 		} catch (IOException e) {
 			e.printStackTrace();
