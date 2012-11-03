@@ -2,6 +2,7 @@ define(['jquery','underscore','backbone'],
 function($, _, Backbone){
 	var AppRouter = Backbone.Router.extend({
 		routes: {
+			'': 'home',
 			'search': 'search',
 			'add': 'add',
 			'export': 'export',
@@ -9,6 +10,10 @@ function($, _, Backbone){
 			// Default
 			'*actions': 'defaultAction'
 		},
+		
+		home: function() {
+			console.log('home route hit');
+		}
 		
 		search: function() {
 			console.log('search route hit');
