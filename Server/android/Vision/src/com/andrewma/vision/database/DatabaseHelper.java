@@ -76,15 +76,14 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 			tables.put(clazz.getSimpleName(), table);
 		}
 	}
-	
+
 	private DbTable lookupModelTable(Class<?> modelClass) {
 		return lookupModelTable(modelClass.getSimpleName());
 	}
 
 	private DbTable lookupModelTable(String modelClass) {
 		if (!tables.containsKey(modelClass)) {
-			Log.e(TAG,
-					"Could not insert object of class " + modelClass);
+			Log.e(TAG, "Could not insert object of class " + modelClass);
 			return null;
 		} else {
 			return tables.get(modelClass);
@@ -133,23 +132,21 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 		}
 		return list;
 	}
-	
-	public <E> List<E> get(String modelClass, int id) {
+
+	public <E> E get(String modelClass, int id) {
 		final DbTable table = lookupModelTable(modelClass);
 		if (table == null) {
 			return null;
 		}
 
-		final List<E> list = new ArrayList<E>();
+		E result = null;
 		final SQLiteDatabase db = getReadableDatabase();
 		try {
-			final Cursor cursor = db.query(table.getTableName(), null, null,
+			final String selection = table.getPrimaryKeyName() + " = " + id;
+			final Cursor cursor = db.query(table.getTableName(), null, selection,
 					null, null, null, null);
 			if (cursor.moveToNext()) {
-				final E row = cursorToObject(table, cursor);
-				if (row != null) {
-					list.add(row);
-				}
+				result = cursorToObject(table, cursor);
 			}
 			cursor.close();
 		} finally {
@@ -157,7 +154,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 				db.close();
 			}
 		}
-		return list;
+		return result;
 	}
 
 	@SuppressWarnings("unchecked")
@@ -165,6 +162,11 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 		E row = null;
 		try {
 			row = (E) table.getModelClass().newInstance();
+
+			final int primaryKeyColumnIndex = cursor.getColumnIndex(table
+					.getPrimaryKeyName());
+			table.getPrimaryKeyField().setInt(row,
+					cursor.getInt(primaryKeyColumnIndex));
 
 			for (DbColumn column : table.columns()) {
 				final Field columnField = column.columnField;
