@@ -28,7 +28,7 @@ public class VisionHTTPD extends NanoHTTPD {
 	private final Gson gson = new Gson();
 
 	private final Map<String, Controller> controllers = new HashMap<String, Controller>();
-	
+
 	public VisionHTTPD(Context c) throws IOException {
 		super(WebServerService.WEBSERVER_PORT, null);
 		assets = c.getApplicationContext().getResources().getAssets();
@@ -42,7 +42,7 @@ public class VisionHTTPD extends NanoHTTPD {
 		Log.v(TAG, "Requesting " + uri);
 
 		if (uri.toLowerCase().startsWith("/api/")) {
-			return serveApi(uri, params);
+			return serveApi(uri, method, header, params);
 		} else {
 			return serveAsset(uri);
 		}
@@ -76,7 +76,8 @@ public class VisionHTTPD extends NanoHTTPD {
 		return mimeTypeMap.getMimeTypeFromExtension(extension);
 	}
 
-	private Response serveApi(String uri, Properties params) {
+	private Response serveApi(String uri, String method, Properties header,
+			Properties params) {
 		Log.v(TAG, "Serving from API: " + uri);
 		final Scanner scanner = new Scanner(uri).useDelimiter("/");
 
@@ -87,19 +88,21 @@ public class VisionHTTPD extends NanoHTTPD {
 			return notFoundResponse;
 		}
 
-		final String controllerUrl = (scanner.hasNext() ? scanner.next().toLowerCase() : null);
-		final String actionUrl = (scanner.hasNext() ? scanner.next().toLowerCase()
-				: null);
+		final String controllerUrl = (scanner.hasNext() ? scanner.next()
+				.toLowerCase() : null);
+		final String actionUrl = (scanner.hasNext() ? scanner.next()
+				.toLowerCase() : null);
 		final String idUrl = (scanner.hasNext() ? scanner.next() : null);
 
-		Log.v(TAG, String.format("Model: %s Action: %s Id: %s", controllerUrl, actionUrl, idUrl));
-		
-		if(!controllers.containsKey(controllerUrl)) {
+		Log.v(TAG, String.format("Model: %s Action: %s Id: %s", controllerUrl,
+				actionUrl, idUrl));
+
+		if (!controllers.containsKey(controllerUrl)) {
 			return notFoundResponse;
 		}
-		
+
 		final Controller controller = controllers.get(controllerUrl);
-		final Object obj = controller.execute(actionUrl, idUrl);
+		final Object obj = controller.execute(actionUrl, idUrl, params);
 		return new Response(HTTP_OK, MIME_JSON, gson.toJson(obj));
 	}
 }

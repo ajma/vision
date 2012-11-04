@@ -8,6 +8,12 @@ function($, _, Backbone, addTemplate, rxForm) {
 		render : function() {
 			this.$el.append(addTemplate).hide().fadeIn();
 			$('#rxform').append(rxForm);
+			$('#addButton').click(function() {
+				var test = $('#rxform').serialize();
+				$.post('/api/glasses/add', test, function() {
+					alert(test);
+				});
+			});
 		}
 	});
 });
