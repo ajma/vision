@@ -1,11 +1,13 @@
-define([ 'jquery', 'underscore', 'backbone', 'text!templates/add.html'],
-function($, _, Backbone, template) {
+define([ 'jquery', 'underscore', 'backbone', 'text!templates/add.html', 'text!templates/rxform.html'],
+function($, _, Backbone, addTemplate, rxForm) {
 	return Backbone.View.extend({
 		el : $('#body'),
-		render : function() {
+		initialize : function() {
 			this.$el.empty();
-			var compiledTemplate = _.template(template, {});
-			this.$el.append(compiledTemplate).hide().fadeIn();
+		},
+		render : function() {
+			this.$el.append(addTemplate).hide().fadeIn();
+			$('#rxform').append(rxForm);
 		}
 	});
 });
