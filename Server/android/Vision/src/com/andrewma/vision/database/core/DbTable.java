@@ -68,6 +68,14 @@ public class DbTable {
 			return modelClass.getSimpleName();
 		}
 	}
+	
+	public String getPrimaryKeyName() {
+		if (primaryKeyAnnotation.primaryKeyName() != "") {
+			return primaryKeyAnnotation.primaryKeyName();
+		} else {
+			return primaryKeyField.getName();
+		}
+	}
 
 	public ContentValues getContentValues(Object model) {
 		if (!modelClass.equals(model.getClass())) {
