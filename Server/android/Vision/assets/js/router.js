@@ -1,13 +1,13 @@
 define(['jquery', 'underscore', 'backbone', 
-        'views/HomeView', 'views/SearchView', 'views/AddView', 'views/ExportView'], 
+        'views/HomeView', 'views/SearchView', 'views/AddView', 'views/OptionsView'], 
 function($, _, Backbone, 
-		HomeView, SearchView, AddView, ExportView){
+		HomeView, SearchView, AddView, OptionsView){
 	var AppRouter = Backbone.Router.extend({
 		routes: {
 			'': 'home',
 			'search': 'search',
 			'add': 'add',
-			'export': 'export',
+			'options': 'options',
 
 			// Default
 			'*actions': 'defaultAction'
@@ -31,10 +31,10 @@ function($, _, Backbone,
 			addView.render();
 		},
 		
-		export: function() {
-			console.log('export route hit');
-			var exportView = new ExportView();
-			exportView.render();
+		options: function() {
+			console.log('options route hit');
+			var optionsView = new OptionsView();
+			optionsView.render();
 		},
 		
 		defaultAction: function(actions) {
