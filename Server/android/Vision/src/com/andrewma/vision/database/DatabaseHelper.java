@@ -1,8 +1,8 @@
 package com.andrewma.vision.database;
 
 import java.lang.reflect.Field;
-import java.util.LinkedList;
-import java.util.List;
+import java.util.Hashtable;
+import java.util.Map;
 
 import com.andrewma.vision.database.core.DbColumn;
 import com.andrewma.vision.database.core.DbTable;
@@ -11,6 +11,7 @@ import com.andrewma.vision.database.core.annotation.PrimaryKey;
 import com.andrewma.vision.database.core.annotation.Table;
 import com.andrewma.vision.models.Glasses;
 
+import android.content.ContentValues;
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
@@ -23,7 +24,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 	private static final int DATABASE_VERSION = 1;
 
 	private static DatabaseHelper instance = null;
-	private final List<DbTable> tables = new LinkedList<DbTable>();
+	private final Map<Class<?>, DbTable> tables = new Hashtable<Class<?>, DbTable>();
 
 	public static DatabaseHelper getInstance(Context context) {
 		if (instance == null) {
@@ -34,12 +35,12 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
 	private DatabaseHelper(Context context) {
 		super(context, DATABASE_NAME, null, DATABASE_VERSION);
-		readClass(Glasses.class);
+		registerModel(Glasses.class);
 	}
 
 	@Override
 	public void onCreate(SQLiteDatabase db) {
-		for (DbTable table : tables) {
+		for (DbTable table : tables.values()) {
 			final String createTableSql = table.generateCreateTableSql();
 			Log.v(TAG, createTableSql);
 			db.execSQL(createTableSql);
@@ -50,7 +51,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 	public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
 	}
 
-	private void readClass(Class<?> clazz) {
+	private void registerModel(Class<?> clazz) {
 		if (clazz.isAnnotationPresent(Table.class)) {
 			final DbTable table = new DbTable(clazz,
 					(Table) clazz.getAnnotation(Table.class));
@@ -68,7 +69,29 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 				}
 			}
 
-			tables.add(table);
+			tables.put(clazz, table);
 		}
+	}
+
+	public void insert(Object model) {
+		final Class<?> modelClass = model.getClass();
+		if (!tables.containsKey(modelClass)) {
+			Log.e(TAG,
+					"Could not insert object of class "
+							+ modelClass.getSimpleName());
+			return;
+		}
+
+		final DbTable table = tables.get(modelClass);
+		final ContentValues contentValues = table.getContentValues(model);
+		final SQLiteDatabase db = getWritableDatabase();
+		try {
+			db.insert(table.getTableName(), null, contentValues);
+		} finally {
+			if (db != null) {
+				db.close();
+			}
+		}
+
 	}
 }
