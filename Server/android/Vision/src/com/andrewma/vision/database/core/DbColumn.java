@@ -2,7 +2,7 @@ package com.andrewma.vision.database.core;
 
 import java.lang.reflect.Field;
 
-import com.andrewma.vision.database.core.annotation.Column;
+import com.andrewma.vision.database.core.annotations.Column;
 
 public class DbColumn {
 	public DbColumn(Field field, Column annotation) {

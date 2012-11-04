@@ -3,9 +3,9 @@ package com.andrewma.vision.models;
 import java.util.Date;
 
 import com.andrewma.vision.database.core.DbDataType;
-import com.andrewma.vision.database.core.annotation.Column;
-import com.andrewma.vision.database.core.annotation.PrimaryKey;
-import com.andrewma.vision.database.core.annotation.Table;
+import com.andrewma.vision.database.core.annotations.Column;
+import com.andrewma.vision.database.core.annotations.PrimaryKey;
+import com.andrewma.vision.database.core.annotations.Table;
 
 @Table
 public class Glasses {

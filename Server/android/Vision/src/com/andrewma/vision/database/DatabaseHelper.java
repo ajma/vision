@@ -9,9 +9,9 @@ import java.util.Map;
 
 import com.andrewma.vision.database.core.DbColumn;
 import com.andrewma.vision.database.core.DbTable;
-import com.andrewma.vision.database.core.annotation.Column;
-import com.andrewma.vision.database.core.annotation.PrimaryKey;
-import com.andrewma.vision.database.core.annotation.Table;
+import com.andrewma.vision.database.core.annotations.Column;
+import com.andrewma.vision.database.core.annotations.PrimaryKey;
+import com.andrewma.vision.database.core.annotations.Table;
 import com.andrewma.vision.models.Glasses;
 
 import android.content.ContentValues;
