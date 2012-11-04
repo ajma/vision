@@ -1,7 +1,8 @@
 package com.andrewma.vision.webserver.core;
 
 import java.io.IOException;
-import java.util.List;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Properties;
 import java.util.Scanner;
 
@@ -10,8 +11,8 @@ import android.content.res.AssetManager;
 import android.util.Log;
 import android.webkit.MimeTypeMap;
 
-import com.andrewma.vision.database.DatabaseHelper;
 import com.andrewma.vision.webserver.WebServerService;
+import com.andrewma.vision.webserver.controllers.GlassesController;
 import com.google.gson.Gson;
 
 public class VisionHTTPD extends NanoHTTPD {
@@ -23,24 +24,25 @@ public class VisionHTTPD extends NanoHTTPD {
 			"<html><head><head><body><h1>404 Not Found</h1></body></html>");
 
 	private final AssetManager assets;
-	private DatabaseHelper dbHelper;
 	private final MimeTypeMap mimeTypeMap;
 	private final Gson gson = new Gson();
 
+	private final Map<String, Controller> controllers = new HashMap<String, Controller>();
+	
 	public VisionHTTPD(Context c) throws IOException {
 		super(WebServerService.WEBSERVER_PORT, null);
 		assets = c.getApplicationContext().getResources().getAssets();
 		mimeTypeMap = MimeTypeMap.getSingleton();
-		dbHelper = DatabaseHelper.getInstance(c);
+		controllers.put("glasses", new GlassesController(c));
 	}
 
 	@Override
 	public Response serve(String uri, String method, Properties header,
-			Properties parms, Properties files) {
+			Properties params, Properties files) {
 		Log.v(TAG, "Requesting " + uri);
 
 		if (uri.toLowerCase().startsWith("/api/")) {
-			return serveApi(uri);
+			return serveApi(uri, params);
 		} else {
 			return serveAsset(uri);
 		}
@@ -74,7 +76,7 @@ public class VisionHTTPD extends NanoHTTPD {
 		return mimeTypeMap.getMimeTypeFromExtension(extension);
 	}
 
-	private Response serveApi(String uri) {
+	private Response serveApi(String uri, Properties params) {
 		Log.v(TAG, "Serving from API: " + uri);
 		final Scanner scanner = new Scanner(uri).useDelimiter("/");
 
@@ -85,29 +87,19 @@ public class VisionHTTPD extends NanoHTTPD {
 			return notFoundResponse;
 		}
 
-		final String model = (scanner.hasNext() ? scanner.next() : null);
-		final String method = (scanner.hasNext() ? scanner.next().toLowerCase()
+		final String controllerUrl = (scanner.hasNext() ? scanner.next().toLowerCase() : null);
+		final String actionUrl = (scanner.hasNext() ? scanner.next().toLowerCase()
 				: null);
-		final String idString = (scanner.hasNext() ? scanner.next() : null);
-		int id = 0;
-		if(idString != null) {
-			try {
-				id = Integer.parseInt(idString);
-			} catch (NumberFormatException nfe) {
-				return notFoundResponse;
-			}
-		}
+		final String idUrl = (scanner.hasNext() ? scanner.next() : null);
 
-
-		Log.v(TAG, String.format("Model: %s Method: %s Id: %d", model, method, id));
-		if ("getall".equals(method)) {
-			final List<?> getAll = dbHelper.getAll(model);
-			return new Response(HTTP_OK, MIME_JSON, gson.toJson(getAll));
-		} else if ("get".equals(method)) {
-			final Object result = dbHelper.get(model, id);
-			return new Response(HTTP_OK, MIME_JSON, gson.toJson(result));
-		} else {
+		Log.v(TAG, String.format("Model: %s Action: %s Id: %s", controllerUrl, actionUrl, idUrl));
+		
+		if(!controllers.containsKey(controllerUrl)) {
 			return notFoundResponse;
 		}
+		
+		final Controller controller = controllers.get(controllerUrl);
+		final Object obj = controller.execute(actionUrl, idUrl);
+		return new Response(HTTP_OK, MIME_JSON, gson.toJson(obj));
 	}
 }
