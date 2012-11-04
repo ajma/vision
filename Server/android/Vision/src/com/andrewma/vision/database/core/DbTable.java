@@ -7,9 +7,9 @@ import java.util.List;
 import android.content.ContentValues;
 import android.util.Log;
 
-import com.andrewma.vision.database.core.annotation.Column;
-import com.andrewma.vision.database.core.annotation.PrimaryKey;
-import com.andrewma.vision.database.core.annotation.Table;
+import com.andrewma.vision.database.core.annotations.Column;
+import com.andrewma.vision.database.core.annotations.PrimaryKey;
+import com.andrewma.vision.database.core.annotations.Table;
 
 public class DbTable {
 	private final String TAG;

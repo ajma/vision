@@ -1,4 +1,4 @@
-package com.andrewma.vision.database.core.annotation;
+package com.andrewma.vision.database.core.annotations;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
