@@ -4,19 +4,24 @@ import java.lang.reflect.Field;
 import java.util.LinkedList;
 import java.util.List;
 
+import android.content.ContentValues;
+import android.util.Log;
+
 import com.andrewma.vision.database.core.annotation.Column;
 import com.andrewma.vision.database.core.annotation.PrimaryKey;
 import com.andrewma.vision.database.core.annotation.Table;
 
 public class DbTable {
+	private final String TAG;
 	private final List<DbColumn> columns = new LinkedList<DbColumn>();
 	private Field primaryKeyField;
 	private PrimaryKey primaryKeyAnnotation;
-	private Class<?> tableClass;
+	private Class<?> modelClass;
 	private Table tableAnnotation;
 
-	public DbTable(Class<?> clazz, Table annotation) {
-		tableClass = clazz;
+	public DbTable(Class<?> model, Table annotation) {
+		TAG = "DbTable" + model.getSimpleName();
+		modelClass = model;
 		tableAnnotation = annotation;
 	}
 
@@ -60,7 +65,44 @@ public class DbTable {
 		if (tableAnnotation.tableName() != "") {
 			return tableAnnotation.tableName();
 		} else {
-			return tableClass.getSimpleName();
+			return modelClass.getSimpleName();
 		}
+	}
+
+	public ContentValues getContentValues(Object model) {
+		if (!modelClass.equals(model.getClass())) {
+			Log.e(TAG, "getContentValues called with a "
+					+ model.getClass().getSimpleName()
+					+ " object when expecting " + modelClass.getSimpleName());
+			return null;
+		}
+		final ContentValues result = new ContentValues(columns.size());
+		for (DbColumn column : columns) {
+			try {
+				final String columnName = "[" + column.getColumnName() + "]";
+				switch (column.columnAnnotation.dataType()) {
+				case INTEGER:
+					result.put(columnName, column.columnField.getInt(model));
+					break;
+				case REAL:
+					result.put(columnName, column.columnField.getFloat(model));
+					break;
+				case TEXT:
+					final Object value = column.columnField.get(model);
+					if (value == null) {
+						result.putNull(columnName);
+					} else {
+						result.put(columnName, value.toString());
+					}
+					break;
+				}
+			} catch (Exception e) {
+				Log.e(TAG,
+						column.getColumnName() + ". Exception:" + e.getMessage());
+				e.printStackTrace();
+				return null;
+			}
+		}
+		return result;
 	}
 }
