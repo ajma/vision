@@ -25,6 +25,12 @@ public class GlassesController extends Controller {
 	public Object Get(int id) {
 		return dbHelper.get(Glasses.class, id);
 	}
+	
+	@Action
+	public Object Add(Glasses glasses) {
+		dbHelper.insert(glasses);
+		return true;
+	}
 
 	@Override
 	protected String getTag() {
