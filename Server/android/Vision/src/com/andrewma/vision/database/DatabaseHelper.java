@@ -73,16 +73,23 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 		}
 	}
 
-	public void insert(Object model) {
-		final Class<?> modelClass = model.getClass();
+	private DbTable lookupModelTable(Class<?> modelClass) {
 		if (!tables.containsKey(modelClass)) {
 			Log.e(TAG,
 					"Could not insert object of class "
 							+ modelClass.getSimpleName());
+			return null;
+		} else {
+			return tables.get(modelClass);
+		}
+	}
+
+	public void insert(Object model) {
+		final DbTable table = lookupModelTable(model.getClass());
+		if(table == null) {
 			return;
 		}
-
-		final DbTable table = tables.get(modelClass);
+		
 		final ContentValues contentValues = table.getContentValues(model);
 		final SQLiteDatabase db = getWritableDatabase();
 		try {
@@ -92,6 +99,24 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 				db.close();
 			}
 		}
+	}
 
+	public void delete(Object model) {
+		final DbTable table = lookupModelTable(model.getClass());
+		if(table == null) {
+			return;
+		}
+		
+		final SQLiteDatabase db = getWritableDatabase();
+		try {
+			String where = table.getPrimaryKeyName() + "=" + table.getPrimaryKeyField().getInt(model);
+			db.delete(table.getTableName(), where, null);
+		} catch(Exception e) {
+			Log.e(TAG, e.getMessage());
+		} finally {
+			if (db != null) {
+				db.close();
+			}
+		}
 	}
 }
