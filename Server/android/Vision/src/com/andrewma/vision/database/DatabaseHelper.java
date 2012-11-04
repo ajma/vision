@@ -1,7 +1,10 @@
 package com.andrewma.vision.database;
 
 import java.lang.reflect.Field;
+import java.util.ArrayList;
+import java.util.Date;
 import java.util.Hashtable;
+import java.util.List;
 import java.util.Map;
 
 import com.andrewma.vision.database.core.DbColumn;
@@ -13,6 +16,7 @@ import com.andrewma.vision.models.Glasses;
 
 import android.content.ContentValues;
 import android.content.Context;
+import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
@@ -24,7 +28,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 	private static final int DATABASE_VERSION = 1;
 
 	private static DatabaseHelper instance = null;
-	private final Map<Class<?>, DbTable> tables = new Hashtable<Class<?>, DbTable>();
+	private final Map<String, DbTable> tables = new Hashtable<String, DbTable>();
 
 	public static DatabaseHelper getInstance(Context context) {
 		if (instance == null) {
@@ -69,15 +73,18 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 				}
 			}
 
-			tables.put(clazz, table);
+			tables.put(clazz.getSimpleName(), table);
 		}
 	}
-
+	
 	private DbTable lookupModelTable(Class<?> modelClass) {
+		return lookupModelTable(modelClass.getSimpleName());
+	}
+
+	private DbTable lookupModelTable(String modelClass) {
 		if (!tables.containsKey(modelClass)) {
 			Log.e(TAG,
-					"Could not insert object of class "
-							+ modelClass.getSimpleName());
+					"Could not insert object of class " + modelClass);
 			return null;
 		} else {
 			return tables.get(modelClass);
@@ -86,10 +93,10 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
 	public void insert(Object model) {
 		final DbTable table = lookupModelTable(model.getClass());
-		if(table == null) {
+		if (table == null) {
 			return;
 		}
-		
+
 		final ContentValues contentValues = table.getContentValues(model);
 		final SQLiteDatabase db = getWritableDatabase();
 		try {
@@ -101,18 +108,105 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 		}
 	}
 
-	public void delete(Object model) {
-		final DbTable table = lookupModelTable(model.getClass());
-		if(table == null) {
+	public <E> List<E> getAll(String modelClass) {
+		final DbTable table = lookupModelTable(modelClass);
+		if (table == null) {
+			return null;
+		}
+
+		final List<E> list = new ArrayList<E>();
+		final SQLiteDatabase db = getReadableDatabase();
+		try {
+			final Cursor cursor = db.query(table.getTableName(), null, null,
+					null, null, null, null);
+			while (cursor.moveToNext()) {
+				final E row = cursorToObject(table, cursor);
+				if (row != null) {
+					list.add(row);
+				}
+			}
+			cursor.close();
+		} finally {
+			if (db != null) {
+				db.close();
+			}
+		}
+		return list;
+	}
+	
+	public <E> List<E> get(String modelClass, int id) {
+		final DbTable table = lookupModelTable(modelClass);
+		if (table == null) {
+			return null;
+		}
+
+		final List<E> list = new ArrayList<E>();
+		final SQLiteDatabase db = getReadableDatabase();
+		try {
+			final Cursor cursor = db.query(table.getTableName(), null, null,
+					null, null, null, null);
+			if (cursor.moveToNext()) {
+				final E row = cursorToObject(table, cursor);
+				if (row != null) {
+					list.add(row);
+				}
+			}
+			cursor.close();
+		} finally {
+			if (db != null) {
+				db.close();
+			}
+		}
+		return list;
+	}
+
+	@SuppressWarnings("unchecked")
+	private <E> E cursorToObject(DbTable table, Cursor cursor) {
+		E row = null;
+		try {
+			row = (E) table.getModelClass().newInstance();
+
+			for (DbColumn column : table.columns()) {
+				final Field columnField = column.columnField;
+				final int cursorColumnindex = cursor.getColumnIndex(column
+						.getColumnName());
+				switch (column.columnAnnotation.dataType()) {
+				case INTEGER:
+					columnField.setInt(row, cursor.getInt(cursorColumnindex));
+					break;
+				case REAL:
+					columnField.setFloat(row,
+							cursor.getFloat(cursorColumnindex));
+					break;
+				case TEXT:
+					final Class<?> columnFieldClass = columnField.getClass();
+					if (String.class.equals(columnFieldClass)) {
+						column.columnField.set(row, "test");
+					} else if (boolean.class.equals(columnFieldClass)) {
+						// TODO
+					} else if (Date.class.equals(columnFieldClass)) {
+						// TODO
+					}
+
+					break;
+				}
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return row;
+	}
+
+	public void delete(Class<?> modelClass, int id) {
+		final DbTable table = lookupModelTable(modelClass);
+		if (table == null) {
 			return;
 		}
-		
+
 		final SQLiteDatabase db = getWritableDatabase();
 		try {
-			String where = table.getPrimaryKeyName() + "=" + table.getPrimaryKeyField().getInt(model);
+			final String where = table.getPrimaryKeyName() + "=" + id;
 			db.delete(table.getTableName(), where, null);
-		} catch(Exception e) {
-			Log.e(TAG, e.getMessage());
 		} finally {
 			if (db != null) {
 				db.close();

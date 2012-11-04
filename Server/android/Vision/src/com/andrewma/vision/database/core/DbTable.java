@@ -24,6 +24,10 @@ public class DbTable {
 		modelClass = model;
 		tableAnnotation = annotation;
 	}
+	
+	public Class<?> getModelClass() {
+		return modelClass;
+	}
 
 	public Field getPrimaryKeyField() {
 		return primaryKeyField;
