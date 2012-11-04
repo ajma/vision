@@ -12,6 +12,7 @@ import android.webkit.MimeTypeMap;
 
 import com.andrewma.vision.database.DatabaseHelper;
 import com.andrewma.vision.webserver.WebServerService;
+import com.google.gson.Gson;
 
 public class VisionHTTPD extends NanoHTTPD {
 
@@ -24,6 +25,7 @@ public class VisionHTTPD extends NanoHTTPD {
 	private final AssetManager assets;
 	private DatabaseHelper dbHelper;
 	private final MimeTypeMap mimeTypeMap;
+	private final Gson gson = new Gson();
 
 	public VisionHTTPD(Context c) throws IOException {
 		super(WebServerService.WEBSERVER_PORT, null);
@@ -96,12 +98,14 @@ public class VisionHTTPD extends NanoHTTPD {
 			}
 		}
 
+
+		Log.v(TAG, String.format("Model: %s Method: %s Id: %d", model, method, id));
 		if ("getall".equals(method)) {
 			final List<?> getAll = dbHelper.getAll(model);
-			return new Response(HTTP_OK, MIME_JSON, "count: " + getAll.size());
+			return new Response(HTTP_OK, MIME_JSON, gson.toJson(getAll));
 		} else if ("get".equals(method)) {
-			final Object getAll = dbHelper.get(model, id);
-			return new Response(HTTP_OK, MIME_JSON, getAll.toString());
+			final Object result = dbHelper.get(model, id);
+			return new Response(HTTP_OK, MIME_JSON, gson.toJson(result));
 		} else {
 			return notFoundResponse;
 		}
