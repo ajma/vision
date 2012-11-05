@@ -17,6 +17,11 @@ public class GlassesController extends Controller {
 		super();
 		dbHelper = DatabaseHelper.getInstance(context);
 	}
+	
+	@Action
+	public Result Search(Glasses query) {
+		return GetAll();
+	}
 
 	@Action
 	public Result GetAll() {
