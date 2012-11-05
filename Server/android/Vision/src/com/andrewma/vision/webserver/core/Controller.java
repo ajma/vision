@@ -7,16 +7,26 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Properties;
 
+import android.util.Log;
+
 import com.andrewma.vision.webserver.core.annotations.Action;
 
 public abstract class Controller {
 	private Map<String, Method> actions = new HashMap<String, Method>();
+	private final String TAG;
 
 	public Controller() {
+		TAG = getClass().getSimpleName();
+		
 		final Method[] methods = getClass().getMethods();
 		for (Method method : methods) {
+			final Class<?> returnType = method.getReturnType();
 			if (method.isAnnotationPresent(Action.class)) {
-				actions.put(method.getName().toLowerCase(), method);
+				if(returnType.equals(Result.class)) {
+					actions.put(method.getName().toLowerCase(), method);
+				} else {
+					Log.e(TAG, method.getName() + " needs to have Result type to be an action");
+				}
 			}
 		}
 	}
@@ -73,5 +83,21 @@ public abstract class Controller {
 			return null;
 		}
 		return result;
+	}
+	
+	public Result Result(String status, String mimeType, Object data) {
+		return new Result(status, mimeType, data);
+	}
+	
+	public class Result {
+		public final String status;
+		public final String mimeType;
+		public final Object data;
+		
+		private Result(String status, String mimeType, Object data) {
+			this.status = status;
+			this.mimeType = mimeType;
+			this.data = data;
+		}
 	}
 }
