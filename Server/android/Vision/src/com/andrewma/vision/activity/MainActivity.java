@@ -27,26 +27,29 @@ public class MainActivity extends Activity {
 
 		serverIpAddressTextView = (TextView) findViewById(R.id.serverIpAddress);
 		startStopServerButton = (Button) findViewById(R.id.startStopServerButton);
-		webviewButton = (Button)findViewById(R.id.webviewButton);
+		webviewButton = (Button) findViewById(R.id.webviewButton);
 
-		serverIpAddressTextView.setText(WebServerService.getWebServerUrl(this));
-		startStopServerButton
-				.setText(WebServerService.isWebServerRunning() ? R.string.stopServer
-						: R.string.startServer);
+		setWebServerStatus(WebServerService.isWebServerRunning());
 	}
 
 	public void startStopServerButtonClick(View v) {
 		if (!WebServerService.isWebServerRunning()) {
 			startService(webServerServiceIntent);
-			webviewButton.setEnabled(true);
-			startStopServerButton.setText(R.string.stopServer);
+			setWebServerStatus(true);
 		} else {
 			stopService(webServerServiceIntent);
-			webviewButton.setEnabled(false);
-			startStopServerButton.setText(R.string.startServer);
+			setWebServerStatus(false);
 		}
 	}
-	
+
+	private void setWebServerStatus(boolean enabled) {
+		webviewButton.setEnabled(enabled);
+		startStopServerButton.setText(enabled ? R.string.stopServer
+				: R.string.startServer);
+		serverIpAddressTextView.setText(enabled ? WebServerService
+				.getWebServerUrl(this) : "");
+	}
+
 	public void webviewButtonClick(View v) {
 		startActivity(new Intent(this, WebViewActivity.class));
 	}
