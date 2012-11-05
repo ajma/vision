@@ -31,9 +31,4 @@ public class GlassesController extends Controller {
 		dbHelper.insert(glasses);
 		return true;
 	}
-
-	@Override
-	protected String getTag() {
-		return "GlassesController";
-	}
 }
