@@ -1,7 +1,24 @@
-@media ( min-width : 979px) {
-	body {
-		padding-top: 60px;
-	}
+.home_hero {
+	padding: 30px;
+}
+
+.home_feature {
+	text-align: center;
+	padding-top: 30px;
+}
+
+.home_feature a {
+	color: #444;
+	text-decoration: none;
+}
+
+.home_feature h2 {
+	padding-top: 50px;
+}
+
+.home_feature_icon {
+	font-size: 180px;
+	cursor: pointer;
 }
 
 .rx_form {
@@ -18,4 +35,10 @@
 .rx_form input[type=text] {
 	width: 60px;
 	font-size: 1em;
+}
+
+@media ( min-width : 979px) {
+	body {
+		padding-top: 60px;
+	}
 }
