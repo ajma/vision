@@ -22,6 +22,6 @@ require.config({
 	}
 });
 
-require([ 'jquery', 'router', 'bootstrap' ], function($, Router) {
+require([ 'jquery', 'backbone', 'router', 'bootstrap' ], function($, Backbone, Router) {
 	Router.initialize();
 });
