@@ -4,7 +4,9 @@
 
     <string name="startServer">Start Server</string>
     <string name="stopServer">Stop Server</string>
+    <string name="autoStartServer">Auto-Start server</string>
     
     <string name="webclient">Open Vision</string>
+    
     
 </resources>
