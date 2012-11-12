@@ -9,6 +9,9 @@ function($, _, Backbone, addTemplate, rxForm) {
 			this.$el.append(addTemplate).hide().fadeIn();
 			$('#rxform').append(rxForm);
 			
+			$('ul.nav .active').removeClass('active');
+			$('#nav_add').addClass('active');
+			
 			var hideFeatures = function() {
 				$('#add_features').slideUp();
 			};
