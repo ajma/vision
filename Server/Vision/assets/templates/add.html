@@ -1,5 +1,41 @@
 <h1>Add</h1>
-<p>
+<div id="add_features" class="row">
+	<div class="span4 home_feature">
+		<i id="newBatchFeatureIcon" class="icon-star home_feature_icon"></i>
+		<h2>New Batch</h2>
+		<p>Start a new batch.</p>
+	</div>
+	<div class="span4 home_feature">
+		<i id="loadBatchFeatureIcon"
+			class="icon-folder-open home_feature_icon"></i>
+		<h2>Continue Batch</h2>
+		<p>This is if you need to resume a batch. You can revisit old
+			batches with this but be careful if labels have already been printed.</p>
+	</div>
+	<div class="span4 home_feature">
+		<a href="#help"><i class="icon-question-sign home_feature_icon"></i></a>
+		<h2>New Here?</h2>
+		<p>For first time users (or those who need a refresher),
+			instructions can be found here.</p>
+	</div>
+</div>
+
+<div id="loadBatchModal" class="modal hide fade">
+	<div class="modal-body">
+		<button type="button" class="close" data-dismiss="modal"
+			aria-hidden="true">&times;</button>
+		<h3>Load Batch Number:</h3>
+		<input type="text" class="text" />
+	</div>
+	<div class="modal-footer">
+		<a href="#add" data-dismiss="modal" class="btn">Close</a> <a href="#"
+			class="btn btn-primary">Load</a>
+	</div>
+</div>
+
+
+<div id="addGlassesForm" class="hide">
+	<hr />
 	<form id="rxform"></form>
 	<a id="addButton" class="btn btn-primary btn-large icon-plus"> Add</a>
-</p>
+</div>
