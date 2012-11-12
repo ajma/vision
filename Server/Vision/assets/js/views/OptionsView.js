@@ -7,6 +7,9 @@ function($, _, Backbone, template) {
 		},
 		render : function() {
 			this.$el.append(template).hide().fadeIn();
+			
+			$('ul.nav .active').removeClass('active');
+			$('#nav_options').addClass('active');
 		}
 	});
 });

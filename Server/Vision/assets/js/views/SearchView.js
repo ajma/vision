@@ -9,6 +9,11 @@ function($, _, Backbone, searchTemplate, rxForm) {
 		render : function() {
 			this.$el.append(searchTemplate).hide().fadeIn();
 			$('#rxform').append(rxForm);
+			
+			$('ul.nav .active').removeClass('active');
+			$('#nav_search').addClass('active');
+			
+			
 			$('#searchButton').click(function() {
 				var query = $('#rxform').serialize();
 				$.post('/api/glasses/search', query, function(data) {
