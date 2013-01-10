@@ -12,6 +12,7 @@ import com.andrewma.vision.database.core.DbTable;
 import com.andrewma.vision.database.core.annotations.Column;
 import com.andrewma.vision.database.core.annotations.PrimaryKey;
 import com.andrewma.vision.database.core.annotations.Table;
+import com.andrewma.vision.models.Batch;
 import com.andrewma.vision.models.Glasses;
 
 import android.content.ContentValues;
@@ -40,6 +41,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 	private DatabaseHelper(Context context) {
 		super(context, DATABASE_NAME, null, DATABASE_VERSION);
 		registerModel(Glasses.class);
+		registerModel(Batch.class);
 	}
 
 	@Override
@@ -114,6 +116,32 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 		try {
 			final Cursor cursor = db.query(table.getTableName(), null, null,
 					null, null, null, null);
+			while (cursor.moveToNext()) {
+				final E row = cursorToObject(table, cursor);
+				if (row != null) {
+					list.add(row);
+				}
+			}
+			cursor.close();
+		} finally {
+			if (db != null) {
+				db.close();
+			}
+		}
+		return list;
+	}
+	
+	public <E> List<E> executeSql(Class<?> modelClass, String sqlStmt) {
+		Log.v(TAG, "Executing SQL: " + sqlStmt);
+		final DbTable table = lookupModelTable(modelClass);
+		if (table == null) {
+			return null;
+		}
+
+		final List<E> list = new ArrayList<E>();
+		final SQLiteDatabase db = getReadableDatabase();
+		try {
+			final Cursor cursor = db.rawQuery(sqlStmt, null);
 			while (cursor.moveToNext()) {
 				final E row = cursorToObject(table, cursor);
 				if (row != null) {
