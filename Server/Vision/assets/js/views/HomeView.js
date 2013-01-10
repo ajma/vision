@@ -7,6 +7,9 @@ function($, _, Backbone, template) {
 			var compiledTemplate = _.template(template, {});
 			this.$el.append(compiledTemplate).hide().fadeIn();
 			
+			$('ul.nav .active').removeClass('active');
+			$('#nav_home').addClass('active');
+			
 			$('.home_feature_icon').hover(function() {
 				$(this).parent().find('h2').stop().animate({ paddingTop : '40px' }, 'fast');
 			    $(this).stop().animate({ fontSize : '220px' }, 'fast');
