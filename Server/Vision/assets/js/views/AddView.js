@@ -17,8 +17,12 @@ function($, _, Backbone, addTemplate, rxForm) {
 			};
 			
 			$('#newBatchFeatureIcon').click(function() {
-				$('#addGlassesForm').slideDown();
 				hideFeatures();
+				$.getJSON('/api/batches/new', function(data) {
+					$('#newBatchId').text('#' + data.data.BatchId);
+					$('#newBatchModal').modal();
+					$('#addGlassesForm').slideDown();
+				})
 			});
 			
 			$('#loadBatchFeatureIcon').click(function() {
@@ -26,9 +30,10 @@ function($, _, Backbone, addTemplate, rxForm) {
 			});
 			
 			$('#addButton').click(function() {
-				var test = $('#rxform').serialize();
-				$.post('/api/glasses/add', test, function() {
-					alert(test);
+				var newGlasses = $('#rxform').serialize();
+				console.log(newGlasses);
+				$.post('/api/glasses/add', newGlasses, function(data) {
+					console.log(data.data);
 				});
 			});
 		}
