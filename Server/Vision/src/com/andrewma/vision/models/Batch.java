@@ -3,6 +3,7 @@ package com.andrewma.vision.models;
 import com.andrewma.vision.database.core.DbDataType;
 import com.andrewma.vision.database.core.annotations.Column;
 import com.andrewma.vision.database.core.annotations.PrimaryKey;
+import com.andrewma.vision.database.core.annotations.Table;
 
 /**
  * When glasses are added to the inventory in batches, this is used to keep
@@ -11,6 +12,7 @@ import com.andrewma.vision.database.core.annotations.PrimaryKey;
  * @author ajma
  * 
  */
+@Table(tableName="Batches")
 public class Batch {
 	@PrimaryKey
 	public int BatchId;

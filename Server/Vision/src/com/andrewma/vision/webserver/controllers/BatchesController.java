@@ -1,5 +1,7 @@
 package com.andrewma.vision.webserver.controllers;
 
+import java.util.List;
+
 import android.content.Context;
 
 import com.andrewma.vision.database.DatabaseHelper;
@@ -17,7 +19,7 @@ public class BatchesController extends Controller {
 		super();
 		dbHelper = DatabaseHelper.getInstance(context);
 	}
-	
+
 	@Action
 	public Result Get(int id) {
 		return Result(NanoHTTPD.HTTP_OK, VisionHTTPD.MIME_JSON,
@@ -25,8 +27,17 @@ public class BatchesController extends Controller {
 	}
 
 	@Action
-	public Result Add(Batch glasses) {
-		dbHelper.insert(glasses);
-		return Result(NanoHTTPD.HTTP_OK, VisionHTTPD.MIME_JSON, true);
+	public Result New() {
+		final List<Batch> lastBatch = dbHelper.executeSql(Batch.class,
+				"SELECT * FROM Batches ORDER BY [BatchId] DESC LIMIT 1");
+		final Batch newBatch = new Batch();
+		if(lastBatch == null || lastBatch.size() == 0)
+			newBatch.BatchId = 1;
+		else
+			newBatch.BatchId = lastBatch.get(0).BatchId + 1;
+		newBatch.Name = newBatch.Glasses = "";
+
+		dbHelper.insert(newBatch);
+		return Result(NanoHTTPD.HTTP_OK, VisionHTTPD.MIME_JSON, newBatch);
 	}
 }
