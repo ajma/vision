@@ -4,7 +4,6 @@ import java.util.List;
 
 import android.content.Context;
 import android.util.FloatMath;
-import android.util.SparseBooleanArray;
 
 import com.andrewma.vision.database.DatabaseHelper;
 import com.andrewma.vision.models.Glasses;
