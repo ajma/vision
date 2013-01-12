@@ -1,6 +1,9 @@
 package com.andrewma.vision.webserver.core;
 
+import java.io.File;
 import java.io.IOException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Properties;
@@ -8,10 +11,12 @@ import java.util.Scanner;
 
 import android.content.Context;
 import android.content.res.AssetManager;
+import android.text.format.DateFormat;
 import android.util.Log;
 import android.webkit.MimeTypeMap;
 
 import com.andrewma.vision.webserver.WebServerService;
+import com.andrewma.vision.webserver.controllers.BatchesController;
 import com.andrewma.vision.webserver.controllers.GlassesController;
 import com.google.gson.Gson;
 
@@ -24,6 +29,7 @@ public class VisionHTTPD extends NanoHTTPD {
 			"<html><head><head><body><h1>404 Not Found</h1></body></html>");
 
 	private final AssetManager assets;
+	private final File databasePath;
 	private final MimeTypeMap mimeTypeMap;
 	private final Gson gson = new Gson();
 
@@ -32,8 +38,10 @@ public class VisionHTTPD extends NanoHTTPD {
 	public VisionHTTPD(Context c) throws IOException {
 		super(WebServerService.WEBSERVER_PORT, null);
 		assets = c.getApplicationContext().getResources().getAssets();
+		databasePath = c.getDatabasePath("vision.db").getParentFile();
 		mimeTypeMap = MimeTypeMap.getSingleton();
 		controllers.put("glasses", new GlassesController(c));
+		controllers.put("batches", new BatchesController(c));
 	}
 
 	@Override
@@ -41,7 +49,14 @@ public class VisionHTTPD extends NanoHTTPD {
 			Properties params, Properties files) {
 		Log.v(TAG, "Requesting " + uri);
 
-		if (uri.toLowerCase().startsWith("/api/")) {
+		if(uri.toLowerCase().equals("/exportdb")) {
+			final Response res = serveFile("vision.db", header, databasePath, false);
+			final SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd-HH-mm-ss");
+			final String downloadFileName = "vision-" + df.format(new Date());
+			res.addHeader("Content-Disposition", "attachment; filename=" + downloadFileName);
+			return res;
+		}
+		else if (uri.toLowerCase().startsWith("/api/")) {
 			return serveApi(uri, method, header, params);
 		} else {
 			return serveAsset(uri);
