@@ -37,7 +37,16 @@ public class BatchesController extends Controller {
 			newBatch.BatchId = lastBatch.get(0).BatchId + 1;
 		newBatch.Name = newBatch.Glasses = "";
 
-		dbHelper.insert(newBatch);
-		return Result(NanoHTTPD.HTTP_OK, VisionHTTPD.MIME_JSON, newBatch);
+		final long batchId = dbHelper.insert(newBatch);
+		return Result(NanoHTTPD.HTTP_OK, VisionHTTPD.MIME_JSON, batchId);
+	}
+	
+	@Action
+	public Result AddGlasses(Batch appendBatch) {
+		dbHelper.executeSql(Batch.class,
+				"UPDATE Batches SET Glasses = Glasses || \""
+						+ appendBatch.Glasses + " \" WHERE BatchId = "
+						+ appendBatch.BatchId);
+		return Result(NanoHTTPD.HTTP_OK, VisionHTTPD.MIME_JSON, true);
 	}
 }

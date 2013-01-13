@@ -60,7 +60,7 @@ public class GlassesController extends Controller {
 		}
 		glasses.Number = max + 1;
 
-		dbHelper.insert(glasses);
+		glasses.GlassesId = (int) dbHelper.insert(glasses);
 		return Result(NanoHTTPD.HTTP_OK, VisionHTTPD.MIME_JSON, glasses);
 	}
 }
