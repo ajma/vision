@@ -5,7 +5,7 @@ function($, _, Backbone, addTemplate, rxForm) {
 		initialize : function() {
 			this.$el.empty();
 		},
-		render : function() {			
+		render : function() {
 			this.$el.append(addTemplate).hide().fadeIn();
 			$('#rxform').append(rxForm);
 			var tpl = _.template($('#glasses-tpl').text());
