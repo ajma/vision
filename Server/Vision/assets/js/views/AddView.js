@@ -74,23 +74,26 @@ function($, _, Backbone, addTemplate, rxForm) {
 				hideFeatures();
 				batchId = $('#loadBatchId').val();
 				$.getJSON('/api/batches/get/' + batchId, function(response) {
-					var glasses = response.data.Glasses.trim().split(' ');
+					var glasses = (response.data.Glasses === '' ? [] : response.data.Glasses.trim().split(' '));
 					count = glasses.length;
 					setProgress();
 					$('#batchId').text(batchId);
 					$('#addGlassesForm').slideDown();
 					
-					// load glasses one-by-one. Sqlite seems to fail badly if we try to request all 40 at the same time
-					var processNext = function() {
-						var glassesId = glasses.shift();
-						console.log('Loading GlassesID:' + glassesId);
-						$.getJSON('/api/glasses/get/' + glassesId, function(response) {
-							logGlasses(response.data);
-							if(glasses.length > 0)
-								processNext();
-						});
-					};
-					processNext();
+					if(glasses.length > 0) {
+						console.log('Glasses to load: ' + glasses.length + '(IDs:' + response.data.Glasses.trim() + ')');
+						// load glasses one-by-one. Sqlite seems to fail badly if we try to request all 40 at the same time
+						var processNext = function() {
+							var glassesId = glasses.shift();
+							console.log('Loading GlassesID:' + glassesId);
+							$.getJSON('/api/glasses/get/' + glassesId, function(response) {
+								logGlasses(response.data);
+								if(glasses.length > 0)
+									processNext();
+							});
+						};
+						processNext();
+					}
 					
 					checkIfBatchDone();
 				});
