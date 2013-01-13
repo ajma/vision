@@ -8,6 +8,7 @@ function($, _, Backbone, addTemplate, rxForm) {
 		render : function() {
 			this.$el.append(addTemplate).hide().fadeIn();
 			$('#rxform').append(rxForm);
+			var batchSize = 40;
 			var count = 0;
 			var batchId = 0;
 			var tpl = _.template($('#glasses-tpl').text());
@@ -21,7 +22,7 @@ function($, _, Backbone, addTemplate, rxForm) {
 			
 			var setProgress = function() {
 				$('#progressCount').text(count);
-				$('#progressBar').width((count*100/40) + '%');
+				$('#progressBar').width((count*100/batchSize) + '%');
 			};
 			
 			var logGlasses = function(glasses) {
@@ -42,8 +43,24 @@ function($, _, Backbone, addTemplate, rxForm) {
 					setProgress();
 				})
 			});
-			
+			$('#restart').click(function() {
+				alert('restarting');
+				$.getJSON('/api/batches/new', function(response) {
+					batchId = response.data;
+					$('#newBatchId').text('#' + batchId);
+					$('#batchId').text(batchId);
+					$('#newBatchModal').modal();
+					$('#addGlassesForm').slideDown();
+					count = 0;
+					setProgress();
+					$('#rxformDiv').show();
+					$('#finished').hide();
+					$('#log').empty();
+				})
+			});
+						
 			$('#loadBatchFeatureIcon').click(function() { $('#loadBatchModal').modal(); });
+			$('#loadBatchModal').on('shown', function() { $('#loadBatchId').focus(); });
 			
 			$('#loadBatchButton').click(function() {
 				hideFeatures();
@@ -75,6 +92,12 @@ function($, _, Backbone, addTemplate, rxForm) {
 					
 					var batch = { BatchId: batchId, Glasses: String(response.data.GlassesId)};
 					$.post('/api/batches/addglasses', batch, function() { });
+					
+					if(count == batchSize) {
+						$('#rxformDiv').slideUp(function() {
+							$('#finished').slideDown();
+						});
+					}
 				});
 			});
 		}
