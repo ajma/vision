@@ -22,12 +22,18 @@ function($, _, Backbone, addTemplate, rxForm) {
 			var setProgress = function() {
 				$('#progressCount').text(count);
 				$('#progressBar').width((count*100/40) + '%');
-			}
+			};
+			
+			var logGlasses = function(glasses) {
+				var logHtml = $(tpl(glasses));
+				$('#log').prepend(logHtml);
+				logHtml.fadeIn('slow');
+			};
 			
 			$('#newBatchFeatureIcon').click(function() {
 				hideFeatures();
-				$.getJSON('/api/batches/new', function(data) {
-					batchId = data.data;
+				$.getJSON('/api/batches/new', function(response) {
+					batchId = response.data;
 					$('#newBatchId').text('#' + batchId);
 					$('#batchId').text(batchId);
 					$('#newBatchModal').modal();
@@ -41,23 +47,33 @@ function($, _, Backbone, addTemplate, rxForm) {
 			
 			$('#loadBatchButton').click(function() {
 				hideFeatures();
-				$('#addGlassesForm').slideDown();
 				batchId = $('#loadBatchId').val();
-				$('#batchId').text(batchId);
+				$.getJSON('/api/batches/get/' + batchId, function(response) {
+					var glasses = response.data.Glasses.trim().split(' ');
+					count = glasses.length;
+					setProgress();
+					$('#batchId').text(batchId);
+					$('#addGlassesForm').slideDown();
+					
+					$.each(glasses, function() {
+						console.log('Loading GlassesID:' + this);
+						$.getJSON('/api/glasses/get/' + this, function(response) {
+							logGlasses(response.data);
+						})
+					});
+				});
 			});
 						
 			$('#addButton').click(function() {
 				var newGlasses = $('#rxform').serialize();
 				console.log(newGlasses);
-				$.post('/api/glasses/add', newGlasses, function(data) {
-					console.log(data.data);
+				$.post('/api/glasses/add', newGlasses, function(response) {
+					console.log(response.data);
 					count++;
 					setProgress();
-					var a = $(tpl(data.data));
-					$('#log').prepend(a);
-					a.fadeIn('slow');
+					logGlasses(response.data);
 					
-					var batch = { BatchId: batchId, Glasses: String(data.data.GlassesId)};
+					var batch = { BatchId: batchId, Glasses: String(response.data.GlassesId)};
 					$.post('/api/batches/addglasses', batch, function() { });
 				});
 			});
