@@ -72,12 +72,41 @@
 	<div id="log" class="row"></div>
 </div>
 
+<script type="text/javascript">
+	var sphcylFormat = function (val) {
+		return (val >= 0 ? '+' : '') + val.toFixed(2);
+	};
+	
+	var axisFormat = function(val) {
+		if (val >= 100)
+			return val.toString();
+		else if (val >= 10)
+			return '0' + val.toString();
+		else
+			return '00' + val.toString();
+	};
+</script>
+
 <script type="text/html" id="glasses-tpl">
 <div class="span3 hide">
 	<h4>Call Number: <%= Group %>/<%= Number %></h4>
-	<table class="table">
-		<tr><td>OD:</td><td><%= OD_Spherical %></td><td><%= OD_Cylindrical %></td><td><%= OD_Axis %></td><td><%= OD_Add %></td></tr>
-		<tr><td>OS:</td><td><%= OS_Spherical %></td><td><%= OS_Cylindrical %></td><td><%= OS_Axis %></td><td><%= OS_Add %></td></tr>
+	<table class="table table-condensed">
+		<tr><td>&nbsp;</td><td>Sph</td><td>Cyl</td><td>Axis</td><td>Add</td></tr>
+		<tr><td>OD:</td><td><%= sphcylFormat(OD_Spherical) %></td>
+			<% if(OD_Cylindrical === 0 && OD_Axis === 0 && OD_Add === 0) { %>
+			<td colspan="3" class="pagination-centered">DS</td>
+			<% } else { %>
+			<td><%= sphcylFormat(OD_Cylindrical) %></td><td><%= axisFormat(OD_Axis) %></td><td><%= sphcylFormat(OD_Add) %></td>
+			<% } %>
+		</tr>
+		<tr><td>OS:</td><td><%= sphcylFormat(OS_Spherical) %></td>
+			<% if(OS_Cylindrical === 0 && OS_Axis === 0 && OS_Add === 0) { %>
+			<td colspan="3" class="pagination-centered">DS</td>
+			<% } else { %>
+			<td><%= sphcylFormat(OS_Cylindrical) %></td><td><%= axisFormat(OS_Axis) %></td><td><%= sphcylFormat(OS_Add) %></td>
+			<% } %>
+		</tr>
 	</table>
 </div>
 </script>
+
