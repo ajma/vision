@@ -88,21 +88,23 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 		}
 	}
 
-	public void insert(Object model) {
+	public long insert(Object model) {
+		long rowid = -1;
 		final DbTable table = lookupModelTable(model.getClass());
 		if (table == null) {
-			return;
+			return rowid;
 		}
 
 		final ContentValues contentValues = table.getContentValues(model);
 		final SQLiteDatabase db = getWritableDatabase();
 		try {
-			db.insert(table.getTableName(), null, contentValues);
+			rowid = db.insert(table.getTableName(), null, contentValues);
 		} finally {
 			if (db != null) {
 				db.close();
 			}
 		}
+		return rowid;
 	}
 
 	public <E> List<E> getAll(Class<?> modelClass) {
@@ -194,8 +196,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
 			for (DbColumn column : table.columns()) {
 				final Field columnField = column.columnField;
-				final int cursorColumnindex = cursor.getColumnIndex(column
-						.getColumnName());
+				final String columnName = column.getColumnName();
+				final int cursorColumnindex = cursor.getColumnIndex(columnName);
 				switch (column.columnAnnotation.dataType()) {
 				case INTEGER:
 					columnField.setInt(row, cursor.getInt(cursorColumnindex));
@@ -205,11 +207,12 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 							cursor.getFloat(cursorColumnindex));
 					break;
 				case TEXT:
-					final Class<?> columnFieldClass = columnField.getClass();
+					final Class<?> columnFieldClass = columnField.getType();
+					final String value = cursor.getString(cursorColumnindex);
 					if (String.class.equals(columnFieldClass)) {
-						column.columnField.set(row, "test");
+						columnField.set(row, value);
 					} else if (boolean.class.equals(columnFieldClass)) {
-						// TODO
+						columnField.setBoolean(row, "true".equalsIgnoreCase(value));
 					} else if (Date.class.equals(columnFieldClass)) {
 						// TODO
 					}
