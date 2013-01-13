@@ -11,7 +11,6 @@ import java.util.Scanner;
 
 import android.content.Context;
 import android.content.res.AssetManager;
-import android.text.format.DateFormat;
 import android.util.Log;
 import android.webkit.MimeTypeMap;
 
@@ -24,6 +23,7 @@ public class VisionHTTPD extends NanoHTTPD {
 
 	private static final String TAG = "VisionHTTPD";
 	public static final String MIME_JSON = "application/json";
+	public static final String MIME_SCRIPT = "application/x-javascript";
 	private final Response notFoundResponse = new Response(HTTP_NOTFOUND,
 			MIME_HTML,
 			"<html><head><head><body><h1>404 Not Found</h1></body></html>");
@@ -89,6 +89,8 @@ public class VisionHTTPD extends NanoHTTPD {
 
 	private String getMimeTypeFromUrl(String url) {
 		final String extension = MimeTypeMap.getFileExtensionFromUrl(url);
+		if(extension.equals("js"))
+			return MIME_SCRIPT;
 		return mimeTypeMap.getMimeTypeFromExtension(extension);
 	}
 
