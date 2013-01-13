@@ -49,17 +49,18 @@ public class VisionHTTPD extends NanoHTTPD {
 			Properties params, Properties files) {
 		Log.v(TAG, "Requesting " + uri);
 
-		if(uri.toLowerCase().equals("/exportdb")) {
-			final Response res = serveFile("vision.db", header, databasePath, false);
-			final SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd-HH-mm-ss");
-			final String downloadFileName = "vision-" + df.format(new Date());
-			res.addHeader("Content-Disposition", "attachment; filename=" + downloadFileName);
-			return res;
-		}
-		else if (uri.toLowerCase().startsWith("/api/")) {
-			return serveApi(uri, method, header, params);
-		} else {
-			return serveAsset(uri);
+		try {
+			if (uri.toLowerCase().equals("/exportdb")) {
+				return serveExportDb(header);
+			} else if (uri.toLowerCase().startsWith("/api/")) {
+				return serveApi(uri, method, header, params);
+			} else {
+				return serveAsset(uri);
+			}
+		} catch (Exception ex) {
+			ex.printStackTrace();
+			return new Response(HTTP_INTERNALERROR, MIME_PLAINTEXT, ex
+					.getClass().getName() + "\n" + ex.getLocalizedMessage());
 		}
 	}
 
@@ -119,5 +120,17 @@ public class VisionHTTPD extends NanoHTTPD {
 		final Controller controller = controllers.get(controllerUrl);
 		final Object obj = controller.execute(actionUrl, idUrl, params);
 		return new Response(HTTP_OK, MIME_JSON, gson.toJson(obj));
+	}
+	
+	private Response serveExportDb(Properties header) {
+		final Response res = serveFile("vision.db", header,
+				databasePath, false);
+		final SimpleDateFormat df = new SimpleDateFormat(
+				"yyyy-MM-dd-HH-mm-ss");
+		final String downloadFileName = "vision-"
+				+ df.format(new Date());
+		res.addHeader("Content-Disposition", "attachment; filename="
+				+ downloadFileName);
+		return res;
 	}
 }
