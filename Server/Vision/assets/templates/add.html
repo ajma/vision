@@ -56,10 +56,17 @@
 	<hr />
 	
 	<div class="row">
-		<div class="span5">
+		<div id="rxformDiv" class="span5">
 			<form id="rxform"></form>
 			<a id="addButton" class="btn btn-primary btn-large icon-plus"> Add Glasses</a>
 		</div>
+		<div id="finished" class="span5 hide">
+			<h1>You're finished!</h1>
+			<p>Thanks for finishing this batch. Please pass this batch along to the person
+			who is printing labels</p>
+			<button id="restart" class="btn btn-large btn-primary">Start a new batch</button>
+		</div>
+		
 		<div class="span4 thumbnail" style="padding:0 20px;">	
 			<h2>This is batch #<span id="batchId"></span></h2>
 			<h4>Current Progress: <span id="progressCount">0</span>/40</h4>
@@ -70,7 +77,7 @@
 	</div>
 	
 	<hr />
-
+	
 	<div id="log" class="row"></div>
 </div>
 
@@ -91,6 +98,7 @@
 
 <script type="text/html" id="glasses-tpl">
 <div class="span3 hide">
+	<div class="well">
 	<h4>Call Number: <%= Group %>/<%= Number %></h4>
 	<table class="table table-condensed">
 		<tr><td>&nbsp;</td><td>Sph</td><td>Cyl</td><td>Axis</td><td>Add</td></tr>
@@ -109,6 +117,7 @@
 			<% } %>
 		</tr>
 	</table>
+	</div>
 </div>
 </script>
 
