@@ -15,10 +15,11 @@ function($, _, Backbone, searchTemplate, rxForm) {
 			
 			
 			$('#searchButton').click(function() {
+				var tableBody = $('#searchResults tbody');
+				tableBody.empty();
 				var query = $('#rxform').serialize();
 				$.post('/api/glasses/search', query, function(data) {
-					var rowTemplate = $('#resultRowTemplate').html();
-					var tableBody = $('#searchResults tbody');
+					var rowTemplate = $('#resultRowTemplate').html();					
 					tableBody.append(_.template(rowTemplate, data));
 				});
 			});
