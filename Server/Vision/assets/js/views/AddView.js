@@ -31,6 +31,14 @@ function($, _, Backbone, addTemplate, rxForm) {
 				logHtml.fadeIn('slow');
 			};
 			
+			var checkIfBatchDone = function() {
+				if(count == batchSize) {
+					$('#rxformDiv').slideUp(function() {
+						$('#finished').slideDown();
+					});
+				}
+			};
+
 			$('#newBatchFeatureIcon').click(function() {
 				hideFeatures();
 				$.getJSON('/api/batches/new', function(response) {
@@ -58,7 +66,7 @@ function($, _, Backbone, addTemplate, rxForm) {
 					$('#log').empty();
 				})
 			});
-						
+
 			$('#loadBatchFeatureIcon').click(function() { $('#loadBatchModal').modal(); });
 			$('#loadBatchModal').on('shown', function() { $('#loadBatchId').focus(); });
 			
@@ -72,15 +80,22 @@ function($, _, Backbone, addTemplate, rxForm) {
 					$('#batchId').text(batchId);
 					$('#addGlassesForm').slideDown();
 					
-					$.each(glasses, function() {
-						console.log('Loading GlassesID:' + this);
-						$.getJSON('/api/glasses/get/' + this, function(response) {
+					// load glasses one-by-one. Sqlite seems to fail badly if we try to request all 40 at the same time
+					var processNext = function() {
+						var glassesId = glasses.shift();
+						console.log('Loading GlassesID:' + glassesId);
+						$.getJSON('/api/glasses/get/' + glassesId, function(response) {
 							logGlasses(response.data);
-						})
-					});
+							if(glasses.length > 0)
+								processNext();
+						});
+					};
+					processNext();
+					
+					checkIfBatchDone();
 				});
 			});
-						
+
 			$('#addButton').click(function() {
 				var newGlasses = $('#rxform').serialize();
 				console.log(newGlasses);
@@ -92,12 +107,8 @@ function($, _, Backbone, addTemplate, rxForm) {
 					
 					var batch = { BatchId: batchId, Glasses: String(response.data.GlassesId)};
 					$.post('/api/batches/addglasses', batch, function() { });
-					
-					if(count == batchSize) {
-						$('#rxformDiv').slideUp(function() {
-							$('#finished').slideDown();
-						});
-					}
+
+					checkIfBatchDone();
 				});
 			});
 		}
