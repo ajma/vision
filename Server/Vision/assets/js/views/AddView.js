@@ -70,6 +70,7 @@ function($, _, Backbone, addTemplate, rxForm) {
 			$('#loadBatchFeatureIcon').click(function() { $('#loadBatchModal').modal(); });
 			$('#loadBatchModal').on('shown', function() { $('#loadBatchId').focus(); });
 			
+			$('#loadBatchId').keypress(function(e) { if(e.which == 13) $('#loadBatchButton').click(); });
 			$('#loadBatchButton').click(function() {
 				hideFeatures();
 				batchId = $('#loadBatchId').val();
