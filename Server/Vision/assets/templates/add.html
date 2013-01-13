@@ -1,4 +1,4 @@
-<h1>Add</h1>
+<h1>Add Glasses To Inventory</h1>
 <div id="add_features" class="row">
 	<div class="span4 home_feature">
 		<i id="newBatchFeatureIcon" class="icon-star home_feature_icon"></i>
@@ -26,10 +26,10 @@
 			aria-hidden="true">&times;</button>
 		<h3>Let's get started!</h3>
 		<p>
-			You are starting a new batch. This new batch is:
+			Thanks for starting a new batch. This new batch is:
 		</p>
 		<h1 id="newBatchId" class="pagination-centered"></h1>
-		<p>Please enter in 40 glasses for this batch and then pass it along for label printing when complete</p>
+		<p>Please enter in 40 glasses for this batch and then pass it along for label printing</p>
 	</div>
 	<div class="modal-footer">
 		<a href="#" data-dismiss="modal" class="btn btn-primary">Let's Go!</a>
@@ -52,6 +52,32 @@
 
 <div id="addGlassesForm" class="hide">
 	<hr />
-	<form id="rxform"></form>
-	<a id="addButton" class="btn btn-primary btn-large icon-plus"> Add</a>
+	
+	<div class="row">
+		<div class="span5">
+			<form id="rxform"></form>
+			<a id="addButton" class="btn btn-primary btn-large icon-plus"> Add Glasses</a>
+		</div>
+		<div class="span4 thumbnail" style="padding:0 20px;">	
+			<h2>This is batch #<span id="batchId"></span></h2>
+			<h4>Current Progress: <span id="progressCount">0</span>/40</h4>
+			<div class="progress progress-striped">
+		  		<div id="progressBar" class="bar" style="width: 0%;"></div>
+		  	</div>
+		</div>
+	</div>
+	
+	<hr />
+
+	<div id="log" class="row"></div>
 </div>
+
+<script type="text/html" id="glasses-tpl">
+<div class="span3 hide">
+	<h4>Call Number: <%= Group %>/<%= Number %></h4>
+	<table class="table">
+		<tr><td>OD:</td><td><%= OD_Spherical %></td><td><%= OD_Cylindrical %></td><td><%= OD_Axis %></td><td><%= OD_Add %></td></tr>
+		<tr><td>OS:</td><td><%= OS_Spherical %></td><td><%= OS_Cylindrical %></td><td><%= OS_Axis %></td><td><%= OS_Add %></td></tr>
+	</table>
+</div>
+</script>
