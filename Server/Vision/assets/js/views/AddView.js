@@ -5,9 +5,10 @@ function($, _, Backbone, addTemplate, rxForm) {
 		initialize : function() {
 			this.$el.empty();
 		},
-		render : function() {
+		render : function() {			
 			this.$el.append(addTemplate).hide().fadeIn();
 			$('#rxform').append(rxForm);
+			var tpl = _.template($('#glasses-tpl').text());
 			
 			$('ul.nav .active').removeClass('active');
 			$('#nav_add').addClass('active');
@@ -20,6 +21,7 @@ function($, _, Backbone, addTemplate, rxForm) {
 				hideFeatures();
 				$.getJSON('/api/batches/new', function(data) {
 					$('#newBatchId').text('#' + data.data.BatchId);
+					$('#batchId').text(data.data.BatchId);
 					$('#newBatchModal').modal();
 					$('#addGlassesForm').slideDown();
 				})
@@ -29,11 +31,17 @@ function($, _, Backbone, addTemplate, rxForm) {
 				$('#loadBatchModal').modal();
 			});
 			
+			var count = 0;
 			$('#addButton').click(function() {
 				var newGlasses = $('#rxform').serialize();
 				console.log(newGlasses);
 				$.post('/api/glasses/add', newGlasses, function(data) {
 					console.log(data.data);
+					$('#progressCount').text(++count);
+					$('#progressBar').width((count*100/40) + '%');
+					var a = $(tpl(data.data));
+					$('#log').prepend(a);
+					a.fadeIn('slow');
 				});
 			});
 		}

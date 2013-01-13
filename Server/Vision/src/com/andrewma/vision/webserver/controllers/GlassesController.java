@@ -39,7 +39,7 @@ public class GlassesController extends Controller {
 	}
 
 	@Action
-	public Result Add(Glasses glasses) {
+	public synchronized Result Add(Glasses glasses) {
 		// figure out which group this pair goes to. the algorithm for this is
 		// rounding the OD (right) Sph value away from 0
 		boolean positive = (glasses.OD_Spherical >= 0);
@@ -58,8 +58,7 @@ public class GlassesController extends Controller {
 			if(g.Number > max)
 				max = g.Number;
 		}
-		if(max == glassesInGroup.size())
-			glasses.Number = max + 1;
+		glasses.Number = max + 1;
 
 		dbHelper.insert(glasses);
 		return Result(NanoHTTPD.HTTP_OK, VisionHTTPD.MIME_JSON, glasses);
