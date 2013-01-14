@@ -1,5 +1,6 @@
 package com.andrewma.vision.webserver.controllers;
 
+import java.util.Date;
 import java.util.List;
 
 import android.content.Context;
@@ -59,8 +60,15 @@ public class GlassesController extends Controller {
 				max = g.Number;
 		}
 		glasses.Number = max + 1;
+		
+		glasses.AddedDate = new Date();
 
 		glasses.GlassesId = (int) dbHelper.insert(glasses);
+		
+		// if database couldn't insert glasses, it will return -1 as the ID
+		if(glasses.GlassesId == -1) {
+			return ErrorResult("Couldn't add glasses. Error on db.insert.");
+		}
 		return Result(NanoHTTPD.HTTP_OK, VisionHTTPD.MIME_JSON, glasses);
 	}
 }

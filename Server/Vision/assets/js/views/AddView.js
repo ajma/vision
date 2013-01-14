@@ -113,14 +113,18 @@ function($, _, Backbone, rxform, addTemplate, rxFormTemplate) {
 				console.log(newGlasses);
 				$.post('/api/glasses/add', newGlasses, function(response) {
 					console.log(response.data);
-					count++;
-					setProgress();
-					logGlasses(response.data);
-					
-					var batch = { BatchId: batchId, Glasses: String(response.data.GlassesId)};
-					$.post('/api/batches/addglasses', batch, function() { });
-
-					checkIfBatchDone();
+					if(response.status == "200 OK") {
+						count++;
+						setProgress();
+						logGlasses(response.data);
+						
+						var batch = { BatchId: batchId, Glasses: String(response.data.GlassesId)};
+						$.post('/api/batches/addglasses', batch, function() { });
+	
+						checkIfBatchDone();
+					} else {
+						$('#errorModal').modal();
+					}
 				});
 			});
 		}

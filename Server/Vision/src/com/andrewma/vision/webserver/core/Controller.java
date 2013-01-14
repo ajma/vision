@@ -89,6 +89,11 @@ public abstract class Controller {
 		return new Result(status, mimeType, data);
 	}
 	
+	public Result ErrorResult(String error) {
+		Log.e(TAG, error);
+		return new Result(NanoHTTPD.HTTP_INTERNALERROR, VisionHTTPD.MIME_JSON, error);
+	}
+	
 	public class Result {
 		public final String status;
 		public final String mimeType;
