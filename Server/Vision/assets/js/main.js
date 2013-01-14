@@ -6,6 +6,7 @@ require.config({
 		bootstrap : 'libs/bootstrap/bootstrap.min',
 		text : 'libs/require/text',
 		templates : '../templates',
+		vision : 'libs/vision/vision',
 		rxform : 'libs/vision/rxform'
 	},
 	shim : {
@@ -19,7 +20,9 @@ require.config({
 		backbone : {
 			deps : [ 'underscore', 'jquery' ],
 			exports : 'Backbone'
-		}
+		},
+		
+		rxform : [ 'jquery' ]
 	}
 });
 

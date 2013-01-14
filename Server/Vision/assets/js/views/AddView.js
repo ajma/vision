@@ -1,5 +1,5 @@
-define([ 'jquery', 'underscore', 'backbone', 'rxform', 'text!templates/add.html', 'text!templates/rxform.html'],
-function($, _, Backbone, rxform, addTemplate, rxFormTemplate) {
+define([ 'jquery', 'underscore', 'backbone', 'vision', 'rxform', 'text!templates/add.html', 'text!templates/rxform.html'],
+function($, _, Backbone, vision, rxform, addTemplate, rxFormTemplate) {
 	return Backbone.View.extend({
 		el : $('#body'),
 		initialize : function() {
@@ -111,20 +111,15 @@ function($, _, Backbone, rxform, addTemplate, rxFormTemplate) {
 				$('#rxform input').val('');
 				$('#rxform input[type="checkbox"]').prop('checked', false);
 				console.log(newGlasses);
-				$.post('/api/glasses/add', newGlasses, function(response) {
-					console.log(response.data);
-					if(response.status == "200 OK") {
-						count++;
-						setProgress();
-						logGlasses(response.data);
-						
-						var batch = { BatchId: batchId, Glasses: String(response.data.GlassesId)};
-						$.post('/api/batches/addglasses', batch, function() { });
-	
-						checkIfBatchDone();
-					} else {
-						$('#errorModal').modal();
-					}
+				vision.post('/api/glasses/add', newGlasses, function(response) {
+					count++;
+					setProgress();
+					logGlasses(response.data);
+					
+					var batch = { BatchId: batchId, Glasses: String(response.data.GlassesId)};
+					vision.post('/api/batches/addglasses', batch, function() { });
+
+					checkIfBatchDone();
 				});
 			});
 		}
