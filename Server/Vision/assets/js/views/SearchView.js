@@ -1,6 +1,6 @@
-define([ 'jquery', 'underscore', 'backbone', 
+define([ 'jquery', 'underscore', 'backbone', 'rxform',
          'text!templates/search.html', 'text!templates/rxform.html'],
-function($, _, Backbone, searchTemplate, rxForm) {
+function($, _, Backbone, rxform, searchTemplate, rxForm) {
 	return Backbone.View.extend({
 		el : $('#body'),
 		initialize : function() {
@@ -8,12 +8,16 @@ function($, _, Backbone, searchTemplate, rxForm) {
 		},
 		render : function() {
 			this.$el.append(searchTemplate).hide().fadeIn();
+
 			$('#rxform').append(rxForm);
+			$('input.sph').rxForm({ autoZero: false });
+	        $('input.cyl').rxForm({ autoZero: false, min: -20, max: 0 });
+	        $('input.axis').rxForm({ autoZero: false, min: 0, max: 180, littleStep: 5, bigStep: 10, beforeDecimal: 3, afterDecimal: 0, autoDecimal: 999 });
+	        $('input.add').rxForm({ autoZero: false, min: 0, max: 20 });
 			
 			$('ul.nav .active').removeClass('active');
 			$('#nav_search').addClass('active');
-			
-			
+
 			$('#searchButton').click(function() {
 				var tableBody = $('#searchResults tbody');
 				tableBody.empty();
