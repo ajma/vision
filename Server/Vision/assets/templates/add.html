@@ -104,14 +104,14 @@
 		<tr><td>&nbsp;</td><td>Sph</td><td>Cyl</td><td>Axis</td><td>Add</td></tr>
 		<tr><td>OD:</td><td><%= sphcylFormat(OD_Spherical) %></td>
 			<% if(OD_Cylindrical === 0 && OD_Axis === 0 && OD_Add === 0) { %>
-			<td colspan="3" class="pagination-centered">DS</td>
+			<td colspan="3"><div class="pagination-centered">DS</div></td>
 			<% } else { %>
 			<td><%= sphcylFormat(OD_Cylindrical) %></td><td><%= axisFormat(OD_Axis) %></td><td><%= sphcylFormat(OD_Add) %></td>
 			<% } %>
 		</tr>
 		<tr><td>OS:</td><td><%= sphcylFormat(OS_Spherical) %></td>
 			<% if(OS_Cylindrical === 0 && OS_Axis === 0 && OS_Add === 0) { %>
-			<td colspan="3" class="pagination-centered">DS</td>
+			<td colspan="3"><div class="pagination-centered">DS</div></td>
 			<% } else { %>
 			<td><%= sphcylFormat(OS_Cylindrical) %></td><td><%= axisFormat(OS_Axis) %></td><td><%= sphcylFormat(OS_Add) %></td>
 			<% } %>

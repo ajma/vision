@@ -49,7 +49,7 @@
         <td><%= result.Group %>/<%= result.Number %></td>
 		<td class="table-horizontal-break"><%= sphcylFormat(result.OD_Spherical) %></td>
 		<% if(result.OD_Cylindrical === 0 && result.OD_Axis === 0 && result.OD_Add === 0) { %>
-		<td colspan="3">DS</td>
+		<td colspan="3"><div class="pagination-centered">DS</div></td>
 		<% } else { %>
 		<td><%= sphcylFormat(result.OD_Cylindrical) %></td>
 		<td><%= axisFormat(result.OD_Axis) %></td>
@@ -57,7 +57,7 @@
 		<% } %>
 		<td class="table-horizontal-break"><%= sphcylFormat(result.OS_Spherical) %></td>
 		<% if(result.OD_Cylindrical === 0 && result.OD_Axis === 0 && result.OD_Add === 0) { %>
-		<td colspan="3">DS</td>
+		<td colspan="3"><div class="pagination-centered">DS</div></td>
 		<% } else { %>
 		<td><%= sphcylFormat(result.OS_Cylindrical) %></td>
 		<td><%= axisFormat(result.OS_Axis) %></td>
