@@ -1,5 +1,5 @@
-define([ 'jquery', 'underscore', 'backbone', 'text!templates/add.html', 'text!templates/rxform.html'],
-function($, _, Backbone, addTemplate, rxForm) {
+define([ 'jquery', 'underscore', 'backbone', 'rxform', 'text!templates/add.html', 'text!templates/rxform.html'],
+function($, _, Backbone, rxform, addTemplate, rxFormTemplate) {
 	return Backbone.View.extend({
 		el : $('#body'),
 		initialize : function() {
@@ -7,7 +7,13 @@ function($, _, Backbone, addTemplate, rxForm) {
 		},
 		render : function() {
 			this.$el.append(addTemplate).hide().fadeIn();
-			$('#rxform').append(rxForm);
+			
+			$('#rxform').append(rxFormTemplate);
+			$('input.sph').rxForm();
+	        $('input.cyl').rxForm({ min: -20, max: 0 });
+	        $('input.axis').rxForm({ min: 0, max: 180, littleStep: 5, bigStep: 10, beforeDecimal: 3, afterDecimal: 0, autoDecimal: 999 });
+	        $('input.add').rxForm({ min: 0, max: 20 });
+
 			var batchSize = 40;
 			var count = 0;
 			var batchId = 0;
@@ -102,6 +108,8 @@ function($, _, Backbone, addTemplate, rxForm) {
 
 			$('#addButton').click(function() {
 				var newGlasses = $('#rxform').serialize();
+				$('#rxform input').val('');
+				$('#rxform input[type="checkbox"]').prop('checked', false);
 				console.log(newGlasses);
 				$.post('/api/glasses/add', newGlasses, function(response) {
 					console.log(response.data);

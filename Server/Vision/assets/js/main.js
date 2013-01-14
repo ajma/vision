@@ -5,7 +5,8 @@ require.config({
 		backbone : 'libs/backbone/backbone-min',
 		bootstrap : 'libs/bootstrap/bootstrap.min',
 		text : 'libs/require/text',
-		templates : '../templates'
+		templates : '../templates',
+		rxform : 'libs/vision/rxform'
 	},
 	shim : {
 		bootstrap : [ 'jquery' ],
