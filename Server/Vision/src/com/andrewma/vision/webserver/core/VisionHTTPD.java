@@ -23,7 +23,6 @@ public class VisionHTTPD extends NanoHTTPD {
 
 	private static final String TAG = "VisionHTTPD";
 	public static final String MIME_JSON = "application/json";
-	public static final String MIME_SCRIPT = "application/x-javascript";
 	private final Response notFoundResponse = new Response(HTTP_NOTFOUND,
 			MIME_HTML,
 			"<html><head><head><body><h1>404 Not Found</h1></body></html>");
@@ -89,8 +88,10 @@ public class VisionHTTPD extends NanoHTTPD {
 
 	private String getMimeTypeFromUrl(String url) {
 		final String extension = MimeTypeMap.getFileExtensionFromUrl(url);
-		if(extension.equals("js"))
-			return MIME_SCRIPT;
+		if(extension.equalsIgnoreCase("js"))
+			return "application/x-javascript";
+		else if (extension.equalsIgnoreCase("woff"))
+			return "application/x-font-woff";
 		return mimeTypeMap.getMimeTypeFromExtension(extension);
 	}
 
