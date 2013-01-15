@@ -1,7 +1,5 @@
 package com.andrewma.vision.webserver.controllers;
 
-import java.util.List;
-
 import android.content.Context;
 
 import com.andrewma.vision.database.DatabaseHelper;
@@ -28,16 +26,11 @@ public class BatchesController extends Controller {
 
 	@Action
 	public Result New() {
-		final List<Batch> lastBatch = dbHelper.executeSql(Batch.class,
-				"SELECT * FROM Batches ORDER BY [BatchId] DESC LIMIT 1");
-		final Batch newBatch = new Batch();
-		if(lastBatch == null || lastBatch.size() == 0)
-			newBatch.BatchId = 1;
-		else
-			newBatch.BatchId = lastBatch.get(0).BatchId + 1;
-		newBatch.Name = newBatch.Glasses = "";
-
-		final long batchId = dbHelper.insert(newBatch);
+		final long batchId = dbHelper.insert(new Batch());
+		
+		if(batchId == -1)
+			return ErrorResult("Could not create a new batch. batchId returned was -1.");
+		
 		return Result(NanoHTTPD.HTTP_OK, VisionHTTPD.MIME_JSON, batchId);
 	}
 	

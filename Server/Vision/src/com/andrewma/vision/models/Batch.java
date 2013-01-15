@@ -21,11 +21,11 @@ public class Batch {
 	 * Name of person working on this batch
 	 */
 	@Column(dataType = DbDataType.TEXT)
-	public String Name;
+	public String Name = "";
 
 	/**
 	 * Comma-delimited list of {@link Glasses#GlassesId} that are in this batch
 	 */
 	@Column(dataType = DbDataType.TEXT)
-	public String Glasses;
+	public String Glasses = "";
 }
