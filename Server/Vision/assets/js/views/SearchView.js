@@ -1,6 +1,6 @@
-define([ 'jquery', 'underscore', 'backbone', 'rxform',
+define([ 'jquery', 'underscore', 'backbone', 'vision', 'rxform',
          'text!templates/search.html', 'text!templates/rxform.html'],
-function($, _, Backbone, rxform, searchTemplate, rxForm) {
+function($, _, Backbone, vision, rxform, searchTemplate, rxForm) {
 	return Backbone.View.extend({
 		el : $('#body'),
 		initialize : function() {
@@ -22,7 +22,7 @@ function($, _, Backbone, rxform, searchTemplate, rxForm) {
 				var tableBody = $('#searchResults tbody');
 				tableBody.empty();
 				var query = $('#rxform').serialize();
-				$.post('/api/glasses/search', query, function(data) {
+				vision.post('/api/glasses/search', query, function(data) {
 					var rowTemplate = $('#resultRowTemplate').html();					
 					tableBody.append(_.template(rowTemplate, data));
 				});
