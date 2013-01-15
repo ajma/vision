@@ -204,9 +204,9 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 				final String columnName = column.getColumnName();
 				
 				final int cursorColumnindex = cursor.getColumnIndex(columnName);
+				final Class<?> columnFieldClass = columnField.getType();
 				switch (column.columnAnnotation.dataType()) {
 				case INTEGER:
-					final Class<?> columnFieldClass = columnField.getType();
 					final int value = cursor.getInt(cursorColumnindex);
 					if (boolean.class.equals(columnFieldClass)) {
 						columnField.setBoolean(row, (value == 1));
@@ -221,7 +221,11 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 							cursor.getFloat(cursorColumnindex));
 					break;
 				case TEXT:
-					columnField.set(row, cursor.getString(cursorColumnindex));
+					final String cursorString = cursor.getString(cursorColumnindex);
+					if(char.class.equals(columnFieldClass))
+						columnField.set(row, cursorString.equals("") ? ' ' : cursorString.charAt(0));
+					else
+						columnField.set(row, cursorString);
 					break;
 				}
 			}
