@@ -67,8 +67,22 @@ public class GlassesController extends Controller {
 		
 		// if database couldn't insert glasses, it will return -1 as the ID
 		if(glasses.GlassesId == -1) {
-			return ErrorResult("Couldn't add glasses. Error on db.insert.");
+			return ErrorResult("Could not add glasses. Error on db.insert.");
 		}
 		return Result(NanoHTTPD.HTTP_OK, VisionHTTPD.MIME_JSON, glasses);
+	}
+
+	@Action
+	public Result Update(Glasses update) {
+		final Glasses original = (Glasses)dbHelper.get(Glasses.class, update.GlassesId);
+
+		update.Group = original.Group;
+		update.Number = original.Number;
+		update.AddedDate = original.AddedDate;
+
+		// if update(...) returns 0, then no rows were updated
+		if (dbHelper.update(update) == 0)
+			return ErrorResult("Could not update glasses. Error on db.update.");
+		return Result(NanoHTTPD.HTTP_OK, VisionHTTPD.MIME_JSON, update);
 	}
 }

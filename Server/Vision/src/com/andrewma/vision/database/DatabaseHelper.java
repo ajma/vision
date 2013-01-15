@@ -112,6 +112,33 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 		return rowid;
 	}
 
+	public int update(Object model) {
+		final DbTable table = lookupModelTable(model.getClass());
+		if (table == null) {
+			return 0;
+		}
+
+		final ContentValues contentValues = table.getContentValues(model);
+		final SQLiteDatabase db = getWritableDatabase();
+		try {
+			String whereClause;
+			try {
+				whereClause = table.getPrimaryKeyName() + "="
+						+ table.getPrimaryKeyField().getInt(model);
+			} catch (Exception e) {
+				Log.e(TAG, "Failed to get primary key from model for table "
+						+ table.getTableName());
+				e.printStackTrace();
+				return 0;
+			}
+			return db.update(table.getTableName(), contentValues, whereClause, null);
+		} finally {
+			if (db != null) {
+				db.close();
+			}
+		}
+	}
+
 	public <E> List<E> getAll(Class<?> modelClass) {
 		final DbTable table = lookupModelTable(modelClass);
 		if (table == null) {
