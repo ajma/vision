@@ -11,27 +11,27 @@ function($, _, Backbone, vision, rxform, addTemplate, rxFormTemplate) {
 			$('#rxform').append(rxFormTemplate);
 			$('#editModalRxForm').append(rxFormTemplate);
 			$('input.sph').rxForm();
-	        $('input.cyl').rxForm({ min: -20, max: 0 });
-	        $('input.axis').rxForm({ min: 0, max: 180, littleStep: 5, bigStep: 10, beforeDecimal: 3, afterDecimal: 0, autoDecimal: 999 });
-	        $('input.add').rxForm({ min: 0, max: 20 });
+					$('input.cyl').rxForm({ min: -20, max: 0 });
+					$('input.axis').rxForm({ min: 0, max: 180, littleStep: 5, bigStep: 10, beforeDecimal: 3, afterDecimal: 0, autoDecimal: 999 });
+					$('input.add').rxForm({ min: 0, max: 20 });
 
 			var batchSize = 40;
 			var count = 0;
 			var batchId = 0;
 			var tpl = _.template($('#glasses-tpl').text());
-			
+
 			$('ul.nav .active').removeClass('active');
 			$('#nav_add').addClass('active');
-			
+
 			var hideFeatures = function() {
 				$('#add_features').fadeOut();
 			};
-			
+
 			var setProgress = function() {
 				$('#progressCount').text(count);
 				$('#progressBar').width((count*100/batchSize) + '%');
 			};
-			
+
 			var logGlasses = function(glasses) {
 				var logHtml = $(tpl(glasses));
 				$('#log').prepend(logHtml);
@@ -40,7 +40,7 @@ function($, _, Backbone, vision, rxform, addTemplate, rxFormTemplate) {
 				count++;
 				setProgress();
 			};
-			
+
 			var checkIfBatchDone = function() {
 				if(count == batchSize) {
 					$('#rxformDiv').slideUp(function() {
@@ -78,7 +78,7 @@ function($, _, Backbone, vision, rxform, addTemplate, rxFormTemplate) {
 
 			$('#loadBatchFeatureIcon').click(function() { $('#loadBatchModal').modal(); });
 			$('#loadBatchModal').on('shown', function() { $('#loadBatchId').focus(); });
-			
+
 			$('#loadBatchId').keypress(function(e) { if(e.which == 13) $('#loadBatchButton').click(); });
 			$('#loadBatchButton').click(function() {
 				hideFeatures();
@@ -88,7 +88,7 @@ function($, _, Backbone, vision, rxform, addTemplate, rxFormTemplate) {
 					count = 0;
 					$('#batchId').text(batchId);
 					$('#addGlassesForm').slideDown();
-					
+
 					if(glasses.length > 0) {
 						console.log('Glasses to load: ' + glasses.length + '(IDs:' + response.data.Glasses.trim() + ')');
 						// load glasses one-by-one. Sqlite seems to fail badly if we try to request all 40 at the same time
@@ -103,7 +103,7 @@ function($, _, Backbone, vision, rxform, addTemplate, rxFormTemplate) {
 						};
 						processNext();
 					}
-					
+
 					checkIfBatchDone();
 				});
 			});
@@ -115,28 +115,45 @@ function($, _, Backbone, vision, rxform, addTemplate, rxFormTemplate) {
 				console.log(newGlasses);
 				vision.post('/api/glasses/add', newGlasses, function(response) {
 					logGlasses(response.data);
-					
+
 					var batch = { BatchId: batchId, Glasses: String(response.data.GlassesId)};
 					vision.post('/api/batches/addglasses', batch, function() { });
 
 					checkIfBatchDone();
 				});
 			});
-			
+
+			var editingDiv;
 			$('#log').on('click', '.editGlasses', function(event) {
 				event.preventDefault();
-				
+
 				var rxform = $('#editModal').find('.rx_form');
-				var glasses = $(this).parent().parent().data(); 
-				
+				editingDiv = $(this).parents('.glasses');
+				var glasses = $(this).parents('.glasses').data(); 
+
 				$('#editModalCallNum').text(glasses.Group + '/' + glasses.Number);
 				rxform.find('input').each(function() {
 					var input = $(this)
 					input.val(glasses[input.attr('name')]).change();
 				});
-				
+
 				$('#editModal').modal();
+				$('#editModal').data(glasses);
 			});
+
+			$('#editModalSave').click(function() {
+				var originalGlasses = $('#editModal').data();
+				var updateGlasses = $('#editModalRxForm').serialize() + 
+					"&GlassesId=" + originalGlasses.GlassesId;
+				console.log(updateGlasses);
+				vision.post('/api/glasses/update', updateGlasses, function(response) {
+					var logHtml = $(tpl(response.data));
+					editingDiv.replaceWith(logHtml);
+					logHtml.show();
+					logHtml.data(response.data);
+				});
+			});
+
 		}
 	});
 });
