@@ -81,6 +81,18 @@
 	<div id="log" class="row"></div>
 </div>
 
+<div id="editModal" class="modal hide fade">
+	<div class="modal-body">
+		<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+		<h3>Edit Glasses Call Number: <span id="editModalCallNum"></span></h3>
+		<div id="editModalRxForm"></div>
+	</div>
+	<div class="modal-footer">
+		<a href="#" data-dismiss="modal" class="btn">Close</a> 
+		<a id="editModalSave" href="#" data-dismiss="modal" class="btn btn-primary">Save</a>
+	</div>
+</div>
+
 <script type="text/javascript">
 	var sphcylFormat = function (val) {
 		return (val >= 0 ? '+' : '') + val.toFixed(2);
@@ -117,6 +129,7 @@
 			<% } %>
 		</tr>
 	</table>
+	<a href="#" class="editGlasses">[ Edit ]</a>
 	</div>
 </div>
 </script>
