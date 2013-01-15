@@ -37,6 +37,8 @@ function($, _, Backbone, vision, rxform, addTemplate, rxFormTemplate) {
 				$('#log').prepend(logHtml);
 				logHtml.data(glasses);
 				logHtml.fadeIn('slow');
+				count++;
+				setProgress();
 			};
 			
 			var checkIfBatchDone = function() {
@@ -83,8 +85,7 @@ function($, _, Backbone, vision, rxform, addTemplate, rxFormTemplate) {
 				batchId = $('#loadBatchId').val();
 				vision.getJSON('/api/batches/get/' + batchId, function(response) {
 					var glasses = (response.data.Glasses === '' ? [] : response.data.Glasses.trim().split(' '));
-					count = glasses.length;
-					setProgress();
+					count = 0;
 					$('#batchId').text(batchId);
 					$('#addGlassesForm').slideDown();
 					
@@ -113,8 +114,6 @@ function($, _, Backbone, vision, rxform, addTemplate, rxFormTemplate) {
 				$('#rxform input[type="checkbox"]').prop('checked', false);
 				console.log(newGlasses);
 				vision.post('/api/glasses/add', newGlasses, function(response) {
-					count++;
-					setProgress();
 					logGlasses(response.data);
 					
 					var batch = { BatchId: batchId, Glasses: String(response.data.GlassesId)};
