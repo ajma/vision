@@ -1,12 +1,14 @@
 package com.andrewma.vision.database.core;
 
 import java.lang.reflect.Field;
+import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
 
 import android.content.ContentValues;
 import android.util.Log;
 
+import com.andrewma.vision.database.DatabaseHelper;
 import com.andrewma.vision.database.core.annotations.Column;
 import com.andrewma.vision.database.core.annotations.PrimaryKey;
 import com.andrewma.vision.database.core.annotations.Table;
@@ -94,13 +96,25 @@ public class DbTable {
 				final String columnName = "[" + column.getColumnName() + "]";
 				switch (column.columnAnnotation.dataType()) {
 				case INTEGER:
-					result.put(columnName, column.columnField.getInt(model));
+					final Class<?> columnFieldClass = column.columnField.getType();
+					if(boolean.class.equals(columnFieldClass)) {
+						result.put(columnName, column.columnField.getBoolean(model) ? 1 : 0);
+					} else if(Date.class.equals(columnFieldClass)) {
+						final Date date = (Date)column.columnField.get(model);
+						if(date != null) {
+							result.put(columnName, date.getTime() / 1000);
+						} else 
+							result.put(columnName, 0);
+					} else {
+						result.put(columnName, column.columnField.getInt(model));
+					}
 					break;
 				case REAL:
 					result.put(columnName, column.columnField.getFloat(model));
 					break;
 				case TEXT:
 					final Object value = column.columnField.get(model);
+					
 					if (value == null) {
 						result.putNull(columnName);
 					} else {

@@ -25,6 +25,7 @@ import android.util.Log;
 public class DatabaseHelper extends SQLiteOpenHelper {
 
 	private static final String TAG = "SQLite";
+
 	private static final String DATABASE_NAME = "vision.db";
 	private static final int DATABASE_VERSION = 1;
 
@@ -88,6 +89,10 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 		}
 	}
 
+	/**
+	 * @param model
+	 * @return returns -1 if there was an error
+	 */
 	public long insert(Object model) {
 		long rowid = -1;
 		final DbTable table = lookupModelTable(model.getClass());
@@ -197,26 +202,26 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 			for (DbColumn column : table.columns()) {
 				final Field columnField = column.columnField;
 				final String columnName = column.getColumnName();
+				
 				final int cursorColumnindex = cursor.getColumnIndex(columnName);
 				switch (column.columnAnnotation.dataType()) {
 				case INTEGER:
-					columnField.setInt(row, cursor.getInt(cursorColumnindex));
+					final Class<?> columnFieldClass = columnField.getType();
+					final int value = cursor.getInt(cursorColumnindex);
+					if (boolean.class.equals(columnFieldClass)) {
+						columnField.setBoolean(row, (value == 1));
+					} else if (Date.class.equals(columnFieldClass)) {
+						columnField.set(row, new Date((long)value * 1000));
+					} else {
+						columnField.setInt(row, value);
+					}
 					break;
 				case REAL:
 					columnField.setFloat(row,
 							cursor.getFloat(cursorColumnindex));
 					break;
 				case TEXT:
-					final Class<?> columnFieldClass = columnField.getType();
-					final String value = cursor.getString(cursorColumnindex);
-					if (String.class.equals(columnFieldClass)) {
-						columnField.set(row, value);
-					} else if (boolean.class.equals(columnFieldClass)) {
-						columnField.setBoolean(row, "true".equalsIgnoreCase(value));
-					} else if (Date.class.equals(columnFieldClass)) {
-						// TODO
-					}
-
+					columnField.set(row, cursor.getString(cursorColumnindex));
 					break;
 				}
 			}
