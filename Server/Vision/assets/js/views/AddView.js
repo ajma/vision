@@ -9,6 +9,7 @@ function($, _, Backbone, vision, rxform, addTemplate, rxFormTemplate) {
 			this.$el.append(addTemplate).hide().fadeIn();
 			
 			$('#rxform').append(rxFormTemplate);
+			$('#editModalRxForm').append(rxFormTemplate);
 			$('input.sph').rxForm();
 	        $('input.cyl').rxForm({ min: -20, max: 0 });
 	        $('input.axis').rxForm({ min: 0, max: 180, littleStep: 5, bigStep: 10, beforeDecimal: 3, afterDecimal: 0, autoDecimal: 999 });
@@ -34,6 +35,7 @@ function($, _, Backbone, vision, rxform, addTemplate, rxFormTemplate) {
 			var logGlasses = function(glasses) {
 				var logHtml = $(tpl(glasses));
 				$('#log').prepend(logHtml);
+				logHtml.data(glasses);
 				logHtml.fadeIn('slow');
 			};
 			
@@ -120,6 +122,21 @@ function($, _, Backbone, vision, rxform, addTemplate, rxFormTemplate) {
 
 					checkIfBatchDone();
 				});
+			});
+			
+			$('#log').on('click', '.editGlasses', function(event) {
+				event.preventDefault();
+				
+				var rxform = $('#editModal').find('.rx_form');
+				var glasses = $(this).parent().parent().data(); 
+				
+				$('#editModalCallNum').text(glasses.Group + '/' + glasses.Number);
+				rxform.find('input').each(function() {
+					var input = $(this)
+					input.val(glasses[input.attr('name')]).change();
+				});
+				
+				$('#editModal').modal();
 			});
 		}
 	});
