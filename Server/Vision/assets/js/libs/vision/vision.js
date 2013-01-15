@@ -5,11 +5,21 @@ function($, _, Backbone, template) {
 			$.post(url, data, function(response) {
 				console.log(response.data);
 				if(response.status == "200 OK") {
-					sucess(response);
+					success(response);
 				} else {
 					$('#errorModal').modal();
 				}
 			});
-		}
+		},
+		getJSON : function(url, success) {
+			$.getJSON(url, function(response) {
+				console.log(response.data);
+				if(response.status == "200 OK") {
+					success(response);
+				} else {
+					$('#errorModal').modal();
+				}
+			});
+		},
 	};
 });

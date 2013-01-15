@@ -47,7 +47,7 @@ function($, _, Backbone, vision, rxform, addTemplate, rxFormTemplate) {
 
 			$('#newBatchFeatureIcon').click(function() {
 				hideFeatures();
-				$.getJSON('/api/batches/new', function(response) {
+				vision.getJSON('/api/batches/new', function(response) {
 					batchId = response.data;
 					$('#newBatchId').text('#' + batchId);
 					$('#batchId').text(batchId);
@@ -58,8 +58,7 @@ function($, _, Backbone, vision, rxform, addTemplate, rxFormTemplate) {
 				})
 			});
 			$('#restart').click(function() {
-				alert('restarting');
-				$.getJSON('/api/batches/new', function(response) {
+				vision.getJSON('/api/batches/new', function(response) {
 					batchId = response.data;
 					$('#newBatchId').text('#' + batchId);
 					$('#batchId').text(batchId);
@@ -80,7 +79,7 @@ function($, _, Backbone, vision, rxform, addTemplate, rxFormTemplate) {
 			$('#loadBatchButton').click(function() {
 				hideFeatures();
 				batchId = $('#loadBatchId').val();
-				$.getJSON('/api/batches/get/' + batchId, function(response) {
+				vision.getJSON('/api/batches/get/' + batchId, function(response) {
 					var glasses = (response.data.Glasses === '' ? [] : response.data.Glasses.trim().split(' '));
 					count = glasses.length;
 					setProgress();
@@ -93,7 +92,7 @@ function($, _, Backbone, vision, rxform, addTemplate, rxFormTemplate) {
 						var processNext = function() {
 							var glassesId = glasses.shift();
 							console.log('Loading GlassesID:' + glassesId);
-							$.getJSON('/api/glasses/get/' + glassesId, function(response) {
+							vision.getJSON('/api/glasses/get/' + glassesId, function(response) {
 								logGlasses(response.data);
 								if(glasses.length > 0)
 									processNext();
