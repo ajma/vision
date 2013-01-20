@@ -24,14 +24,17 @@
 	<div class="modal-body">
 		<button type="button" class="close" data-dismiss="modal"
 			aria-hidden="true">&times;</button>
-		<h3>Let's get started!</h3>
-		<p>
-			Thanks for starting a new batch. This new batch is:
-		</p>
-		<h1 id="newBatchId" class="pagination-centered"></h1>
-		<p>Please mark this on your container holding the glasses. Enter the data for 
-			40 pairs of glasses into the next screen and when you are done, pass the 
-			box off for label printing.</p>
+		<div id="creating"><h3><i class="icon-refresh icon-spin"></i> Creating new batch</h3></div>
+		<div id="created" class="hide">
+			<h3>Let's get started!</h3>
+			<p>
+				Thanks for starting a new batch. This new batch is:
+			</p>
+			<h1 id="newBatchId" class="pagination-centered"></h1>
+			<p>Please mark this on your container holding the glasses. Enter the data for 
+				40 pairs of glasses into the next screen and when you are done, pass the 
+				box off for label printing.</p>
+		</div>
 	</div>
 	<div class="modal-footer">
 		<a href="#" data-dismiss="modal" class="btn btn-primary">Let's Go!</a>
@@ -48,6 +51,7 @@
 			<button type="button" class="close" data-dismiss="alert">&times;</button>
 			Batch number not found.
 		</div>
+		<div id="loadingBatch" class="hide"><i class="icon-refresh icon-spin"></i> Looking up batch...</div>
 	</div>
 	<div class="modal-footer">
 		<button data-dismiss="modal" class="btn">Close</button> 
