@@ -1,5 +1,7 @@
 package com.andrewma.vision.webserver.controllers;
 
+import java.util.Date;
+
 import android.content.Context;
 
 import com.andrewma.vision.database.DatabaseHelper;
@@ -20,13 +22,19 @@ public class BatchesController extends Controller {
 
 	@Action
 	public Result Get(int id) {
-		return Result(NanoHTTPD.HTTP_OK, VisionHTTPD.MIME_JSON,
-				dbHelper.get(Batch.class, id));
+		final Batch batch = dbHelper.get(Batch.class, id); 
+		if(batch == null) {
+			return ErrorResult("No batch with id " + id);
+		}
+		return Result(NanoHTTPD.HTTP_OK, VisionHTTPD.MIME_JSON, batch);
 	}
 
 	@Action
 	public Result New() {
-		final long batchId = dbHelper.insert(new Batch());
+		final Batch newBatch = new Batch();
+		newBatch.CreatedDate = new Date();
+		
+		final long batchId = dbHelper.insert(newBatch);
 		
 		if(batchId == -1)
 			return ErrorResult("Could not create a new batch. batchId returned was -1.");
