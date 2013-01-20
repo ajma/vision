@@ -27,6 +27,12 @@ function($, _, Backbone, vision, rxform, addTemplate, rxFormTemplate) {
 				$('#add_features').fadeOut();
 			};
 
+			var setBatchId = function() {
+				$('#newBatchId').text('#' + batchId);
+				$('#batchId').text(batchId);
+				$('#addGlassesForm').slideDown();
+			};
+
 			var setProgress = function() {
 				$('#progressCount').text(count);
 				$('#progressBar').width((count*100/batchSize) + '%');
@@ -42,48 +48,43 @@ function($, _, Backbone, vision, rxform, addTemplate, rxFormTemplate) {
 			};
 
 			var checkIfBatchDone = function() {
-				if(count == batchSize) {
+				if(count >= batchSize) {
 					$('#rxformDiv').slideUp(function() {
 						$('#finished').slideDown();
 					});
 				}
 			};
 
-			$('#newBatchFeatureIcon').click(function() {
-				hideFeatures();
+			var createNewBatch = function() {
+				$('#creating').show();
+				$('#created').hide();
+				$('#newBatchModal').modal();
 				vision.getJSON('/api/batches/new', function(data) {
+					$('#creating').hide();
+					$('#created').show();
+					hideFeatures();
 					batchId = data;
-					$('#newBatchId').text('#' + batchId);
-					$('#batchId').text(batchId);
-					$('#newBatchModal').modal();
-					$('#addGlassesForm').slideDown();
-					count = 0;
-					setProgress();
-				})
-			});
-			$('#restart').click(function() {
-				vision.getJSON('/api/batches/new', function(data) {
-					batchId = data.data;
-					$('#newBatchId').text('#' + batchId);
-					$('#batchId').text(batchId);
-					$('#newBatchModal').modal();
-					$('#addGlassesForm').slideDown();
+					setBatchId();
 					count = 0;
 					setProgress();
 					$('#rxformDiv').show();
 					$('#finished').hide();
 					$('#log').empty();
 				})
-			});
+			};
+			$('#newBatchFeatureIcon').click(createNewBatch);
+			$('#restart').click(createNewBatch);
 
 			$('#loadBatchFeatureIcon').click(function() { $('#loadBatchModal').modal(); });
 			$('#loadBatchModal').on('shown', function() { $('#loadBatchId').focus(); });
 
 			$('#loadBatchId').keypress(function(e) { if(e.which == 13) $('#loadBatchButton').click(); });
 			$('#loadBatchButton').click(function() {
+				$('#loadingBatch').fadeIn();
 				$('#loadBatchAlert').hide();
 				batchId = $('#loadBatchId').val();
 				vision.getJSON('/api/batches/get/' + batchId, function(data) {
+					$('#loadingBatch').hide();
 					if(data == null) {
 						$('#loadBatchAlert').slideDown();
 						return;
@@ -92,8 +93,7 @@ function($, _, Backbone, vision, rxform, addTemplate, rxFormTemplate) {
 					hideFeatures();
 					var glasses = (data.Glasses === '' ? [] : data.Glasses.trim().split(' '));
 					count = 0;
-					$('#batchId').text(batchId);
-					$('#addGlassesForm').slideDown();
+					setBatchId();
 
 					if(glasses.length > 0) {
 						console.log('Glasses to load: ' + glasses.length + '(IDs:' + data.Glasses.trim() + ')');
