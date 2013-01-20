@@ -12,14 +12,10 @@ function($, _, Backbone, template) {
 			});
 		},
 		getJSON : function(url, success) {
-			$.getJSON(url, function(response) {
-				console.log(response.data);
-				if(response.status == "200 OK") {
-					success(response);
-				} else {
-					$('#errorModal').modal();
-				}
-			});
+			$.getJSON(url, function(data) {
+				console.log(data);
+				success(data);
+			}).error(function() { $('#errorModal').modal(); });
 		},
 	};
 });
