@@ -19,12 +19,16 @@ function($, _, Backbone, vision, rxform, searchTemplate, rxForm) {
 			$('#nav_search').addClass('active');
 
 			$('#searchButton').click(function() {
+				$('#searchButton').addClass('disabled');
+				$('#searching').fadeIn();
 				var tableBody = $('#searchResults tbody');
 				tableBody.empty();
 				var query = $('#rxform').serialize();
 				vision.post('/api/glasses/search', query, function(data) {
 					var rowTemplate = $('#resultRowTemplate').html();					
 					tableBody.append(_.template(rowTemplate, { results: data }));
+					$('#searchButton').removeClass('disabled');
+					$('#searching').hide();
 				});
 			});
 		}
