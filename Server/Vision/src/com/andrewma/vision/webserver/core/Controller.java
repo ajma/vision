@@ -89,12 +89,31 @@ public abstract class Controller {
 		return new Result(status, mimeType, data);
 	}
 	
+	/**
+	 * Helper function to return a 500 internal error {@link Result}
+	 * @param error
+	 * @return
+	 */
 	public Result ErrorResult(String error) {
-		Log.e(TAG, error);
+		Log.e(TAG, "ErrorResult: " + error);
 		return new Result(NanoHTTPD.HTTP_INTERNALERROR, VisionHTTPD.MIME_JSON, error);
 	}
 	
+	/**
+	 * Helper function to return a 404 not found code {@link Result}
+	 * @param message
+	 * @return
+	 */
+	public Result NotFoundResult(String message) {
+		Log.w(TAG, "NotFoundResult: " + message);
+		return new Result(NanoHTTPD.HTTP_NOTFOUND, VisionHTTPD.MIME_JSON, message);
+	}
+	
+	/**
+	 * Object to hold the result of an API call
+	 */
 	public class Result {
+		
 		public final String status;
 		public final String mimeType;
 		public final Object data;

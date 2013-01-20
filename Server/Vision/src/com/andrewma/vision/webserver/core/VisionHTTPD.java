@@ -17,6 +17,7 @@ import android.webkit.MimeTypeMap;
 import com.andrewma.vision.webserver.WebServerService;
 import com.andrewma.vision.webserver.controllers.BatchesController;
 import com.andrewma.vision.webserver.controllers.GlassesController;
+import com.andrewma.vision.webserver.core.Controller.Result;
 import com.google.gson.Gson;
 
 public class VisionHTTPD extends NanoHTTPD {
@@ -121,8 +122,13 @@ public class VisionHTTPD extends NanoHTTPD {
 		}
 
 		final Controller controller = controllers.get(controllerUrl);
-		final Object obj = controller.execute(actionUrl, idUrl, params);
-		return new Response(HTTP_OK, MIME_JSON, gson.toJson(obj));
+		final Result result = (Result) controller.execute(actionUrl, idUrl, params);
+		if(MIME_JSON.equals(result.mimeType)) {
+			return new Response(result.status, MIME_JSON, gson.toJson(result.data));
+		} else {
+			// TODO handle non json cases
+			throw new UnsupportedOperationException();
+		}
 	}
 	
 	private Response serveExportDb(Properties header) {

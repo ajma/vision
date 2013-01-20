@@ -51,8 +51,8 @@ function($, _, Backbone, vision, rxform, addTemplate, rxFormTemplate) {
 
 			$('#newBatchFeatureIcon').click(function() {
 				hideFeatures();
-				vision.getJSON('/api/batches/new', function(response) {
-					batchId = response.data;
+				vision.getJSON('/api/batches/new', function(data) {
+					batchId = data;
 					$('#newBatchId').text('#' + batchId);
 					$('#batchId').text(batchId);
 					$('#newBatchModal').modal();
@@ -62,8 +62,8 @@ function($, _, Backbone, vision, rxform, addTemplate, rxFormTemplate) {
 				})
 			});
 			$('#restart').click(function() {
-				vision.getJSON('/api/batches/new', function(response) {
-					batchId = response.data;
+				vision.getJSON('/api/batches/new', function(data) {
+					batchId = data.data;
 					$('#newBatchId').text('#' + batchId);
 					$('#batchId').text(batchId);
 					$('#newBatchModal').modal();
@@ -81,22 +81,28 @@ function($, _, Backbone, vision, rxform, addTemplate, rxFormTemplate) {
 
 			$('#loadBatchId').keypress(function(e) { if(e.which == 13) $('#loadBatchButton').click(); });
 			$('#loadBatchButton').click(function() {
-				hideFeatures();
+				$('#loadBatchAlert').hide();
 				batchId = $('#loadBatchId').val();
-				vision.getJSON('/api/batches/get/' + batchId, function(response) {
-					var glasses = (response.data.Glasses === '' ? [] : response.data.Glasses.trim().split(' '));
+				vision.getJSON('/api/batches/get/' + batchId, function(data) {
+					if(data == null) {
+						$('#loadBatchAlert').slideDown();
+						return;
+					}
+					
+					hideFeatures();
+					var glasses = (data.Glasses === '' ? [] : data.Glasses.trim().split(' '));
 					count = 0;
 					$('#batchId').text(batchId);
 					$('#addGlassesForm').slideDown();
 
 					if(glasses.length > 0) {
-						console.log('Glasses to load: ' + glasses.length + '(IDs:' + response.data.Glasses.trim() + ')');
+						console.log('Glasses to load: ' + glasses.length + '(IDs:' + data.Glasses.trim() + ')');
 						// load glasses one-by-one. Sqlite seems to fail badly if we try to request all 40 at the same time
 						var processNext = function() {
 							var glassesId = glasses.shift();
 							console.log('Loading GlassesID:' + glassesId);
-							vision.getJSON('/api/glasses/get/' + glassesId, function(response) {
-								logGlasses(response.data);
+							vision.getJSON('/api/glasses/get/' + glassesId, function(data) {
+								logGlasses(data);
 								if(glasses.length > 0)
 									processNext();
 							});
@@ -105,6 +111,7 @@ function($, _, Backbone, vision, rxform, addTemplate, rxFormTemplate) {
 					}
 
 					checkIfBatchDone();
+					$('#loadBatchModal').modal('hide');
 				});
 			});
 
@@ -113,10 +120,10 @@ function($, _, Backbone, vision, rxform, addTemplate, rxFormTemplate) {
 				$('#rxform input').val('');
 				$('#rxform input[type="checkbox"]').prop('checked', false);
 				console.log(newGlasses);
-				vision.post('/api/glasses/add', newGlasses, function(response) {
-					logGlasses(response.data);
+				vision.post('/api/glasses/add', newGlasses, function(data) {
+					logGlasses(data);
 
-					var batch = { BatchId: batchId, Glasses: String(response.data.GlassesId)};
+					var batch = { BatchId: batchId, Glasses: String(data.GlassesId)};
 					vision.post('/api/batches/addglasses', batch, function() { });
 
 					checkIfBatchDone();
@@ -146,11 +153,11 @@ function($, _, Backbone, vision, rxform, addTemplate, rxFormTemplate) {
 				var updateGlasses = $('#editModalRxForm').serialize() + 
 					"&GlassesId=" + originalGlasses.GlassesId;
 				console.log(updateGlasses);
-				vision.post('/api/glasses/update', updateGlasses, function(response) {
-					var logHtml = $(tpl(response.data));
+				vision.post('/api/glasses/update', updateGlasses, function(data) {
+					var logHtml = $(tpl(data));
 					editingDiv.replaceWith(logHtml);
 					logHtml.show();
-					logHtml.data(response.data);
+					logHtml.data(data);
 				});
 			});
 

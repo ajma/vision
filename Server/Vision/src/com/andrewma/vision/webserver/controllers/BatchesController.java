@@ -22,11 +22,8 @@ public class BatchesController extends Controller {
 
 	@Action
 	public Result Get(int id) {
-		final Batch batch = dbHelper.get(Batch.class, id); 
-		if(batch == null) {
-			return ErrorResult("No batch with id " + id);
-		}
-		return Result(NanoHTTPD.HTTP_OK, VisionHTTPD.MIME_JSON, batch);
+		return Result(NanoHTTPD.HTTP_OK, VisionHTTPD.MIME_JSON, 
+				dbHelper.get(Batch.class, id));
 	}
 
 	@Action
@@ -36,8 +33,9 @@ public class BatchesController extends Controller {
 		
 		final long batchId = dbHelper.insert(newBatch);
 		
-		if(batchId == -1)
+		if(batchId == -1) {
 			return ErrorResult("Could not create a new batch. batchId returned was -1.");
+		}
 		
 		return Result(NanoHTTPD.HTTP_OK, VisionHTTPD.MIME_JSON, batchId);
 	}
