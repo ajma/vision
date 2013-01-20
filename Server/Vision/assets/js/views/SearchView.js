@@ -24,7 +24,7 @@ function($, _, Backbone, vision, rxform, searchTemplate, rxForm) {
 				var query = $('#rxform').serialize();
 				vision.post('/api/glasses/search', query, function(data) {
 					var rowTemplate = $('#resultRowTemplate').html();					
-					tableBody.append(_.template(rowTemplate, data));
+					tableBody.append(_.template(rowTemplate, { results: data }));
 				});
 			});
 		}
