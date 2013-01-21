@@ -52,7 +52,7 @@ public abstract class Controller {
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
-			return null;
+			return ErrorResult(e.getClass().getName());
 		}
 	}
 
