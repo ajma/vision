@@ -1,4 +1,5 @@
-; (function ($, window, document, undefined) {
+define([ 'jquery', 'vision' ],
+function($, vision) {
     var pluginName = 'rxForm',
         defaults = {
             min: -20,
@@ -13,19 +14,24 @@
             autoZero: true
         };
 
-    function Plugin(element, options) {
-        this.element = element;
-
-        this.options = $.extend({}, defaults, options);
+    function RxForm(element, sph_options, cyl_options, axis_options, add_options) {
+        var form = $(element);
 
         this._defaults = defaults;
         this._name = pluginName;
 
-        this.init();
+        rxInput(form.find('input.sph'), $.extend({}, defaults, sph_options));
+        rxInput(form.find('input.cyl'), $.extend({}, defaults, cyl_options));
+        rxInput(form.find('input.axis'), $.extend({}, defaults, axis_options));
+        rxInput(form.find('input.add'), $.extend({}, defaults, add_options));
+        
+        form.find('.rxFormTipsLink').click(function(ev) {
+        	ev.preventDefault();
+        	vision.help.rxFormShorcuts();
+        });
     }
 
-    Plugin.prototype.init = function () {
-        var options = this.options;
+    var rxInput = function (inputBox, options) {
         var updateBox = function (box, val) {
             var updatedValue = val;
             if (isNaN(val)) updatedValue = 0;
@@ -39,20 +45,21 @@
             }
             $(box).val(padding + updatedValue.toFixed(options.afterDecimal));
         };
+
         if (options.autoZero) {
-            $(this.element).focusout(function () {
+            $(inputBox).focusout(function () {
                 if ($(this).val() === '') {
                     $(this).val('0');
                     $(this).change();
                 }
             });
         }
-        $(this.element).change(function () {
+        $(inputBox).change(function () {
             var currentValue = parseFloat($(this).val());
             if (currentValue >= options.autoDecimal) currentValue = currentValue / 100;
             updateBox(this, currentValue);
         });
-        $(this.element).keydown(function (event) {
+        $(inputBox).keydown(function (event) {
         	if(event.which == 40) {
                 updateBox(this, parseFloat($(this).val()) - (event.shiftKey ? options.bigStep : options.littleStep));
                 event.preventDefault();
@@ -65,12 +72,17 @@
 
     // A really lightweight plugin wrapper around the constructor, 
     // preventing against multiple instantiations
-    $.fn[pluginName] = function (options) {
+    $.fn[pluginName] = function (sph_options, cyl_options, axis_options, add_options) {
         return this.each(function () {
             if (!$.data(this, 'plugin_' + pluginName)) {
-                $.data(this, 'plugin_' + pluginName, new Plugin(this, options));
+                $.data(this, 'plugin_' + pluginName, new RxForm(this, sph_options, cyl_options, axis_options, add_options));
             }
         });
     }
 
-})(jQuery, window, document);
+    $.fn['rxTips'] = function () {
+        return this.each(function () {
+            $(this).find('.alert').show();
+        });
+    }
+});

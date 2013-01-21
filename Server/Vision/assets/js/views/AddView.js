@@ -10,10 +10,13 @@ function($, _, Backbone, vision, rxform, addTemplate, rxFormTemplate) {
 			
 			$('#rxform').append(rxFormTemplate);
 			$('#editModalRxForm').append(rxFormTemplate);
-			$('input.sph').rxForm();
-					$('input.cyl').rxForm({ min: -20, max: 0 });
-					$('input.axis').rxForm({ min: 0, max: 180, littleStep: 5, bigStep: 10, beforeDecimal: 3, afterDecimal: 0, autoDecimal: 999 });
-					$('input.add').rxForm({ min: 0, max: 20 });
+			
+			$('#rxform, #editModalRxForm').rxForm(
+					{},
+					{ min: -20, max: 0 },
+					{ min: 0, max: 180, littleStep: 5, bigStep: 10, beforeDecimal: 3, afterDecimal: 0, autoDecimal: 999 },
+					{ min: 0, max: 20 });
+			$('#rxform').rxTips();
 
 			var batchSize = 40;
 			var count = 0;

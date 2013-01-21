@@ -10,10 +10,11 @@ function($, _, Backbone, vision, rxform, searchTemplate, rxForm) {
 			this.$el.append(searchTemplate).hide().fadeIn();
 
 			$('#rxform').append(rxForm);
-			$('input.sph').rxForm({ autoZero: false });
-	        $('input.cyl').rxForm({ autoZero: false, min: -20, max: 0 });
-	        $('input.axis').rxForm({ autoZero: false, min: 0, max: 180, littleStep: 5, bigStep: 10, beforeDecimal: 3, afterDecimal: 0, autoDecimal: 999 });
-	        $('input.add').rxForm({ autoZero: false, min: 0, max: 20 });
+	        $('#rxform').rxForm(
+					{ autoZero: false },
+					{ autoZero: false, min: -20, max: 0 },
+					{ autoZero: false, min: 0, max: 180, littleStep: 5, bigStep: 10, beforeDecimal: 3, afterDecimal: 0, autoDecimal: 999 },
+					{ autoZero: false, min: 0, max: 20 });
 			
 			$('ul.nav .active').removeClass('active');
 			$('#nav_search').addClass('active');
