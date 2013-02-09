@@ -8,6 +8,7 @@ import android.util.FloatMath;
 
 import com.andrewma.vision.database.DatabaseHelper;
 import com.andrewma.vision.models.Glasses;
+import com.andrewma.vision.models.ScoredGlasses;
 import com.andrewma.vision.webserver.core.Controller;
 import com.andrewma.vision.webserver.core.NanoHTTPD;
 import com.andrewma.vision.webserver.core.VisionHTTPD;
@@ -16,17 +17,19 @@ import com.andrewma.vision.webserver.core.annotations.Action;
 public class GlassesController extends Controller {
 
 	final DatabaseHelper dbHelper;
+    final GlassesScoring scorer = new GlassesScoring();
 
 	public GlassesController(Context context) {
 		super();
 		dbHelper = DatabaseHelper.getInstance(context);
 	}
 
-	@Action
-	public Result Search(Glasses query) {
-        return Result(NanoHTTPD.HTTP_OK, VisionHTTPD.MIME_JSON,
-                dbHelper.getAll(Glasses.class, 100));
-	}
+    @Action
+    public Result Search(Glasses query) {
+        final List<Glasses> glasses = dbHelper.getAll(Glasses.class);
+        final List<ScoredGlasses> results = scorer.score(glasses, 100);
+        return Result(NanoHTTPD.HTTP_OK, VisionHTTPD.MIME_JSON, results);
+    }
 
 	@Action
 	public Result GetAll() {
