@@ -1,32 +1,58 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    android:layout_centerHorizontal="true"
-    android:layout_centerVertical="true"
-    android:gravity="center"
-    android:orientation="vertical"
     android:layout_width="match_parent"
-    android:layout_height="match_parent" >
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:padding="10dp"
+    tools:ignore="HardcodedText" >
 
-       <TextView
-           android:id="@+id/serverIpAddress"
-           android:layout_width="wrap_content"
-           android:layout_height="wrap_content" />
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Server Status"
+        android:textAppearance="?android:attr/textAppearanceMedium" />
 
-       <Button
-           android:id="@+id/startStopServerButton"
-           android:layout_width="wrap_content"
-           android:layout_height="wrap_content"
-           android:text="@string/startServer" />
-       <CheckBox
-           android:id="@+id/autoStartServer"
-           android:text="@string/autoStartServer"
-           android:layout_width="wrap_content"
-           android:layout_height="wrap_content" />
-       <Button
-           android:id="@+id/webviewButton"
-           android:layout_width="wrap_content"
-           android:layout_height="wrap_content"
-           android:text="@string/webclient"
-           android:enabled="false"/>
+    <TextView
+        android:id="@+id/serverStatus"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="20dp"
+        android:layout_marginBottom="20dp"
+        android:text="@string/server_status_stopped" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Server web address"
+        android:textAppearance="?android:attr/textAppearanceMedium" />
+
+    <TextView
+        android:id="@+id/serverIpAddress"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="20dp"
+        android:layout_marginBottom="20dp"
+        android:text="@string/server_ip_na" />
+
+    <CheckBox
+        android:id="@+id/autoStartServer"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="20dp"
+        android:text="Auto-start server when app starts" />
+
+    <Button
+        android:id="@+id/startStopServerButton"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="20dp"
+        android:text="@string/start_server" />
+
+    <Button
+        android:id="@+id/webviewButton"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:enabled="false"
+        android:text="Open Webview" />
 
 </LinearLayout>

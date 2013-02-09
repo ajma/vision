@@ -1,11 +1,8 @@
+
 package com.andrewma.vision.webserver;
 
 import java.io.IOException;
 import java.util.concurrent.atomic.AtomicBoolean;
-
-import com.andrewma.vision.activity.MainActivity;
-import com.andrewma.vision.utils.NetworkUtils;
-import com.andrewma.vision.webserver.core.VisionHTTPD;
 
 import android.app.Notification;
 import android.app.PendingIntent;
@@ -15,74 +12,102 @@ import android.content.Intent;
 import android.os.IBinder;
 import android.util.Log;
 
+import com.andrewma.vision.activity.MainActivity;
+import com.andrewma.vision.utils.NetworkUtils;
+import com.andrewma.vision.webserver.core.VisionHTTPD;
+
 public class WebServerService extends Service {
 
-	public static final int WEBSERVER_PORT = 8765;
+    public static final int WEBSERVER_PORT = 8765;
 
-	private static final String TAG = "WebServerService";
-	private static final int NOTIFICATION_ID = 1337;
-	private static final String NOTIFICATION_TITLE = "Vision Web Server";
+    private static final String TAG = "WebServerService";
+    private static final int NOTIFICATION_ID = 1337;
+    private static final String NOTIFICATION_TITLE = "Vision Web Server";
 
-	private static final AtomicBoolean mWebServerRunning = new AtomicBoolean(
-			false);
+    private static Intent webServerServiceIntent;
 
-	private VisionHTTPD server;
+    private static final AtomicBoolean mWebServerRunning = new AtomicBoolean(false);
 
-	@Override
-	public IBinder onBind(Intent arg0) {
-		return null;
-	}
+    private VisionHTTPD server;
 
-	@Override
-	public int onStartCommand(Intent intent, int flags, int startId) {
-		Log.v(TAG, "Starting Web Server Service");
+    private static WebServerEvents webServerEvents;
 
-		try {
-			server = new VisionHTTPD(this);
-			mWebServerRunning.set(true);
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-		showNotification();
+    @Override
+    public IBinder onBind(Intent arg0) {
+        return null;
+    }
 
-		return (START_NOT_STICKY);
-	}
+    @Override
+    public int onStartCommand(Intent intent, int flags, int startId) {
+        Log.v(TAG, "Starting Web Server Service");
 
-	private void showNotification() {
-		final Notification note = new Notification(
-				android.R.drawable.ic_dialog_info,
-				"Starting Vision Web Server Service",
-				System.currentTimeMillis());
-		final Intent i = new Intent(this, MainActivity.class);
-		i.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP
-				| Intent.FLAG_ACTIVITY_SINGLE_TOP);
-		final PendingIntent pi = PendingIntent.getActivity(this, 0, i, 0);
+        try {
+            server = new VisionHTTPD(this);
+            mWebServerRunning.set(true);
 
-		note.setLatestEventInfo(this, NOTIFICATION_TITLE,
-				WebServerService.getWebServerUrl(this), pi);
-		note.flags |= Notification.FLAG_NO_CLEAR;
+            if (webServerEvents != null) {
+                webServerEvents.onStart(getWebServerUrl(this));
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        showNotification();
 
-		startForeground(NOTIFICATION_ID, note);
+        return (START_NOT_STICKY);
+    }
 
-	}
+    private void showNotification() {
+        final Notification note = new Notification(
+                android.R.drawable.ic_dialog_info,
+                "Starting Vision Web Server Service",
+                System.currentTimeMillis());
+        final Intent i = new Intent(this, MainActivity.class);
+        i.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP
+                | Intent.FLAG_ACTIVITY_SINGLE_TOP);
+        final PendingIntent pi = PendingIntent.getActivity(this, 0, i, 0);
 
-	@Override
-	public void onDestroy() {
-		Log.v(TAG, "Stopping Web Server Service");
-		if (server != null) {
-			server.stop();
-			mWebServerRunning.set(false);
-		}
-		super.onDestroy();
-	}
+        note.setLatestEventInfo(this, NOTIFICATION_TITLE, getWebServerUrl(this), pi);
+        note.flags |= Notification.FLAG_NO_CLEAR;
 
-	public static boolean isWebServerRunning() {
-		return mWebServerRunning.get();
-	}
-	
-	public static String getWebServerUrl(Context context) {
-		return String.format("http://%s:%d",
-				NetworkUtils.getWifiIpAddress(context),
-				WEBSERVER_PORT);
-	}
+        startForeground(NOTIFICATION_ID, note);
+    }
+
+    @Override
+    public void onDestroy() {
+        Log.v(TAG, "Stopping Web Server Service");
+        if (server != null) {
+            server.stop();
+            mWebServerRunning.set(false);
+
+            if (webServerEvents != null) {
+                webServerEvents.onStop();
+            }
+        }
+        super.onDestroy();
+    }
+
+    public static void start(Context context) {
+        webServerServiceIntent = new Intent(context, WebServerService.class);
+        context.startService(webServerServiceIntent);
+    }
+
+    public static void stop(Context context) {
+        if (webServerServiceIntent != null) {
+            context.stopService(webServerServiceIntent);
+            webServerServiceIntent = null;
+        }
+    }
+
+    public static void setEvents(WebServerEvents events) {
+        webServerEvents = events;
+    }
+
+    public static boolean isWebServerRunning() {
+        return mWebServerRunning.get();
+    }
+
+    public static String getWebServerUrl(Context context) {
+        return String.format("http://%s:%d",
+                NetworkUtils.getWifiIpAddress(context), WEBSERVER_PORT);
+    }
 }
