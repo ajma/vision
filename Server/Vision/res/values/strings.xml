@@ -2,11 +2,12 @@
 
     <string name="app_name">Vision</string>
 
-    <string name="startServer">Start Server</string>
-    <string name="stopServer">Stop Server</string>
-    <string name="autoStartServer">Auto-Start server</string>
+    <string name="start_server">Start Server</string>
+    <string name="stop_server">Stop Server</string>
     
-    <string name="webclient">Open Vision</string>
+    <string name="server_status_running">Running</string>
+    <string name="server_status_stopped">Not Running</string>
     
+    <string name="server_ip_na">n/a</string>
     
 </resources>
