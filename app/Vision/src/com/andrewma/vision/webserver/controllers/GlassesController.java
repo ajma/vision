@@ -24,7 +24,8 @@ public class GlassesController extends Controller {
 
 	@Action
 	public Result Search(Glasses query) {
-		return GetAll();
+        return Result(NanoHTTPD.HTTP_OK, VisionHTTPD.MIME_JSON,
+                dbHelper.getAll(Glasses.class, 100));
 	}
 
 	@Action
