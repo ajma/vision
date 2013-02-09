@@ -10,8 +10,8 @@ Android based application that will run a web-server on an Android device (phone
 	- Ideally these would be something a larger screen (13" or larger), a keyboard and a mouse. This is to help make data input easier.
 
 ### Stuff used to make this
- * [Bootstrap](https://github.com/twitter/bootstrap)
- * [backbone.js](https://github.com/documentcloud/backbone)
- * [require.js](https://github.com/jrburke/requirejs)
- * [Google Gson](https://code.google.com/p/google-gson/)
- 
+ * [Bootstrap](https://github.com/twitter/bootstrap) for the template
+ * [backbone.js](https://github.com/documentcloud/backbone) for the web app
+ * [require.js](https://github.com/jrburke/requirejs) for managing javascript modules
+ * [Google Gson](https://code.google.com/p/google-gson/) for parsing json on the server side
+ * [NanoHTTPd](https://github.com/elonen/nanohttpd) for the web server
