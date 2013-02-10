@@ -27,7 +27,7 @@ public class GlassesController extends Controller {
     @Action
     public Result Search(Glasses query) {
         final List<Glasses> glasses = dbHelper.getAll(Glasses.class);
-        final List<ScoredGlasses> results = scorer.score(glasses, 100);
+        final List<ScoredGlasses> results = scorer.score(query, glasses, 100);
         return Result(NanoHTTPD.HTTP_OK, VisionHTTPD.MIME_JSON, results);
     }
 
