@@ -21,7 +21,7 @@ public class PerfLogger {
         }
         PerfLog log = logMap.get(tag);
         Date current = new Date();
-        Log.i(TAG, String.format("[%s] %s, since start: %dms, since last: %dms",
+        Log.v(TAG, String.format("[%s] %s, since start: %dms, since last: %dms",
                 tag, msg,
                 (current.getTime() - log.startDate.getTime()),
                 (current.getTime() - log.lastEventDate.getTime())));
