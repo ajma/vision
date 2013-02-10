@@ -13,6 +13,8 @@ public class ScoredGlasses extends Glasses {
     }
 
     public int Score;
+    
+    public String ScoreDetails;
 
     private void copyFrom(Glasses glasses) {
         GlassesId = glasses.GlassesId;
