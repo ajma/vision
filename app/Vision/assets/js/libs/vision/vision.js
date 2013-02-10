@@ -11,13 +11,11 @@ function($, _, Backbone, helpTemplate) {
 	return {
 		post : function(url, data, success) {
 			$.post(url, data, function(data) {
-				console.log(data);
 				success(data);
 			}).error(function() { $('#errorModal').modal(); });
 		},
 		getJSON : function(url, success) {
 			$.getJSON(url, function(data) {
-				console.log(data);
 				success(data);
 			}).error(function() { $('#errorModal').modal(); });
 		},
