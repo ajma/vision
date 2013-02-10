@@ -9,6 +9,7 @@ import android.util.FloatMath;
 import com.andrewma.vision.database.DatabaseHelper;
 import com.andrewma.vision.models.Glasses;
 import com.andrewma.vision.models.ScoredGlasses;
+import com.andrewma.vision.utils.PerfLogger;
 import com.andrewma.vision.webserver.core.Controller;
 import com.andrewma.vision.webserver.core.NanoHTTPD;
 import com.andrewma.vision.webserver.core.VisionHTTPD;
@@ -26,8 +27,11 @@ public class GlassesController extends Controller {
 
     @Action
     public Result Search(Glasses query) {
+        PerfLogger.log("Search", "GlassesController.Search start");
         final List<Glasses> glasses = dbHelper.getAll(Glasses.class);
+        PerfLogger.log("Search", "Get glasses");
         final List<ScoredGlasses> results = scorer.score(query, glasses, 100);
+        PerfLogger.stop("Search", "Score glasses");
         return Result(NanoHTTPD.HTTP_OK, VisionHTTPD.MIME_JSON, results);
     }
 
