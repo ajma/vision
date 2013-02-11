@@ -118,4 +118,12 @@ public class GlassesController extends Controller {
         dbHelper.delete(Glasses.class, id);
         return Result(NanoHTTPD.HTTP_OK, VisionHTTPD.MIME_JSON, String.format("%d deleted", id));
     }
+
+    @Action
+    public Result Import(Glasses glasses) {
+        if (cache != null) {
+            getGlasses().add(glasses);
+        }
+        return Result(NanoHTTPD.HTTP_OK, VisionHTTPD.MIME_JSON, dbHelper.insert(glasses));
+    }
 }
