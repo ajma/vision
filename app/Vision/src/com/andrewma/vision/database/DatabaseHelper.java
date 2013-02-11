@@ -155,14 +155,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
      * @return
      */
     public <E> List<E> getAll(Class<?> modelClass) {
-        if (!cache.containsKey(modelClass)) {
-            cache.put(modelClass, getAll(modelClass, Integer.MAX_VALUE));
-        }
-
-        return (List<E>) cache.get(modelClass);
+        return getAll(modelClass, Integer.MAX_VALUE);
     }
-
-    private Map<Class<?>, Object> cache = new HashMap<Class<?>, Object>();
 
     /**
      * Get all rows from the table (with a max number)
@@ -336,7 +330,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         if (table == null) {
             return;
         }
-
+        
         final SQLiteDatabase db = getWritableDatabase();
         try {
             final String where = table.getPrimaryKeyName() + "=" + id;
