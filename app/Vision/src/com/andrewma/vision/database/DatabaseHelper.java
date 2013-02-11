@@ -32,6 +32,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
     private static DatabaseHelper instance = null;
     private final Map<Class<?>, DbTable> tables = new HashMap<Class<?>, DbTable>();
+    private final SQLiteDatabase db;
 
     public static DatabaseHelper getInstance(Context context) {
         if (instance == null) {
@@ -44,6 +45,11 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
         registerModel(Glasses.class);
         registerModel(Batch.class);
+        db = getWritableDatabase();
+    }
+
+    public void close() {
+        db.close();
     }
 
     @Override
@@ -61,8 +67,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
     private void registerModel(Class<?> clazz) {
         if (clazz.isAnnotationPresent(Table.class)) {
-            final DbTable table = new DbTable(clazz,
-                    (Table) clazz.getAnnotation(Table.class));
+            final DbTable table = new DbTable(clazz, (Table) clazz.getAnnotation(Table.class));
 
             final Field[] fields = clazz.getFields();
             for (Field field : fields) {
@@ -71,8 +76,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                             .getAnnotation(PrimaryKey.class);
                     table.setPrimarykey(field, annotation);
                 } else if (field.isAnnotationPresent(Column.class)) {
-                    final Column annotation = (Column) field
-                            .getAnnotation(Column.class);
+                    final Column annotation = (Column) field.getAnnotation(Column.class);
                     table.columns().add(new DbColumn(field, annotation));
                 }
             }
@@ -104,14 +108,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         }
 
         final ContentValues contentValues = table.getContentValues(model);
-        final SQLiteDatabase db = getWritableDatabase();
-        try {
-            rowid = db.insert(table.getTableName(), null, contentValues);
-        } finally {
-            if (db != null) {
-                db.close();
-            }
-        }
+        rowid = db.insert(table.getTableName(), null, contentValues);
         return rowid;
     }
 
@@ -128,24 +125,17 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         }
 
         final ContentValues contentValues = table.getContentValues(model);
-        final SQLiteDatabase db = getWritableDatabase();
+        String whereClause;
         try {
-            String whereClause;
-            try {
-                whereClause = table.getPrimaryKeyName() + "="
-                        + table.getPrimaryKeyField().getInt(model);
-            } catch (Exception e) {
-                Log.e(TAG, "Failed to get primary key from model for table "
-                        + table.getTableName());
-                e.printStackTrace();
-                return 0;
-            }
-            return db.update(table.getTableName(), contentValues, whereClause, null);
-        } finally {
-            if (db != null) {
-                db.close();
-            }
+            whereClause = table.getPrimaryKeyName() + "="
+                    + table.getPrimaryKeyField().getInt(model);
+        } catch (Exception e) {
+            Log.e(TAG, "Failed to get primary key from model for table "
+                    + table.getTableName());
+            e.printStackTrace();
+            return 0;
         }
+        return db.update(table.getTableName(), contentValues, whereClause, null);
     }
 
     /**
@@ -172,29 +162,22 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         }
 
         final List<E> list = new ArrayList<E>();
-        final SQLiteDatabase db = getReadableDatabase();
         int count = 0;
-        try {
-            final Cursor cursor = db.query(table.getTableName(), null, null,
-                    null, null, null, null);
-            while (cursor.moveToNext()) {
-                final E row = cursorToObject(table, cursor);
-                if (row != null) {
-                    list.add(row);
-                    count++;
+        final Cursor cursor = db.query(table.getTableName(), null, null,
+                null, null, null, null);
+        while (cursor.moveToNext()) {
+            final E row = cursorToObject(table, cursor);
+            if (row != null) {
+                list.add(row);
+                count++;
 
-                    // stop traversing cursor if we have enough in the list
-                    if (count == max) {
-                        break;
-                    }
+                // stop traversing cursor if we have enough in the list
+                if (count == max) {
+                    break;
                 }
             }
-            cursor.close();
-        } finally {
-            if (db != null) {
-                db.close();
-            }
         }
+        cursor.close();
         return list;
     }
 
@@ -206,21 +189,14 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         }
 
         final List<E> list = new ArrayList<E>();
-        final SQLiteDatabase db = getReadableDatabase();
-        try {
-            final Cursor cursor = db.rawQuery(sqlStmt, null);
-            while (cursor.moveToNext()) {
-                final E row = cursorToObject(table, cursor);
-                if (row != null) {
-                    list.add(row);
-                }
-            }
-            cursor.close();
-        } finally {
-            if (db != null) {
-                db.close();
+        final Cursor cursor = db.rawQuery(sqlStmt, null);
+        while (cursor.moveToNext()) {
+            final E row = cursorToObject(table, cursor);
+            if (row != null) {
+                list.add(row);
             }
         }
+        cursor.close();
         return list;
     }
 
@@ -231,20 +207,13 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         }
 
         E result = null;
-        final SQLiteDatabase db = getReadableDatabase();
-        try {
-            final String selection = table.getPrimaryKeyName() + " = " + id;
-            final Cursor cursor = db.query(table.getTableName(), null, selection,
-                    null, null, null, null);
-            if (cursor.moveToNext()) {
-                result = cursorToObject(table, cursor);
-            }
-            cursor.close();
-        } finally {
-            if (db != null) {
-                db.close();
-            }
+        final String selection = table.getPrimaryKeyName() + " = " + id;
+        final Cursor cursor = db.query(table.getTableName(), null, selection,
+                null, null, null, null);
+        if (cursor.moveToNext()) {
+            result = cursorToObject(table, cursor);
         }
+        cursor.close();
         return result;
     }
 
@@ -330,15 +299,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         if (table == null) {
             return;
         }
-        
-        final SQLiteDatabase db = getWritableDatabase();
-        try {
-            final String where = table.getPrimaryKeyName() + "=" + id;
-            db.delete(table.getTableName(), where, null);
-        } finally {
-            if (db != null) {
-                db.close();
-            }
-        }
+
+        final String where = table.getPrimaryKeyName() + "=" + id;
+        db.delete(table.getTableName(), where, null);
     }
 }
