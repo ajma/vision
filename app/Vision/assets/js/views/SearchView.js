@@ -30,6 +30,25 @@ function($, _, Backbone, vision, rxform, searchTemplate, rxForm) {
 					tableBody.append(_.template(rowTemplate, { results: data }));
 					$('#searchButton').removeClass('disabled');
 					$('#searching').hide();
+	                
+	                $('.searchResultRow').hover(function() {
+	                    $(this).find('td').css('background','#E8F2FE');
+	                }, function() {
+	                    $(this).find('td').css('background','');
+	                });
+	                $('.searchResultRow').click(function() {
+	                    $('#removeCallNum').text($(this).find('.callnum').text());
+	                    $('#removeModal').modal();
+	                    var htmlRow = this;
+	                    $('#removeFromInventory').click(function(event) {
+	                        event.preventDefault();	                        
+	                        var batchId = $(htmlRow).data('glassesid'); 
+	                        vision.getJSON('/api/glasses/delete/' + batchId, function(data) {
+	                            $(htmlRow).remove();
+	                            $('#removeModal').modal('hide');
+	                        });
+	                    });
+	                });
 				});
 			});
 		}
