@@ -19,3 +19,18 @@
 </p>
 <h4><a href="/exportdb"><i class="icon-cloud-download"></i> Download SQLite3 file</a></h4>
 <p>This is an entire backup for the database in SQLite format. This is the recommended file to get.</p>
+
+<hr class="bs-docs-separator">
+
+<h2>Import</h2>
+<p>
+    Paste a CSV formatted inventory:
+</p>
+<textarea id="importText" rows="10" class="span12">
+#Format:
+#Group,Number,OD_Spherical,OD_Cylindrical,OD_Axis,OD_Add,OD_Blind,OS_Spherical,OS_Cylindrical,OS_Axis,OS_Add,OS_Blind,AddedDate,RemovedDate
+#Example:
+#1,1,1.0,-0.50,12,0,0,1.25,-0.25,42,0,0,0,0
+</textarea>
+<button id="importBtn" class="btn">Import</button>
+<div id="importLog"></div>
