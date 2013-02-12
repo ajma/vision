@@ -77,9 +77,15 @@ public class GlassesController extends Controller {
         }
         glasses.Number = max + 1;
 
-        glasses.AddedDate = new Date();
+        // number of seconds since 1/1/1970
+        glasses.AddedEpochTime = (new Date().getTime()) / 1000;
 
         glasses.GlassesId = (int) dbHelper.insert(glasses);
+        
+        // if glasses inventory is cached, we need to add to cache
+        if(cache != null) {
+            getGlasses().add(glasses);
+        }
 
         // if database couldn't insert glasses, it will return -1 as the ID
         if (glasses.GlassesId == -1) {
@@ -94,7 +100,9 @@ public class GlassesController extends Controller {
 
         update.Group = original.Group;
         update.Number = original.Number;
-        update.AddedDate = original.AddedDate;
+        update.AddedEpochTime = original.AddedEpochTime;
+        
+        //TODO Update the cache
 
         // if update(...) returns 0, then no rows were updated
         if (dbHelper.update(update) == 0) {
@@ -130,13 +138,13 @@ public class GlassesController extends Controller {
     @Action
     public Result ExportCsv() {
         final StringBuilder sb = new StringBuilder();
-        sb.append("#Group,Number,OD_Spherical,OD_Cylindrical,OD_Axis,OD_Add,OD_Blind,OS_Spherical,OS_Cylindrical,OS_Axis,OS_Add,OS_Blind,AddedDate,RemovedDate\r\n");
+        sb.append("#Group,Number,OD_Spherical,OD_Cylindrical,OD_Axis,OD_Add,OD_Blind,OS_Spherical,OS_Cylindrical,OS_Axis,OS_Add,OS_Blind,AddedEpochTime,RemovedEpochTime\r\n");
         for(Glasses g : getGlasses()) {
             sb.append(String.format("%d,%d,%.2f,%.2f,%03d,%.2f,%d,%.2f,%.2f,%03d,%.2f,%d,%d,%d\r\n",
                     g.Group, g.Number, 
                     g.OD_Spherical, g.OD_Cylindrical, g.OD_Axis, g.OD_Add, g.OD_Blind ? 1 : 0,
                     g.OS_Spherical, g.OS_Cylindrical, g.OS_Axis, g.OS_Add, g.OS_Blind ? 1 : 0,
-                    g.AddedDate.getTime(), g.RemovedDate.getTime()));
+                    g.AddedEpochTime, g.RemovedEpochTime));
         }
         return Result(NanoHTTPD.HTTP_OK, VisionHTTPD.MIME_PLAINTEXT, sb.toString());
     }

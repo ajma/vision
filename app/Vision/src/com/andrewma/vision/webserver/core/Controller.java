@@ -67,8 +67,10 @@ public abstract class Controller {
                     final Class<?> fieldType = field.getType();
                     if (float.class.equals(fieldType)) {
                         field.setFloat(result, Float.parseFloat(fieldValue));
-                    } else if (int.class.equals(fieldType)) {
+                    } else if (int.class.equals(fieldType) || long.class.equals(fieldType)) {
                         field.setInt(result, Integer.parseInt(fieldValue));
+                    } else if (long.class.equals(fieldType)) {
+                        field.setLong(result, Integer.parseInt(fieldValue));
                     } else if (boolean.class.equals(fieldType)) {
                         field.setBoolean(result,
                                 "true".equals(fieldValue.toLowerCase()));
