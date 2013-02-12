@@ -1,3 +1,4 @@
+
 package com.andrewma.vision.database.core.annotations;
 
 import java.lang.annotation.ElementType;
@@ -8,5 +9,5 @@ import java.lang.annotation.Target;
 @Retention(RetentionPolicy.RUNTIME)
 @Target(ElementType.FIELD)
 public @interface PrimaryKey {
-	String primaryKeyName() default "";
+    String primaryKeyName() default "";
 }

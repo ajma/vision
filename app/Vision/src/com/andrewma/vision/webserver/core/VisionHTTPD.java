@@ -25,10 +25,10 @@ import com.google.gson.Gson;
 public class VisionHTTPD extends NanoHTTPD {
 
     private static final String TAG = "VisionHTTPD";
-    
+
     public static final String MIME_JSON = "application/json";
     public static final String MIME_CSV = "text/csv";
-    
+
     private final Response notFoundResponse = new Response(HTTP_NOTFOUND, MIME_HTML,
             "<html><head><head><body><h1>404 Not Found</h1></body></html>");
 

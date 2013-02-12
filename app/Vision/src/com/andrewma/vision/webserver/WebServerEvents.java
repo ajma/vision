@@ -1,3 +1,4 @@
+
 package com.andrewma.vision.webserver;
 
 public interface WebServerEvents {

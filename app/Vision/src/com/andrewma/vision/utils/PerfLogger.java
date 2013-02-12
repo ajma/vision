@@ -1,3 +1,4 @@
+
 package com.andrewma.vision.utils;
 
 import java.util.Date;
@@ -16,7 +17,7 @@ public class PerfLogger {
     private static Map<String, PerfLog> logMap = new HashMap<String, PerfLog>();
 
     public static void log(String tag, String msg) {
-        if(!logMap.containsKey(tag)) {
+        if (!logMap.containsKey(tag)) {
             logMap.put(tag, new PerfLog());
         }
         PerfLog log = logMap.get(tag);
