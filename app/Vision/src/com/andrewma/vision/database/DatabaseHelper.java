@@ -51,6 +51,20 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     public void close() {
         db.close();
     }
+    
+    public static boolean delete(Context context) {
+        if (instance == null) {
+            instance.close();
+        }
+
+        if (context.deleteDatabase(DATABASE_NAME)) {
+            Log.i(TAG, "Deleting database");
+            return true;
+        } else {
+            Log.e(TAG, "Tried to delete database but was unable to");
+            return false;
+        }
+    }
 
     @Override
     public void onCreate(SQLiteDatabase db) {
