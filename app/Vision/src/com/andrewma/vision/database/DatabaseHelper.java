@@ -5,6 +5,7 @@ import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
@@ -50,20 +51,6 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
     public void close() {
         db.close();
-    }
-    
-    public static boolean delete(Context context) {
-        if (instance == null) {
-            instance.close();
-        }
-
-        if (context.deleteDatabase(DATABASE_NAME)) {
-            Log.i(TAG, "Deleting database");
-            return true;
-        } else {
-            Log.e(TAG, "Tried to delete database but was unable to");
-            return false;
-        }
     }
 
     @Override
@@ -316,5 +303,38 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
         final String where = table.getPrimaryKeyName() + "=" + id;
         db.delete(table.getTableName(), where, null);
+    }
+
+    /**
+     * Delete the entire database from disk
+     * 
+     * @param context
+     * @return
+     */
+    public static boolean deleteDatabase(Context context) {
+        if (instance == null) {
+            instance.close();
+        }
+
+        if (context.deleteDatabase(DATABASE_NAME)) {
+            Log.i(TAG, "Deleting database");
+            for(DatabaseDeleteEvent e : databaseDeleteEvents) {
+                e.onDelete();
+            }
+            return true;
+        } else {
+            Log.e(TAG, "Tried to delete database but was unable to");
+            return false;
+        }
+    }
+    
+    public static void addDatabaseDeleteListener(DatabaseDeleteEvent event) {
+        databaseDeleteEvents.add(event);
+    }
+
+    private static final List<DatabaseDeleteEvent> databaseDeleteEvents = new LinkedList<DatabaseDeleteEvent>();
+
+    public interface DatabaseDeleteEvent {
+        public void onDelete();
     }
 }
