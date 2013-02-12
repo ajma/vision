@@ -19,7 +19,7 @@ function($, _, Backbone, vision, template) {
 			    $('#importLog').empty();
 			    importLog('start importing');
 			    var lines = $.trim($('#importText').val()).split('\n');
-			    var fields = ['Group','Number','OD_Spherical','OD_Cylindrical','OD_Axis','OD_Add','OD_Blind','OS_Spherical','OS_Cylindrical','OS_Axis','OS_Add','OS_Blind','AddedDate','RemovedDate'];
+			    var fields = ['Group','Number','OD_Spherical','OD_Cylindrical','OD_Axis','OD_Add','OD_Blind','OS_Spherical','OS_Cylindrical','OS_Axis','OS_Add','OS_Blind','AddedEpochTime','RemovedEpochTime'];
 			    
 			    var processNextLine = function() {
 			        if(lines.length === 0) {
@@ -33,7 +33,11 @@ function($, _, Backbone, vision, template) {
 	                        if(vals.length === fields.length) {
 	                            var glasses = {};
 	                            $.each(fields, function(index, field) {
-	                                glasses[field] = $.trim(vals[index]);
+	                            	if(field.indexOf('Date') > -1) {
+	                            		glasses[field] = new Date(Number($.trim(vals[index])));
+	                            	} else {
+	                            		glasses[field] = $.trim(vals[index]);
+	                            	}
 	                            });
 	                            vision.post('/api/glasses/import', glasses, function() {
 	                                    importLog('imported ' + glasses.Group + '/' + glasses.Number);

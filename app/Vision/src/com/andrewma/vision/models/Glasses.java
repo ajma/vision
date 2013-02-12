@@ -46,10 +46,12 @@ public class Glasses {
 	@Column(dataType = DbDataType.TEXT, nullable = true)
 	public char Gender;
 
+	/** Epoch Time (seconds since 1/1/1970 */
 	@Column(dataType = DbDataType.INTEGER)
-	public Date AddedDate;
+	public long AddedEpochTime;
+	/** Epoch Time (seconds since 1/1/1970 */
 	@Column(dataType = DbDataType.INTEGER)
-	public Date RemovedDate;
+	public long RemovedEpochTime;
 	@Column(dataType = DbDataType.TEXT, nullable = true)
 	public String RemovedReason;
 	@Column(dataType = DbDataType.TEXT, nullable = true)

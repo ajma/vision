@@ -105,6 +105,8 @@ public class DbTable {
 						} else {
 							result.put(columnName, 0);
 						}
+					} else if(long.class.equals(columnFieldClass)) {
+					    result.put(columnName, column.columnField.getLong(model));
 					} else {
 						result.put(columnName, column.columnField.getInt(model));
 					}

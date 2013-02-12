@@ -38,8 +38,8 @@ public class ScoredGlasses extends Glasses {
         Size = glasses.Size;
         Gender = glasses.Gender;
 
-        AddedDate = glasses.AddedDate;
-        RemovedDate = glasses.RemovedDate;
+        AddedEpochTime = glasses.AddedEpochTime;
+        RemovedEpochTime = glasses.RemovedEpochTime;
         RemovedReason = glasses.RemovedReason;
         RemovedBy = glasses.RemovedBy;
     }
