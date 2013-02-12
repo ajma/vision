@@ -5,8 +5,10 @@ import java.util.Date;
 import java.util.List;
 
 import android.content.Context;
+import android.util.Log;
 
 import com.andrewma.vision.database.DatabaseHelper;
+import com.andrewma.vision.database.DatabaseHelper.DatabaseDeleteEvent;
 import com.andrewma.vision.models.Glasses;
 import com.andrewma.vision.models.ScoredGlasses;
 import com.andrewma.vision.utils.PerfLogger;
@@ -17,18 +19,26 @@ import com.andrewma.vision.webserver.core.annotations.Action;
 
 public class GlassesController extends Controller {
 
-    final DatabaseHelper dbHelper;
-    final GlassesScoring scorer = new GlassesScoring();
+    private static final String TAG = "GlassesController";
+
+    private final GlassesScoring scorer = new GlassesScoring();
+    private final Context context;
     private List<Glasses> cache = null;
 
-    public GlassesController(Context context) {
+    public GlassesController(Context c) {
         super();
-        dbHelper = DatabaseHelper.getInstance(context);
+        context = c;
+
+        DatabaseHelper.addDatabaseDeleteListener(databaseDeleteEvent);
+    }
+
+    private DatabaseHelper getDb() {
+        return DatabaseHelper.getInstance(context);
     }
 
     private List<Glasses> getGlasses() {
         if (cache == null) {
-            cache = dbHelper.getAll(Glasses.class);
+            cache = getDb().getAll(Glasses.class);
         }
         return cache;
     }
@@ -50,7 +60,7 @@ public class GlassesController extends Controller {
 
     @Action
     public Result Get(int id) {
-        return Result(NanoHTTPD.HTTP_OK, VisionHTTPD.MIME_JSON, dbHelper.get(Glasses.class, id));
+        return Result(NanoHTTPD.HTTP_OK, VisionHTTPD.MIME_JSON, getDb().get(Glasses.class, id));
     }
 
     @Action
@@ -68,7 +78,7 @@ public class GlassesController extends Controller {
         }
 
         // find number
-        final List<Glasses> glassesInGroup = dbHelper.executeSql(Glasses.class,
+        final List<Glasses> glassesInGroup = getDb().executeSql(Glasses.class,
                 "SELECT * FROM Glasses WHERE [Group] = " + glasses.Group);
         int max = 0;
         for (Glasses g : glassesInGroup) {
@@ -80,7 +90,7 @@ public class GlassesController extends Controller {
         // number of seconds since 1/1/1970
         glasses.AddedEpochTime = (new Date().getTime()) / 1000;
 
-        glasses.GlassesId = (int) dbHelper.insert(glasses);
+        glasses.GlassesId = (int) getDb().insert(glasses);
 
         // if glasses inventory is cached, we need to add to cache
         if (cache != null) {
@@ -96,7 +106,7 @@ public class GlassesController extends Controller {
 
     @Action
     public Result Update(Glasses update) {
-        final Glasses original = (Glasses) dbHelper.get(Glasses.class, update.GlassesId);
+        final Glasses original = (Glasses) getDb().get(Glasses.class, update.GlassesId);
 
         update.Group = original.Group;
         update.Number = original.Number;
@@ -105,7 +115,7 @@ public class GlassesController extends Controller {
         // TODO Update the cache
 
         // if update(...) returns 0, then no rows were updated
-        if (dbHelper.update(update) == 0) {
+        if (getDb().update(update) == 0) {
             return ErrorResult("Could not update glasses. Error on db.update.");
         }
         return Result(NanoHTTPD.HTTP_OK, VisionHTTPD.MIME_JSON, update);
@@ -123,7 +133,7 @@ public class GlassesController extends Controller {
             }
         }
 
-        dbHelper.delete(Glasses.class, id);
+        getDb().delete(Glasses.class, id);
         return Result(NanoHTTPD.HTTP_OK, VisionHTTPD.MIME_JSON, String.format("%d deleted", id));
     }
 
@@ -132,7 +142,7 @@ public class GlassesController extends Controller {
         if (cache != null) {
             getGlasses().add(glasses);
         }
-        return Result(NanoHTTPD.HTTP_OK, VisionHTTPD.MIME_JSON, dbHelper.insert(glasses));
+        return Result(NanoHTTPD.HTTP_OK, VisionHTTPD.MIME_JSON, getDb().insert(glasses));
     }
 
     @Action
@@ -149,4 +159,12 @@ public class GlassesController extends Controller {
         }
         return Result(NanoHTTPD.HTTP_OK, VisionHTTPD.MIME_PLAINTEXT, sb.toString());
     }
+
+    private final DatabaseDeleteEvent databaseDeleteEvent = new DatabaseDeleteEvent() {
+        @Override
+        public void onDelete() {
+            Log.i(TAG, "Database delete event happened. Clearing cache.");
+            cache = null;
+        }
+    };
 }
