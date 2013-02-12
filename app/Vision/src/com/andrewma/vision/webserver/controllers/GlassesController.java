@@ -126,4 +126,18 @@ public class GlassesController extends Controller {
         }
         return Result(NanoHTTPD.HTTP_OK, VisionHTTPD.MIME_JSON, dbHelper.insert(glasses));
     }
+    
+    @Action
+    public Result ExportCsv() {
+        final StringBuilder sb = new StringBuilder();
+        sb.append("#Group,Number,OD_Spherical,OD_Cylindrical,OD_Axis,OD_Add,OD_Blind,OS_Spherical,OS_Cylindrical,OS_Axis,OS_Add,OS_Blind,AddedDate,RemovedDate\r\n");
+        for(Glasses g : getGlasses()) {
+            sb.append(String.format("%d,%d,%.2f,%.2f,%03d,%.2f,%d,%.2f,%.2f,%03d,%.2f,%d,%d,%d\r\n",
+                    g.Group, g.Number, 
+                    g.OD_Spherical, g.OD_Cylindrical, g.OD_Axis, g.OD_Add, g.OD_Blind ? 1 : 0,
+                    g.OS_Spherical, g.OS_Cylindrical, g.OS_Axis, g.OS_Add, g.OS_Blind ? 1 : 0,
+                    g.AddedDate.getTime(), g.RemovedDate.getTime()));
+        }
+        return Result(NanoHTTPD.HTTP_OK, VisionHTTPD.MIME_PLAINTEXT, sb.toString());
+    }
 }
