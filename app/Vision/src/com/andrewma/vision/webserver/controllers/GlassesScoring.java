@@ -16,7 +16,7 @@ public class GlassesScoring {
         for (Glasses g : glasses) {
             final ScoredGlasses scored = new ScoredGlasses(g);
             score(search, scored);
-            if (scored.Score > 0) {
+            if (scored.Score > -9990) {
                 result.add(scored);
             }
         }
@@ -46,19 +46,19 @@ public class GlassesScoring {
     }
 
     private float scoreSpherical(float search, float glasses) {
-        if ((search >= 0) && (glasses >= 0) && (search >= glasses)) {
-            return (search - glasses) / 0.25f;
-        } else if ((search < 0) && (glasses <= 0) && (search <= glasses)) {
-            return (search - glasses) / -0.25f;
+        final boolean sameSign = (((search <= 0) && (glasses <= 0)) || ((search > 0) && (glasses >= 0)));
+        
+        if(!sameSign) {
+            return 100f;
         }
-        return 100f;
+        
+        final float stepDifference = Math.abs(search - glasses) * 4;
+        
+        return stepDifference * 2;
     }
 
     private float scoreCylindrical(float search, float glasses) {
-        if ((search - 0.25f) <= glasses) {
-            return Math.abs(search - glasses) / 0.25f;
-        }
-        return 100f;
+        return Math.abs(search - glasses) * 4;
     }
 
     private float scoreAxis(float search_cyl, int search_axis, int glasses_axis)
