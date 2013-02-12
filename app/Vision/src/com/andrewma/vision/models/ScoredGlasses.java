@@ -1,5 +1,5 @@
-package com.andrewma.vision.models;
 
+package com.andrewma.vision.models;
 
 /**
  * Extends the {@link Glasses} model to be used for search results.
@@ -13,7 +13,7 @@ public class ScoredGlasses extends Glasses {
     }
 
     public int Score;
-    
+
     public String ScoreDetails;
 
     private void copyFrom(Glasses glasses) {

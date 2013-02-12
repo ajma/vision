@@ -47,13 +47,13 @@ public class GlassesScoring {
 
     private float scoreSpherical(float search, float glasses) {
         final boolean sameSign = (((search <= 0) && (glasses <= 0)) || ((search > 0) && (glasses >= 0)));
-        
-        if(!sameSign) {
+
+        if (!sameSign) {
             return 100f;
         }
-        
+
         final float stepDifference = Math.abs(search - glasses) * 4;
-        
+
         return stepDifference * 2;
     }
 
