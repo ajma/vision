@@ -3,14 +3,12 @@ package com.andrewma.vision.utils;
 
 import android.content.Context;
 import android.net.wifi.WifiConfiguration;
+import android.net.wifi.WifiInfo;
 import android.net.wifi.WifiManager;
 import android.util.Log;
 
 import com.andrewma.vision.webserver.ConnectInfo;
 import com.andrewma.vision.webserver.WebServerService;
-
-import org.apache.http.NameValuePair;
-import org.apache.http.message.BasicNameValuePair;
 
 import java.net.InetAddress;
 import java.net.NetworkInterface;
@@ -26,7 +24,9 @@ public class NetworkUtils {
             return new ConnectInfo(wifiApConfig.SSID, getUrlAddress());
         } else {
             final WifiManager wifiManager = (WifiManager) context.getSystemService(Context.WIFI_SERVICE);
-            final String ssid = wifiManager.getConnectionInfo().getSSID().replace("\"", "");
+            final WifiInfo wifiInfo = wifiManager.getConnectionInfo();
+            String ssid = wifiInfo.getSSID().replace("\"", "");
+            ssid = (ssid != null ? ssid.replace("\"", "") : "");
             return new ConnectInfo(ssid, getUrlAddress());
         }
     }
