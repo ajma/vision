@@ -19,7 +19,7 @@ function($, _, Backbone, vision, template) {
 			    $('#importLog').empty();
 			    importLog('start importing');
 			    var lines = $.trim($('#importText').val()).split('\n');
-			    var fields = ['Group','Number','OD_Spherical','OD_Cylindrical','OD_Axis','OD_Add','OD_Blind','OS_Spherical','OS_Cylindrical','OS_Axis','OS_Add','OS_Blind','AddedEpochTime','RemovedEpochTime'];
+			    var fields = ['Group','Number','OD_Spherical','OD_Cylindrical','OD_Axis','OD_Add','OD_Blind','OS_Spherical','OS_Cylindrical','OS_Axis','OS_Add','OS_Blind','AddedEpochTime'];
 			    
 			    var processNextLine = function() {
 			        if(lines.length === 0) {

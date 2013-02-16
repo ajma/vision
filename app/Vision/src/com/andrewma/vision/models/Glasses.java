@@ -1,8 +1,6 @@
 
 package com.andrewma.vision.models;
 
-import java.util.Date;
-
 import com.andrewma.vision.database.core.DbDataType;
 import com.andrewma.vision.database.core.annotations.Column;
 import com.andrewma.vision.database.core.annotations.PrimaryKey;
@@ -50,11 +48,29 @@ public class Glasses {
     /** Epoch Time (seconds since 1/1/1970 */
     @Column(dataType = DbDataType.INTEGER)
     public long AddedEpochTime;
-    /** Epoch Time (seconds since 1/1/1970 */
-    @Column(dataType = DbDataType.INTEGER)
-    public long RemovedEpochTime;
-    @Column(dataType = DbDataType.TEXT, nullable = true)
-    public String RemovedReason;
-    @Column(dataType = DbDataType.TEXT, nullable = true)
-    public String RemovedBy;
+    
+    protected void copyFrom(Glasses glasses) {
+        GlassesId = glasses.GlassesId;
+
+        Group = glasses.Group;
+        Number = glasses.Number;
+
+        OD_Blind = glasses.OD_Blind;
+        OD_Spherical = glasses.OD_Spherical;
+        OD_Cylindrical = glasses.OD_Cylindrical;
+        OD_Axis = glasses.OD_Axis;
+        OD_Add = glasses.OD_Add;
+
+        OS_Blind = glasses.OS_Blind;
+        OS_Spherical = glasses.OS_Spherical;
+        OS_Cylindrical = glasses.OS_Cylindrical;
+        OS_Axis = glasses.OS_Axis;
+        OS_Add = glasses.OS_Add;
+
+        Sunglasses = glasses.Sunglasses;
+        Size = glasses.Size;
+        Gender = glasses.Gender;
+
+        AddedEpochTime = glasses.AddedEpochTime;
+    }
 }
