@@ -9,6 +9,7 @@ import android.app.PendingIntent;
 import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
+import android.net.wifi.WifiConfiguration;
 import android.os.IBinder;
 import android.util.Log;
 
@@ -46,7 +47,7 @@ public class WebServerService extends Service {
             mWebServerRunning.set(true);
 
             if (webServerEvents != null) {
-                webServerEvents.onStart(getWebServerUrl(this));
+                webServerEvents.onStart(NetworkUtils.getConnectInfo(getApplicationContext()));
             }
         } catch (IOException e) {
             e.printStackTrace();
@@ -66,7 +67,8 @@ public class WebServerService extends Service {
                 | Intent.FLAG_ACTIVITY_SINGLE_TOP);
         final PendingIntent pi = PendingIntent.getActivity(this, 0, i, 0);
 
-        note.setLatestEventInfo(this, NOTIFICATION_TITLE, getWebServerUrl(this), pi);
+        ConnectInfo info = NetworkUtils.getConnectInfo(getApplicationContext());
+        note.setLatestEventInfo(this, NOTIFICATION_TITLE, info.toString(), pi);
         note.flags |= Notification.FLAG_NO_CLEAR;
 
         startForeground(NOTIFICATION_ID, note);
@@ -104,10 +106,5 @@ public class WebServerService extends Service {
 
     public static boolean isWebServerRunning() {
         return mWebServerRunning.get();
-    }
-
-    public static String getWebServerUrl(Context context) {
-        return String.format("http://%s:%d",
-                NetworkUtils.getWifiIpAddress(context), WEBSERVER_PORT);
     }
 }

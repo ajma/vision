@@ -23,7 +23,7 @@ public class WebViewActivity extends Activity {
         setContentView(R.layout.activity_webview);
 
         webview = (WebView) findViewById(R.id.webview);
-        webview.loadUrl(WebServerService.getWebServerUrl(this));
+        webview.loadUrl("http://127.0.0.1:" + WebServerService.WEBSERVER_PORT);
         webview.getSettings().setJavaScriptEnabled(true);
     }
 }

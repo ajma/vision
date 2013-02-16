@@ -23,16 +23,23 @@
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Server web address"
+        android:text="Server Information"
         android:textAppearance="?android:attr/textAppearanceMedium" />
 
     <TextView
-        android:id="@+id/serverIpAddress"
+        android:id="@+id/ssid"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="20dp"
+        android:text="@string/server_na" />
+    
+    <TextView
+        android:id="@+id/url"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginLeft="20dp"
         android:layout_marginBottom="20dp"
-        android:text="@string/server_ip_na" />
+        android:text="@string/server_na" />
 
     <CheckBox
         android:id="@+id/autoStartServer"
