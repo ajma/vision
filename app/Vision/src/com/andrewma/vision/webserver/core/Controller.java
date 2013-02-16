@@ -89,6 +89,10 @@ public abstract class Controller {
     public Result Result(String status, String mimeType, Object data) {
         return new Result(status, mimeType, data);
     }
+    
+    public Result Result(String status, String mimeType, String filename, Object data) {
+        return new Result(status, mimeType, filename, data);
+    }
 
     /**
      * Helper function to return a 500 internal error {@link Result}
@@ -120,10 +124,19 @@ public abstract class Controller {
         public final String status;
         public final String mimeType;
         public final Object data;
+        
+        public String fileName;
 
         private Result(String status, String mimeType, Object data) {
             this.status = status;
             this.mimeType = mimeType;
+            this.data = data;
+        }
+        
+        private Result(String status, String mimeType, String filename, Object data) {
+            this.status = status;
+            this.mimeType = mimeType;
+            this.fileName = filename;
             this.data = data;
         }
     }

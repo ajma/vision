@@ -31,6 +31,8 @@ public class VisionHTTPD extends NanoHTTPD {
 
     private final Response notFoundResponse = new Response(HTTP_NOTFOUND, MIME_HTML,
             "<html><head><head><body><h1>404 Not Found</h1></body></html>");
+    private final Response errorResponse = new Response(HTTP_INTERNALERROR, MIME_HTML,
+            "<html><head><head><body><h1>500 Internal Server Error</h1></body></html>");
 
     private final AssetManager assets;
     private final File databasePath;
@@ -127,18 +129,28 @@ public class VisionHTTPD extends NanoHTTPD {
         final Result result = (Result) controller.execute(actionUrl, idUrl, params);
         if (MIME_JSON.equals(result.mimeType)) {
             return new Response(result.status, result.mimeType, gson.toJson(result.data));
-        } else if (MIME_PLAINTEXT.equals(result.mimeType) || MIME_CSV.equals(result.mimeType)) {
+        } else if (MIME_PLAINTEXT.equals(result.mimeType)) {
             if (String.class.equals(result.data.getClass())) {
                 return new Response(result.status, result.mimeType, (String) result.data);
             } else {
                 final String err = "Result.data needs to be a String for MIME_PLAINTEXT";
                 Log.e(TAG, err);
-                throw new IllegalArgumentException(err);
+                return errorResponse;
+            }
+        } else if (MIME_CSV.equals(result.mimeType)) {
+            if (String.class.equals(result.data.getClass())) {
+                final Response response = new Response(result.status, result.mimeType, (String) result.data);
+                response.addHeader("Content-Disposition", "attachment; filename=\"" + result.fileName + "\"");
+                return response;
+            } else {
+                final String err = "Result.data needs to be a String for MIME_PLAINTEXT";
+                Log.e(TAG, err);
+                return errorResponse;
             }
         } else {
             final String err = "Unsupported mime type for Result";
             Log.e(TAG, err);
-            throw new UnsupportedOperationException(err);
+            return errorResponse;
         }
     }
 
