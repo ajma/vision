@@ -161,13 +161,13 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     public <E> List<E> getAll(Class<?> modelClass, int max) {
         final DbTable table = lookupModelTable(modelClass);
         if (table == null) {
+            Log.w(TAG, table + " is not a registered model");
             return null;
         }
 
         final List<E> list = new ArrayList<E>();
         int count = 0;
-        final Cursor cursor = db.query(table.getTableName(), null, null,
-                null, null, null, null);
+        final Cursor cursor = db.query(table.getTableName(), null, null, null, null, null, null);
         while (cursor.moveToNext()) {
             final E row = cursorToObject(table, cursor);
             if (row != null) {
@@ -242,6 +242,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                 cursorColumnToObjectField(cursor, cursorRow, column);
             }
         } catch (Exception e) {
+            Log.e(TAG, "cursorToObject failed for " + table.getModelClass().getName());
             e.printStackTrace();
         }
         return cursorRow;
@@ -320,7 +321,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
         if (context.deleteDatabase(DATABASE_NAME)) {
             Log.i(TAG, "Deleting database");
-            for(DatabaseDeleteEvent e : databaseDeleteEvents) {
+            for (DatabaseDeleteEvent e : databaseDeleteEvents) {
                 e.onDelete();
             }
             return true;
@@ -329,7 +330,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             return false;
         }
     }
-    
+
     public static void addDatabaseDeleteListener(DatabaseDeleteEvent event) {
         databaseDeleteEvents.add(event);
     }
