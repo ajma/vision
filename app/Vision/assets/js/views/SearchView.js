@@ -43,7 +43,7 @@ function($, _, Backbone, vision, rxform, searchTemplate, rxForm) {
 	                    $('#removeFromInventory').click(function(event) {
 	                        event.preventDefault();	                        
 	                        var batchId = $(htmlRow).data('glassesid'); 
-	                        vision.getJSON('/api/glasses/delete/' + batchId, function(data) {
+	                        vision.getJSON('/api/glasses/remove/' + batchId, function(data) {
 	                            $(htmlRow).remove();
 	                            $('#removeModal').modal('hide');
 	                        });

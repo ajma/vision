@@ -9,6 +9,7 @@ import android.util.Log;
 
 import com.andrewma.vision.database.DatabaseHelper;
 import com.andrewma.vision.database.DatabaseHelper.DatabaseDeleteEvent;
+import com.andrewma.vision.models.ArchivedGlasses;
 import com.andrewma.vision.models.Glasses;
 import com.andrewma.vision.models.ScoredGlasses;
 import com.andrewma.vision.utils.PerfLogger;
@@ -88,7 +89,7 @@ public class GlassesController extends Controller {
         glasses.Number = max + 1;
 
         // number of seconds since 1/1/1970
-        glasses.AddedEpochTime = (new Date().getTime()) / 1000;
+        glasses.AddedEpochTime = getCurrentEpochTime();
 
         glasses.GlassesId = (int) getDb().insert(glasses);
 
@@ -122,12 +123,15 @@ public class GlassesController extends Controller {
     }
 
     @Action
-    public Result Delete(int id) {
+    public Result Remove(int id) {
         if (cache != null) {
             final List<Glasses> glasses = getGlasses();
             for (int i = 0; i < glasses.size(); i++) {
                 if (glasses.get(i).GlassesId == id) {
-                    glasses.remove(i);
+                    ArchivedGlasses archive = new ArchivedGlasses(glasses.remove(i));
+                    // number of seconds since 1/1/1970
+                    archive.RemovedEpochTime = getCurrentEpochTime();
+                    getDb().insert(archive);
                     break;
                 }
             }
@@ -148,16 +152,25 @@ public class GlassesController extends Controller {
     @Action
     public Result ExportCsv() {
         final StringBuilder sb = new StringBuilder();
-        sb.append("#Group,Number,OD_Spherical,OD_Cylindrical,OD_Axis,OD_Add,OD_Blind,OS_Spherical,OS_Cylindrical,OS_Axis,OS_Add,OS_Blind,AddedEpochTime,RemovedEpochTime\r\n");
+        sb.append("#Group,Number,OD_Spherical,OD_Cylindrical,OD_Axis,OD_Add,OD_Blind,OS_Spherical,OS_Cylindrical,OS_Axis,OS_Add,OS_Blind,AddedEpochTime\r\n");
         for (Glasses g : getGlasses()) {
             sb.append(String.format(
                     "%d,%d,%.2f,%.2f,%03d,%.2f,%d,%.2f,%.2f,%03d,%.2f,%d,%d,%d\r\n",
                     g.Group, g.Number,
                     g.OD_Spherical, g.OD_Cylindrical, g.OD_Axis, g.OD_Add, g.OD_Blind ? 1 : 0,
                     g.OS_Spherical, g.OS_Cylindrical, g.OS_Axis, g.OS_Add, g.OS_Blind ? 1 : 0,
-                    g.AddedEpochTime, g.RemovedEpochTime));
+                    g.AddedEpochTime));
         }
         return Result(NanoHTTPD.HTTP_OK, VisionHTTPD.MIME_PLAINTEXT, sb.toString());
+    }
+
+    /**
+     * Current epoch time (second since 1/1/1970)
+     * 
+     * @return
+     */
+    private long getCurrentEpochTime() {
+        return (new Date().getTime()) / 1000;
     }
 
     private final DatabaseDeleteEvent databaseDeleteEvent = new DatabaseDeleteEvent() {

@@ -21,6 +21,7 @@ import com.andrewma.vision.database.core.DbTable;
 import com.andrewma.vision.database.core.annotations.Column;
 import com.andrewma.vision.database.core.annotations.PrimaryKey;
 import com.andrewma.vision.database.core.annotations.Table;
+import com.andrewma.vision.models.ArchivedGlasses;
 import com.andrewma.vision.models.Batch;
 import com.andrewma.vision.models.Glasses;
 
@@ -46,6 +47,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
         registerModel(Glasses.class);
         registerModel(Batch.class);
+        registerModel(ArchivedGlasses.class);
         db = getWritableDatabase();
     }
 
