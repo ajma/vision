@@ -7,6 +7,8 @@ import com.andrewma.vision.database.core.annotations.Table;
 @Table
 public class ArchivedGlasses extends Glasses {
     
+    public ArchivedGlasses() { }
+    
     public ArchivedGlasses(Glasses glasses) {
         copyFrom(glasses);
     }
