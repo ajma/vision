@@ -315,14 +315,16 @@ public class DatabaseHelper extends SQLiteOpenHelper {
      * @return
      */
     public static boolean deleteDatabase(Context context) {
-        if (instance == null) {
+        if (instance != null) {
             instance.close();
         }
 
         if (context.deleteDatabase(DATABASE_NAME)) {
             Log.i(TAG, "Deleting database");
-            for (DatabaseDeleteEvent e : databaseDeleteEvents) {
-                e.onDelete();
+            if(databaseDeleteEvents != null) {
+                for (DatabaseDeleteEvent e : databaseDeleteEvents) {
+                    e.onDelete();
+                }
             }
             return true;
         } else {
