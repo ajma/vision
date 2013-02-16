@@ -22,11 +22,13 @@ import com.andrewma.vision.R;
 import com.andrewma.vision.database.DatabaseHelper;
 import com.andrewma.vision.webserver.WebServerEvents;
 import com.andrewma.vision.webserver.WebServerService;
+import com.andrewma.vision.webserver.ConnectInfo;
 
 public class MainActivity extends Activity {
 
     private TextView serverStatusTextView;
-    private TextView serverIpAddressTextView;
+    private TextView urlTextView;
+    private TextView ssidTextView;
     private Button startStopServerButton;
     private Button webviewButton;
     private CheckBox autoStartServer;
@@ -37,7 +39,8 @@ public class MainActivity extends Activity {
         setContentView(R.layout.activity_main);
 
         serverStatusTextView = (TextView) findViewById(R.id.serverStatus);
-        serverIpAddressTextView = (TextView) findViewById(R.id.serverIpAddress);
+        ssidTextView = (TextView) findViewById(R.id.ssid);
+        urlTextView = (TextView) findViewById(R.id.url);
         startStopServerButton = (Button) findViewById(R.id.startStopServerButton);
         webviewButton = (Button) findViewById(R.id.webviewButton);
         autoStartServer = (CheckBox) findViewById(R.id.autoStartServer);
@@ -51,12 +54,12 @@ public class MainActivity extends Activity {
         WebServerService.setEvents(new WebServerEvents() {
             @Override
             public void onStop() {
-                setWebServerStatus(false, "");
+                setWebServerStatus(false, null);
             }
 
             @Override
-            public void onStart(String url) {
-                setWebServerStatus(true, url);
+            public void onStart(ConnectInfo info) {
+                setWebServerStatus(true, info);
             }
         });
     }
@@ -80,15 +83,21 @@ public class MainActivity extends Activity {
         }
     }
 
-    private void setWebServerStatus(boolean isRunning, String url) {
+    private void setWebServerStatus(boolean isRunning, ConnectInfo info) {
         webviewButton.setEnabled(isRunning);
 
         final int buttonTextId = (isRunning ? R.string.stop_server : R.string.start_server);
         startStopServerButton.setText(buttonTextId);
 
-        final String ipAddress = (isRunning ? url : getString(R.string.server_ip_na));
-        serverIpAddressTextView.setText(ipAddress);
-
+        if(isRunning && info != null) {
+            ssidTextView.setVisibility(View.VISIBLE);
+            ssidTextView.setText("Wi-fi SSID: " + info.SSID);
+            urlTextView.setText(info.Url);
+        } else {
+            ssidTextView.setVisibility(View.GONE);
+            urlTextView.setText(R.string.server_na);
+        }
+        
         final int statusId = (isRunning ? R.string.server_status_running
                 : R.string.server_status_stopped);
         serverStatusTextView.setText(statusId);

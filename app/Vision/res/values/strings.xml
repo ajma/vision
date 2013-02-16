@@ -8,6 +8,6 @@
     <string name="server_status_running">Running</string>
     <string name="server_status_stopped">Not Running</string>
     
-    <string name="server_ip_na">n/a</string>
+    <string name="server_na">n/a</string>
     
 </resources>
