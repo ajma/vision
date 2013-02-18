@@ -9,12 +9,10 @@ import android.app.PendingIntent;
 import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
-import android.net.wifi.WifiConfiguration;
 import android.os.IBinder;
 import android.util.Log;
 
 import com.andrewma.vision.activity.MainActivity;
-import com.andrewma.vision.utils.NetworkUtils;
 import com.andrewma.vision.webserver.core.VisionHTTPD;
 
 public class WebServerService extends Service {
@@ -47,7 +45,7 @@ public class WebServerService extends Service {
             mWebServerRunning.set(true);
 
             if (webServerEvents != null) {
-                webServerEvents.onStart(NetworkUtils.getConnectInfo(getApplicationContext()));
+                webServerEvents.onStart(ConnectionInfo.getCurrent(getApplicationContext()));
             }
         } catch (IOException e) {
             e.printStackTrace();
@@ -63,12 +61,12 @@ public class WebServerService extends Service {
                 "Starting Vision Web Server Service",
                 System.currentTimeMillis());
         final Intent i = new Intent(this, MainActivity.class);
-        i.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP
-                | Intent.FLAG_ACTIVITY_SINGLE_TOP);
+        i.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
         final PendingIntent pi = PendingIntent.getActivity(this, 0, i, 0);
 
-        ConnectInfo info = NetworkUtils.getConnectInfo(getApplicationContext());
-        note.setLatestEventInfo(this, NOTIFICATION_TITLE, info.toString(), pi);
+        ConnectionInfo connectionInfo = ConnectionInfo.getCurrent(getApplicationContext());
+        String info = (connectionInfo != null ? connectionInfo.toString() : "");
+        note.setLatestEventInfo(this, NOTIFICATION_TITLE, info, pi);
         note.flags |= Notification.FLAG_NO_CLEAR;
 
         startForeground(NOTIFICATION_ID, note);
