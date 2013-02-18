@@ -3,10 +3,15 @@ package com.andrewma.vision.activity;
 
 import android.app.Activity;
 import android.app.AlertDialog;
-import android.app.Application;
+import android.app.AlertDialog.Builder;
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.IntentFilter;
+import android.net.wifi.WifiManager;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -20,11 +25,14 @@ import android.widget.TextView;
 import com.andrewma.vision.Preferences;
 import com.andrewma.vision.R;
 import com.andrewma.vision.database.DatabaseHelper;
+import com.andrewma.vision.utils.WifiApManager;
 import com.andrewma.vision.webserver.WebServerEvents;
 import com.andrewma.vision.webserver.WebServerService;
-import com.andrewma.vision.webserver.ConnectInfo;
+import com.andrewma.vision.webserver.ConnectionInfo;
 
 public class MainActivity extends Activity {
+
+    private final String TAG = "MainActivity";
 
     private TextView serverStatusTextView;
     private TextView urlTextView;
@@ -58,7 +66,7 @@ public class MainActivity extends Activity {
             }
 
             @Override
-            public void onStart(ConnectInfo info) {
+            public void onStart(ConnectionInfo info) {
                 setWebServerStatus(true, info);
             }
         });
@@ -83,21 +91,21 @@ public class MainActivity extends Activity {
         }
     }
 
-    private void setWebServerStatus(boolean isRunning, ConnectInfo info) {
+    private void setWebServerStatus(boolean isRunning, ConnectionInfo info) {
         webviewButton.setEnabled(isRunning);
 
         final int buttonTextId = (isRunning ? R.string.stop_server : R.string.start_server);
         startStopServerButton.setText(buttonTextId);
 
-        if(isRunning && info != null) {
+        if (isRunning && info != null) {
             ssidTextView.setVisibility(View.VISIBLE);
             ssidTextView.setText("Wi-fi SSID: " + info.SSID);
-            urlTextView.setText(info.Url);
+            urlTextView.setText(info.getUrl());
         } else {
             ssidTextView.setVisibility(View.GONE);
             urlTextView.setText(R.string.server_na);
         }
-        
+
         final int statusId = (isRunning ? R.string.server_status_running
                 : R.string.server_status_stopped);
         serverStatusTextView.setText(statusId);
