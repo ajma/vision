@@ -139,8 +139,10 @@ public class VisionHTTPD extends NanoHTTPD {
             }
         } else if (MIME_CSV.equals(result.mimeType)) {
             if (String.class.equals(result.data.getClass())) {
-                final Response response = new Response(result.status, result.mimeType, (String) result.data);
+                final String data = (String) result.data;
+                final Response response = new Response(result.status, result.mimeType, data);
                 response.addHeader("Content-Disposition", "attachment; filename=\"" + result.fileName + "\"");
+                response.addHeader("Content-Length", Integer.toString(data.length()));
                 return response;
             } else {
                 final String err = "Result.data needs to be a String for MIME_PLAINTEXT";
