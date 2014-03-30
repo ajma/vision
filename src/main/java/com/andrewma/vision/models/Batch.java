@@ -1,7 +1,9 @@
 
 package com.andrewma.vision.models;
 
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 import com.andrewma.vision.database.core.DbDataType;
 import com.andrewma.vision.database.core.annotations.Column;
@@ -11,35 +13,28 @@ import com.andrewma.vision.database.core.annotations.Table;
 /**
  * When glasses are added to the inventory in batches, this is used to keep
  * track of which glasses were added into which batch
- * 
- * @author ajma
  */
-@Table(tableName = "Batches")
 public class Batch {
-    @PrimaryKey
-    public int BatchId;
+
+    public int batchId;
 
     /**
      * Name of person working on this batch
      */
-    @Column(dataType = DbDataType.TEXT)
-    public String Name = "";
+    public String name = "";
 
     /**
-     * Date that the batch was created on
+     * UTC Date that the batch was created on
      */
-    @Column(dataType = DbDataType.INTEGER)
-    public Date CreatedDate;
+    public Date createdDate = new Date();
 
     /**
-     * Comma-delimited list of {@link Glasses#GlassesId} that are in this batch
+     * List of {@link Glasses#GlassesId} that are in this batch
      */
-    @Column(dataType = DbDataType.TEXT)
-    public String Glasses = "";
+    public List<Integer> glassesIds = new ArrayList<Integer>();
 
     /**
      * When labels are printed, user can mark the batch as printed
      */
-    @Column(dataType = DbDataType.INTEGER)
-    public boolean Printed = false;
+    public boolean printed = false;
 }

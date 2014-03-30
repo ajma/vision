@@ -30,7 +30,6 @@ public class BatchesController extends Controller {
     @Action
     public Result New() {
         final Batch newBatch = new Batch();
-        newBatch.CreatedDate = new Date();
 
         final long batchId = dbHelper.insert(newBatch);
 
@@ -44,9 +43,7 @@ public class BatchesController extends Controller {
     @Action
     public Result AddGlasses(Batch appendBatch) {
         dbHelper.executeSql(Batch.class,
-                "UPDATE Batches SET Glasses = Glasses || \""
-                        + appendBatch.Glasses + " \" WHERE BatchId = "
-                        + appendBatch.BatchId);
+                "UPDATE Batches SET Glasses = Glasses || \" \" WHERE BatchId = ");
         return Result(NanoHTTPD.HTTP_OK, VisionHTTPD.MIME_JSON, true);
     }
 }
